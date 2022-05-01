@@ -14,6 +14,9 @@ bp = Blueprint("geo", __name__, url_prefix="/geo")
 def get_remote_ip(req_ip, heads):
     ipv4 = ipaddress.IPv4Address(req_ip)
 
+    print(req_ip)
+    print(heads)
+
     if ipv4.is_private:
         return socket.gethostbyname(socket.gethostname())
     return req_ip
