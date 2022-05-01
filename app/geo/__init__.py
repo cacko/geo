@@ -2,6 +2,7 @@ from pprint import pprint
 from socket import socket
 import click
 from flask import Blueprint, jsonify, request
+from requests import head
 from app.geo.maxmind import MaxMind
 import validators
 import ipaddress
@@ -10,8 +11,11 @@ import socket
 bp = Blueprint("geo", __name__, url_prefix="/geo")
 
 
-def get_remote_ip(req_ip):
+def get_remote_ip(req_ip, heads):
     ipv4 = ipaddress.IPv4Address(req_ip)
+
+    print(req_ip, heads)
+
     if ipv4.is_private:
         return socket.gethostbyname(socket.gethostname())
     return req_ip
@@ -27,5 +31,5 @@ def cli_full(ip: str):
 def route_index():
     ip = request.args.get("ip")
     if not ip or not validators.ip_address.ipv4(ip):
-        ip = get_remote_ip(request.remote_addr)
+        ip = get_remote_ip(request.remote_addr, request.headers.get_all())
     return jsonify(MaxMind.lookup(ip).to_dict())
