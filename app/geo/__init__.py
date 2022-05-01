@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request
 from app.geo.maxmind import MaxMind
 import validators
 import ipaddress
-
+import socket
 
 bp = Blueprint("geo", __name__, url_prefix="/geo")
 
