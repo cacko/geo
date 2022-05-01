@@ -46,11 +46,11 @@ class MaxMind(object, metaclass=MaxMindMeta):
             ip=ip,
             country=city.country.names.get('en', 'N/A'),
             city=city.city.names.get('en', 'N/A'),
-            subdivisions=[s.names.get('en') for s in city.subdivisions],
+            subdivisions=','.join([s.names.get('en')
+                                  for s in city.subdivisions]),
             location=(city.location.latitude, city.location.longitude),
             timezone=city.location.time_zone,
             ISP=self.get_asn(ip)
-
         )
 
     def get_asn(self, ip: str) -> ASNInfo:

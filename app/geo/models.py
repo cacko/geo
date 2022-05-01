@@ -16,7 +16,7 @@ class GeoInfo:
     country: str
     city: str
     ip: str
-    subdivisions: Optional[list[str]]
+    subdivisions: Optional[str]
     location: Optional[tuple[float, float]]
     timezone: Optional[str]
     ISP: Optional[ASNInfo]
