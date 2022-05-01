@@ -2,6 +2,7 @@ from pprint import pprint
 import click
 from flask import Blueprint, jsonify, request
 from app.geo.maxmind import MaxMind
+import socket
 
 
 bp = Blueprint("geo", __name__, url_prefix="/geo")
@@ -13,15 +14,13 @@ def cli_full(ip: str):
     pprint(MaxMind.lookup(ip))
 
 
-
 @bp.cli.command("asn")
 @click.argument("ip")
 def cli_full(ip: str):
     pprint(MaxMind.asn(ip))
 
 
-
 @bp.route("/")
 def route_index():
-    ip = request.args.get("ip")
+    ip = request.args.get("ip", socket.gethostbyname(socket.gethostname()))
     return jsonify(MaxMind.lookup(ip).to_dict())
