@@ -28,7 +28,6 @@ class GeoDbMeta(type):
     __instances: 'GeoDb' = {}
 
     def __call__(cls, db: DatabaseType, *args, **kwargs):
-        print(db.value)
         if db not in cls.__instances:
             db_path = Path(cls.__db) / db.value
             cls.__instances[db] = type.__call__(cls, db_path, *args, **kwargs)
