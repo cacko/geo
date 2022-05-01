@@ -11,11 +11,11 @@ import socket
 bp = Blueprint("geo", __name__, url_prefix="/geo")
 
 
-def get_remote_ip(req_ip, heads):
+def get_remote_ip(req_ip, forward_ip=None):
     ipv4 = ipaddress.IPv4Address(req_ip)
 
-    print(req_ip)
-    print(heads)
+    if forward_ip:
+        return forward_ip
 
     if ipv4.is_private:
         return socket.gethostbyname(socket.gethostname())
@@ -33,6 +33,5 @@ def route_index():
     ip = request.args.get("ip")
     if not ip or not validators.ip_address.ipv4(ip):
         ip = get_remote_ip(request.remote_addr,
-                           {k: v for k, v in request.headers.items()}
-                           )
+                           request.headers.get('x-forwarded-for'))
     return jsonify(MaxMind.lookup(ip).to_dict())
