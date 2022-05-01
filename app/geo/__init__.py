@@ -14,13 +14,8 @@ def cli_full(ip: str):
     pprint(MaxMind.lookup(ip))
 
 
-@bp.cli.command("asn")
-@click.argument("ip")
-def cli_full(ip: str):
-    pprint(MaxMind.asn(ip))
-
-
 @bp.route("/")
 def route_index():
+    print(request.remote_addr)
     ip = request.args.get("ip", socket.gethostbyname(socket.gethostname()))
     return jsonify(MaxMind.lookup(ip).to_dict())

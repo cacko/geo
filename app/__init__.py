@@ -1,6 +1,5 @@
 from cachable import Cachable
 from os import environ
-from pathlib import Path
 from flask import Flask
 from flask.json import JSONEncoder
 import logging
