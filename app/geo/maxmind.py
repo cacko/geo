@@ -44,8 +44,8 @@ class MaxMind(object, metaclass=MaxMindMeta):
             return None
         return GeoInfo(
             ip=ip,
-            country=city.country.names['en'] if city.country else 'N/A',
-            city=city.city.names['en'] if city.city else 'N/A',
+            country=city.country.names.get('en', 'N/A'),
+            city=city.city.names.get('en', 'N/A'),
             subdivisions=[s.names['en'] for s in city.subdivisions],
             location=(city.location.latitude, city.location.longitude),
             timezone=city.location.time_zone,
