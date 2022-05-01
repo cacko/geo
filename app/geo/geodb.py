@@ -18,6 +18,7 @@ class Config:
 
 class DatabaseType(Enum):
     CITY = "GeoIP2-City.mmdb"
+    CITY_LITE = "GeoLite2-City.mmdb"
     ASN = "GeoLite2-ASN.mmdb"
 
 
@@ -39,6 +40,9 @@ class GeoDbMeta(type):
 
     def city(cls, ip) -> City:
         return CityDb(ip).lookup()
+
+    def city_lite(cls, ip) -> City:
+        return CityLiteDb(ip).lookup()
 
     def asn(cls, ip) -> ASN:
         return ASNDb(ip).lookup()
@@ -64,19 +68,28 @@ class GeoDb(object, metaclass=GeoDbMeta):
 
 class CityDb(Cachable):
 
-    __ip: str = None
+    _ip: str = None
 
     def __init__(self, ip: str) -> None:
         super().__init__()
-        self.__ip = ip
+        self._ip = ip
 
     @property
     def id(self):
-        return snakecase(self.__ip)
+        return snakecase(self._ip)
 
     def lookup(self) -> City:
         if not self.load():
-            self._struct = GeoDb(DatabaseType.CITY).do_city(self.__ip)
+            self._struct = GeoDb(DatabaseType.CITY).do_city(self._ip)
+            if self._struct:
+                self.tocache(self._struct)
+        return self._struct
+
+
+class CityLiteDb(CityDb):
+    def lookup(self) -> City:
+        if not self.load():
+            self._struct = GeoDb(DatabaseType.CITY_LITE).do_city(self._ip)
             if self._struct:
                 self.tocache(self._struct)
         return self._struct

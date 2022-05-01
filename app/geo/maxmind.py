@@ -40,18 +40,36 @@ class MaxMind(object, metaclass=MaxMindMeta):
 
     def get_info(self, ip: str):
         city = GeoDb.city(ip)
-        if not city:
+        city_lite = GeoDb.city_lite(ip)
+        if not city or not city_lite:
             return None
-        return GeoInfo(
-            ip=ip,
-            country=city.country.names.get('en', 'N/A'),
-            city=city.city.names.get('en', 'N/A'),
-            subdivisions=','.join([s.names.get('en')
-                                  for s in city.subdivisions]),
-            location=(city.location.latitude, city.location.longitude),
-            timezone=city.location.time_zone,
-            ISP=self.get_asn(ip)
-        )
+
+        asn = self.get_asn(ip)
+        city = {
+            "ip": ip,
+            "country": city.country.names.get('en', 'N/A'),
+            "city": city.city.names.get('en', 'N/A'),
+            "subdivisions": ','.join([s.names.get('en')
+                                     for s in city.subdivisions]),
+            "location": (city.location.latitude, city.location.longitude),
+            "timezone": city.location.time_zone,
+            "ISP": asn
+        }
+        city_lite = {
+            "ip": ip,
+            "country": city_lite.country.names.get('en', 'N/A'),
+            "city": city_lite.city.names.get('en', 'N/A'),
+            "subdivisions": ','.join([s.names.get('en')
+                                     for s in city_lite.subdivisions]),
+            "location": (city_lite.location.latitude, city_lite.location.longitude),
+            "timezone": city_lite.location.time_zone,
+            "ISP": asn
+        }
+
+        return GeoInfo(**{
+            **city,
+            **city_lite,
+        })
 
     def get_asn(self, ip: str) -> ASNInfo:
         res = GeoDb.asn(ip)
