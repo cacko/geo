@@ -1,0 +1,75 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  PROJECT: get
+
+tasks:
+  stop:
+    desc: stop the server
+    cmds:
+      - ssh $REMOTE_HOST 'source ~/.zshrc;systemctl --user stop {{.PROJECT}}'
+
+  restart:
+    desc: restart the service
+    cmds:
+      - ssh $REMOTE_HOST 'source ~/.zshrc;systemctl --user restart {{.PROJECT}}'
+
+  push:
+    desc: commit and pushes current changes
+    cmds:
+      - git add .  || true
+      - git commit -am "$(curl -s https://commit.cacko.net/index.txt)" || true
+      - git push  || true
+
+  pull:
+    desc: pulls from git
+    cmds:
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};git reset --hard;git pull'
+
+  pp:
+    desc: push and pull
+    cmds:
+      - task: push
+      - task: pull
+
+  logs:
+    desc: monitor logs
+    cmds:
+      - ssh $REMOTE_HOST 'source ~/.zshrc;journalctl --user -u {{.PROJECT}} -f' | ccze -A
+
+  serve:
+    desc: start local serve
+    cmds:
+      - poetry run flask run
+
+  systemd-exec:
+    desc: systemd exec
+    cmds:
+      - direnv exec . poetry run gunicorn "app:create_app()"
+
+  install:
+    desc: calls poetry install and npm ci
+    cmds:
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};poetry install'
+
+  deploy:
+    desc: shortcut for stop -> push -> pull -> restart
+    cmds:
+      - task: stop
+      - task: push
+      - task: pull
+      - task: install
+      - task: restart
+
+  cli:
+    desc: run flask geo locally
+    cmds:
+      - poetry run flask geo {{.CLI_ARGS}}
+
+
+  redis:
+    desc: open redis-cli
+    cmds:
+      - redis-cli $REDIS_CLI
