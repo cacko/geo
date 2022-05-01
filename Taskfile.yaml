@@ -3,7 +3,7 @@
 version: "3"
 
 vars:
-  PROJECT: get
+  PROJECT: geo
 
 tasks:
   stop:
