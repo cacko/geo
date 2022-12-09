@@ -1,5 +1,5 @@
 from pprint import pprint
-from socket import socket
+import socket
 import click
 from flask import Blueprint, jsonify, request
 from requests import head
@@ -31,7 +31,7 @@ def cli_full(ip: str):
 @bp.route("/")
 def route_index():
     ip = request.args.get("ip")
-    if not ip or not validators.ip_address.ipv4(ip):
-        ip = get_remote_ip(request.remote_addr,
-                           request.headers.get('x-forwarded-for'))
-    return jsonify(MaxMind.lookup(ip).to_dict())
+    assert ip
+    if not validators.ip_address.ipv4(ip):  # type: ignore
+        ip = get_remote_ip(request.remote_addr, request.headers.get("x-forwarded-for"))
+    return jsonify(MaxMind.lookup(ip).to_dict())  # type: ignore

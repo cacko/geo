@@ -39,34 +39,36 @@ tasks:
     cmds:
       - ssh $REMOTE_HOST 'source ~/.zshrc;journalctl --user -u {{.PROJECT}} -f' | ccze -A
 
-  serve:
-    desc: start local serve
-    cmds:
-      - poetry run flask run
-
   systemd-exec:
     desc: systemd exec
     cmds:
-      - direnv exec . poetry run gunicorn "app:create_app()"
+      - direnv exec . mamba run --live-stream -n {{.PROJECT}} flask run {{.PROJECT}}
+
+  export:
+    desc: export env
+    cmds:
+      - mamba env export --no-builds --ignore-channels  -n {{.PROJECT}} > environment.yml
 
   install:
     desc: calls poetry install and npm ci
     cmds:
-      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};poetry install'
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}}; mamba env update -n {{.PROJECT}} -f environment.yml --prune'
 
-  deploy:
-    desc: shortcut for stop -> push -> pull -> restart
+  update:
+    desc: update package
     cmds:
-      - task: stop
-      - task: push
-      - task: pull
+      - mamba run --live-stream -n {{.PROJECT}} pip install {{.CLI_ARGS}} -U
+      - task: export
+      - sed -i '' -e '/libcxx/d' environment.yml
+      - task: pp
       - task: install
-      - task: restart
+      - task: deploy
+
 
   cli:
     desc: run flask geo locally
     cmds:
-      - poetry run flask geo {{.CLI_ARGS}}
+      - mamba run --live-stream -n {{.PROJECT}} flask run {{.PROJECT}} {{.CLI_ARGS}}
 
 
   redis:
