@@ -42,7 +42,7 @@ tasks:
   systemd-exec:
     desc: systemd exec
     cmds:
-      - direnv exec . mamba run --live-stream -n {{.PROJECT}} flask run {{.PROJECT}}
+      - direnv exec . mamba run --live-stream -n {{.PROJECT}} flask run
 
   export:
     desc: export env
