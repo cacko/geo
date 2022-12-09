@@ -8,7 +8,7 @@ import os
 from app.geo.geodb import GeoDb
 
 FileStorage.register(Path(environ.get("STORAGE_DIR", "")))
-RedisStorage.register(Path(environ.get("REDIS_URL", "")))
+RedisStorage.register(environ.get("REDIS_URL", ""))
 
 
 def create_app(test_config=None):
