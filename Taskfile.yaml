@@ -42,7 +42,7 @@ tasks:
   systemd-exec:
     desc: systemd exec
     cmds:
-      - direnv exec . mamba run --live-stream -n {{.PROJECT}} flask run
+      - direnv exec . mamba run --live-stream -n {{.PROJECT}} python -m app
 
   export:
     desc: export env
@@ -68,10 +68,10 @@ tasks:
   cli:
     desc: run flask geo locally
     cmds:
-      - mamba run --live-stream -n {{.PROJECT}} flask run {{.PROJECT}} {{.CLI_ARGS}}
+      - mamba run --live-stream -n {{.PROJECT}} flask {{.CLI_ARGS}}
 
 
   redis:
     desc: open redis-cli
     cmds:
-      - redis-cli $REDIS_CLI
+      - keydb-cli $REDIS_CLI
