@@ -35,3 +35,13 @@ def route_index():
     if not validators.ip_address.ipv4(ip):  # type: ignore
         ip = get_remote_ip(request.remote_addr, request.headers.get("x-forwarded-for"))
     return jsonify(MaxMind.lookup(ip).to_dict())  # type: ignore
+
+
+@bp.after_request
+def after_request(response):
+    headers = response.headers
+    headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+    headers[
+        "Access-Control-Allow-Headers"
+    ] = "device-id,device-token,Cache-control,Pragma"
+    return response
