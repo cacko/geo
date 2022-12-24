@@ -8,7 +8,7 @@ import validators
 import ipaddress
 import socket
 
-bp = Blueprint("geo", __name__, url_prefix="/geo")
+bp = Blueprint("geo", __name__, url_prefix="/api")
 
 
 def get_remote_ip(req_ip, forward_ip=None):
