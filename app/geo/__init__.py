@@ -43,7 +43,7 @@ def route_index():
 @bp.after_request
 def after_request(response):
     headers = response.headers
-    headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+    headers["Access-Control-Allow-Origin"] = "*"
     headers[
         "Access-Control-Allow-Headers"
     ] = "device-id,device-token,Cache-control,Pragma"
