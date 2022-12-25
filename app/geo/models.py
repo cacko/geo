@@ -14,6 +14,7 @@ class ASNInfo:
 @dataclass
 class GeoInfo:
     country: str
+    country_iso: str
     city: str
     ip: str
     subdivisions: Optional[str]
