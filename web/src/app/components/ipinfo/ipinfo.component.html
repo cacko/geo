@@ -1,0 +1,41 @@
+<mat-card class="example-card">
+    <!-- <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div> 
+      <mat-card-title></mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+    <mat-card-content>
+        <div row>
+            <span label>IP</span>
+            <span value>{{ lookup.ip }}</span>
+        </div>
+        <div row *ngIf="lookup.country">
+            <span label>Country</span>
+            <span value>{{ lookup.country }}</span>
+        </div>
+        <div row *ngIf="lookup.city">
+            <span label>City</span>
+            <span value>{{ lookup.city }}</span>
+        </div>
+        <div row *ngIf="lookup.subdivisions">
+            <span label>Region</span>
+            <span value>{{ lookup.subdivisions }}</span>
+        </div>
+        <div row *ngIf="lookup.location">
+            <span label>Location</span>
+            <span value>{{ lookup.location }}</span>
+        </div>
+        <div row *ngIf="lookup.timezone">
+            <span label>Timezone</span>
+            <span value>{{ lookup.timezone }}</span>
+        </div>
+        <div row *ngIf="lookup.ISP">
+            <span label>Owner</span>
+            <span value>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
+        </div>
+    </mat-card-content>
+    <!-- <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions> -->
+</mat-card>
