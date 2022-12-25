@@ -1,7 +1,7 @@
 from pprint import pprint
 import socket
 import click
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort
 from requests import head
 from app.geo.maxmind import MaxMind
 import validators
@@ -30,10 +30,14 @@ def cli_full(ip: str):
 
 @bp.route("/lookup")
 def route_index():
-    ip = request.args.get("ip")
-    if not validators.ip_address.ipv4(ip):  # type: ignore
-        ip = get_remote_ip(request.remote_addr, request.headers.get("x-forwarded-for"))
-    return jsonify(MaxMind.lookup(ip).to_dict())  # type: ignore
+    try:
+        ip = request.args.get("ip")
+        if not ip:
+            ip = get_remote_ip(request.remote_addr, request.headers.get("x-forwarded-for"))
+        assert validators.ip_address.ipv4(ip)  # type: ignore
+        return jsonify(MaxMind.lookup(ip).to_dict())  # type: ignore
+    except AssertionError:
+        abort(502)
 
 
 @bp.after_request
