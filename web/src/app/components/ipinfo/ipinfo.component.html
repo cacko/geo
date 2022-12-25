@@ -6,32 +6,67 @@
     <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
     <mat-card-content>
         <div row>
-            <span label>IP</span>
-            <span value>{{ lookup.ip }}</span>
+            <div label>
+                IP
+            </div>
+            <div value>
+                <span>{{ lookup.ip }}</span>
+                <mat-icon>router</mat-icon>
+            </div>
         </div>
         <div row *ngIf="lookup.country">
-            <span label>Country</span>
-            <span value>{{ lookup.country }}</span>
+            <div label>
+                Country
+            </div>
+            <div value>
+                <span>
+                    {{ lookup.country }}
+                </span>
+            </div>
         </div>
         <div row *ngIf="lookup.city">
-            <span label>City</span>
-            <span value>{{ lookup.city }}</span>
+            <div label>
+                City
+            </div>
+            <div value>
+                <span>{{ lookup.city }}</span>
+                <mat-icon matTooltip="Click for more">location_city</mat-icon>
+            </div>
         </div>
         <div row *ngIf="lookup.subdivisions">
-            <span label>Region</span>
-            <span value>{{ lookup.subdivisions }}</span>
+            <div label matTooltip="Region">
+                Region
+            </div>
+            <div value>
+                <span>{{ lookup.subdivisions }}</span>
+            </div>
         </div>
         <div row *ngIf="lookup.location">
-            <span label>Location</span>
-            <span value>{{ lookup.location }}</span>
+            <div label>
+                GPS
+            </div>
+            <div value>
+                <span>{{ lookup.location }}</span>
+                <mat-icon>gps_fixed</mat-icon>
+            </div>
         </div>
         <div row *ngIf="lookup.timezone">
-            <span label>Timezone</span>
-            <span value>{{ lookup.timezone }}</span>
+            <div label>
+                Timezone
+            </div>
+            <div value>
+                <span>{{ lookup.timezone }}</span>
+                <mat-icon>timer</mat-icon>
+            </div>
         </div>
         <div row *ngIf="lookup.ISP">
-            <span label>Owner</span>
-            <span value>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
+            <div label>
+                Owner
+            </div>
+            <div value>
+                <span>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
+                <mat-icon>business</mat-icon>
+            </div>
         </div>
     </mat-card-content>
     <!-- <mat-card-actions>

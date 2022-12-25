@@ -9,13 +9,18 @@ import { ApiService } from './service/api.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IPInfoComponent } from './components/ipinfo/ipinfo.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressBarModule} from '@angular/material/progress-bar'
-import { MatCardModule } from '@angular/material/card'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
-  MatCardModule
+  MatCardModule,
+  MatIconModule,
+  MatTooltipModule,
 ];
 @NgModule({
   declarations: [
