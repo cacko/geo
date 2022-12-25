@@ -28,10 +28,9 @@ def cli_full(ip: str):
     pprint(MaxMind.lookup(ip))
 
 
-@bp.route("/")
+@bp.route("/lookup")
 def route_index():
     ip = request.args.get("ip")
-    assert ip
     if not validators.ip_address.ipv4(ip):  # type: ignore
         ip = get_remote_ip(request.remote_addr, request.headers.get("x-forwarded-for"))
     return jsonify(MaxMind.lookup(ip).to_dict())  # type: ignore
