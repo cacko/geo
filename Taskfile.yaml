@@ -52,6 +52,7 @@ tasks:
   install:
     desc: calls poetry install and npm ci
     cmds:
+      - task: pp
       - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}}; mamba env update -n {{.PROJECT}} -f environment.yml --prune'
 
   update:
@@ -61,7 +62,6 @@ tasks:
       - task: export
       - sed -i '' -e '/libcxx/d' environment.yml
       - task: pp
-      - task: install
       - task: deploy
 
   web-deploy:
