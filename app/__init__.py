@@ -33,7 +33,6 @@ root_logger = logging.getLogger()
 root_logger.addHandler(handler)
 root_logger.setLevel(getattr(logging, os.environ.get("GEO_LOG_LEVEL", "INFO")))
 
-
 FileStorage.register(Path(environ.get("STORAGE_DIR", "")))
 RedisStorage.register(environ.get("REDIS_URL", ""))
 
