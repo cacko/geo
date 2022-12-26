@@ -38,6 +38,7 @@ def route_background(place: str):
             web_assets.mkdir("777", parents=True)
         image = LookupImage(name=place)
         image_path = image.path
+        assert image_path
         assert image_path.exists()  # type: ignore
         web_path = web_assets / image_path.name
         if not web_path.exists():

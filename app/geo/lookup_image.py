@@ -4,7 +4,7 @@ from corestring import string_hash
 from typing import Optional
 from cachable.request import Request, Method, BinaryStruct
 from dataclasses import dataclass, field, asdict
-
+import logging
 
 @dataclass
 class LookupImageParams:
@@ -20,9 +20,8 @@ class LookupImage(CachableFileImage):
     _name: str
     SIZE = (768, 512)
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str):
         self._name = name
-        super().__init__()
 
     @property
     def storage(self):
@@ -66,6 +65,7 @@ class LookupImage(CachableFileImage):
                 content_type = part.headers.get(
                     b"content-type", b""  # type: ignore
                 ).decode()
+                logging.warning(f">>>>>>>>>>>> {content_type}")
                 if content_type.startswith("image"):
                     self._struct = self.tocache(BinaryStruct(binary=part.content))
                     return True
