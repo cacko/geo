@@ -13,6 +13,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlagComponent } from './components/flag/flag.component';
 
 
 const MaterialModules = [
@@ -29,6 +30,7 @@ const MaterialModules = [
     IPInfoComponent,
     IPInfoComponent,
     LoaderComponent,
+    FlagComponent,
   ],
   imports: [
     BrowserModule,

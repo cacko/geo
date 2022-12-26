@@ -79,7 +79,6 @@ tasks:
     desc: all
     cmds:
       - task: pp
-      - task: install
       - task: restart
 
   cli:

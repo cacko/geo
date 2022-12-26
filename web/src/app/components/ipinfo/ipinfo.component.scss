@@ -1,5 +1,16 @@
 :host {
 
+    [mat-card-image] {
+        background-image: url('/assets/b/northwich.png');
+        margin-bottom: 1em;
+        &[loaded] {
+            height: 20rem;
+        }
+
+    }
+
+
+
     [row] {
         display: grid;
         grid-template-columns: 5rem 1fr;

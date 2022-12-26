@@ -5,6 +5,7 @@ export interface ISPEntity {
 
 export interface LookupEntity {
   country?: string
+  country_iso ?: string
   city?: string
   ip: string;
   subdivisions?: string;
