@@ -6,6 +6,7 @@ from cachable.request import Request, Method, BinaryStruct
 from dataclasses import dataclass, field, asdict
 import logging
 
+
 @dataclass
 class LookupImageParams:
     prompt: str
@@ -67,6 +68,5 @@ class LookupImage(CachableFileImage):
                 ).decode()
                 logging.warning(f">>>>>>>>>>>> {content_type}")
                 if content_type.startswith("image"):
-                    self._struct = self.tocache(BinaryStruct(binary=part.content))
-                    return True
+                    self._path.write_bytes(part.content)
         return False
