@@ -1,4 +1,5 @@
 from cachable.storage.filestorage.image import CachableFileImage
+from cachable.storage import FileStorage
 from corestring import string_hash
 from typing import Optional
 from cachable.request import Request, Method, BinaryStruct
@@ -22,6 +23,10 @@ class LookupImage(CachableFileImage):
     def __init__(self, name: str) -> None:
         self._name = name
         super().__init__()
+
+    @property
+    def storage(self):
+        return FileStorage
 
     @property
     def filename(self):
