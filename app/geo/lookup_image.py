@@ -35,9 +35,18 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            f"{self._name}, ( ( a beautiful 8k masterpiece oil painting ) "
-            "( of ( utopia of a society where people are happy to go to work ) ) "
-            "( hyperrealism ) ( 16 k ) ( trending on artstation )"
+            f"{self._name}, "
+            "with  stunning 3d render + dim volumetric lighting, "
+            "8k octane beautifully detailed render, post-processing, "
+            "extremely hyperdetailed, intricate, ray of sunlight, "
+            "detailed painterly digital art style by WLOP and , "
+            "8k octane beautifully detailed render, post-processing, "
+            "extremely hyperdetailed, intricate, epic composition, "
+            "sparkling atmosphere, cinematic lighting + masterpiece, "
+            "trending on artstation, very detailed, vibrant colors, "
+            "hyperrealistic, smooth, sharp focus, lifelike, "
+            "cinematic lighting, art by artgerm and greg rutkowski "
+            "and alphonse mucha diffuse lighting, fantasy, intricate, elegant, highly detailed"
         )
 
     def _init(self):
