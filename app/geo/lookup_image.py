@@ -68,5 +68,6 @@ class LookupImage(CachableFileImage):
                 ).decode()
                 logging.warning(f">>>>>>>>>>>> {content_type}")
                 if content_type.startswith("image"):
+                    logging.warning(f">>>>>>>>>>>>>> {self.storage.storage_path}")
                     self._path.write_bytes(part.content)
         return False
