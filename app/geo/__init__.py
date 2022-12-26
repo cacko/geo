@@ -9,6 +9,7 @@ import ipaddress
 import socket
 from pathlib import Path
 from .lookup_image import LookupImage
+import logging
 
 bp = Blueprint("geo", __name__, url_prefix="/api")
 
@@ -38,6 +39,7 @@ def route_background(place: str):
             web_assets.mkdir("777", parents=True)
         image = LookupImage(name=place)
         image_path = image.path
+        logging.warning(f">>>>>>>>>>>>>> {image.path}")
         assert image_path
         assert image_path.exists()  # type: ignore
         web_path = web_assets / image_path.name
