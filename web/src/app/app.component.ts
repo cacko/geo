@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { ApiType } from './entity/api.entity';
 import { ApiService } from './service/api.service';
-import { timer, Subscription, interval } from 'rxjs';
+import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
 
 @Component({
@@ -24,22 +24,22 @@ export class AppComponent implements OnInit {
     private swUpdate: SwUpdate,
     private snackBar: MatSnackBar
   ) {
-    // if (this.swUpdate.isEnabled) {
-    //   this.swUpdate.available.subscribe((evt) => {
-    //     this.updating = true;
-    //     this.snackBar
-    //       .open('Update is available', 'Update')
-    //       .onAction()
-    //       .subscribe(() =>
-    //         this.swUpdate
-    //           .activateUpdate()
-    //           .then(() => document.location.reload())
-    //       );
-    //   });
-    //   interval(10000).subscribe(() => {
-    //     this.swUpdate.checkForUpdate();
-    //   });
-    // }
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe((evt) => {
+        this.updating = true;
+        this.snackBar
+          .open('Update is available', 'Update')
+          .onAction()
+          .subscribe(() =>
+            this.swUpdate
+              .activateUpdate()
+              .then(() => document.location.reload())
+          );
+      });
+      interval(10000).subscribe(() => {
+        this.swUpdate.checkForUpdate();
+      });
+    }
     this.api.loading.subscribe(res => {
       console.log("api loading", res);
       this.zone.run(() => (this.loading = res));
@@ -48,7 +48,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.fetch(ApiType.LOOOKUP).then((res) => {
+    const params = new URLSearchParams(window.location.search);
+    console.log(params);
+    this.api.fetch(ApiType.LOOOKUP, {ip: params.get("ip")}).then((res) => {
       this.lookup = res as LookupEntity;
     });
   }

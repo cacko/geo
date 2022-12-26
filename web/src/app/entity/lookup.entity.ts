@@ -5,11 +5,15 @@ export interface ISPEntity {
 
 export interface LookupEntity {
   country?: string
-  country_iso ?: string
+  country_iso?: string
   city?: string
   ip: string;
   subdivisions?: string;
   location?: number[];
-  timezone ?: string;
-  ISP ?: ISPEntity;
+  timezone?: string;
+  ISP?: ISPEntity;
+}
+
+export interface BackgroundEntity {
+  name: string;
 }

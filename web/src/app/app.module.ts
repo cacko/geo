@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
+import { LookupImageComponent } from './components/lookup-image/lookup-image.component';
 
 
 const MaterialModules = [
@@ -31,6 +32,7 @@ const MaterialModules = [
     IPInfoComponent,
     LoaderComponent,
     FlagComponent,
+    LookupImageComponent,
   ],
   imports: [
     BrowserModule,

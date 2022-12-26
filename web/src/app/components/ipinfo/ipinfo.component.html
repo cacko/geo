@@ -1,9 +1,9 @@
-<mat-card class="example-card">
+<mat-card>
     <!-- <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div> 
       <mat-card-title></mat-card-title>
     </mat-card-header> -->
-    <div mat-card-image src="" alt="Photo of a Shiba Inu"></div>
+    <app-lookup-image [lookup]="lookup" *ngIf="lookup"></app-lookup-image>
     <mat-card-content>
         <div row>
             <div label>

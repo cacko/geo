@@ -38,7 +38,9 @@ export class ApiService implements HttpInterceptor {
   constructor(private httpClient: HttpClient, private zone: NgZone) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.showLoader();
+    if ('loader' in req.params) {
+      this.showLoader();
+    }
     return next.handle(req).pipe(tap((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         this.onEnd();
@@ -58,22 +60,27 @@ export class ApiService implements HttpInterceptor {
     this.zone.run(() => this.loaderSubject.next(false));
   }
 
-  fetch(type: ApiType, params: Params = {}): Promise<any> {
+  fetch(type: ApiType, params: Params = {}, cache=true): Promise<any> {
     return new Promise((resolve, reject) => {
 
       const cacheKey = this.cacheKey(type, params);
-
+      let url = `${ApiService.API_BASEURL}/${type}`;
       const cached = this.inCache(cacheKey);
 
-      if (cached) {
+      if ('path' in params) {
+        url += "/" + params['path'];
+        params['path'] = "";
+      }
+
+      if (cache && cached) {
         return resolve(cached);
       }
 
-      this.httpClient.get(`${ApiService.API_BASEURL}/${type}`, {
+      this.httpClient.get(url, {
         params: omitBy(params, isEmpty)
       }).subscribe({
         next: (data) => {
-          if (data) {
+          if (data && cache) {
             this.toCache(cacheKey, data);
           }
           return resolve(data);

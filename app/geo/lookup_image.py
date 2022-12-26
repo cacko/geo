@@ -35,9 +35,9 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            f"{self._name}, ( ( a beautiful 8 k photorealistic masterpiece oil painting ) "
+            f"{self._name}, ( ( a beautiful 8k masterpiece oil painting ) "
             "( of ( utopia of a society where people are happy to go to work ) ) "
-            "( hyperrealism ) ( 1 6 k ) ( trending on artstation )"
+            "( hyperrealism ) ( 16 k ) ( trending on artstation )"
         )
 
     def _init(self):
