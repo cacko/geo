@@ -30,7 +30,7 @@ class LookupImage(CachableFileImage):
 
     @property
     def filename(self):
-        return f"{__class__._name}.{string_hash(self._name)}.png"
+        return f"{string_hash(self._name)}.png"
 
     @property
     def prompt(self) -> str:
