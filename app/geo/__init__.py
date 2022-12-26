@@ -32,7 +32,7 @@ def cli_full(ip: str):
 
 @bp.route("/background/<path:place>")
 def route_background(place: str):
-    try:
+    # try:
         web_assets = Path(current_app.config.get("WEB_BACKGROUNDS"))
         if not web_assets.exists():
             web_assets.mkdir("777", parents=True)
@@ -43,8 +43,8 @@ def route_background(place: str):
         if not web_path.exists():
             web_path.write_bytes(image_path.read_bytes())
         return jsonify({"name": web_path.name})  # type: ignore
-    except AssertionError:
-        abort(502)
+    # except AssertionError:
+    #     abort(502)
 
 
 @bp.route("/lookup")
