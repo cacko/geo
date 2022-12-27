@@ -80,3 +80,22 @@ class LookupImage(CachableFileImage):
                     logging.warning(f">>>>>>>>>>>>>> {self.storage.storage_path}")
                     self._path.write_bytes(part.content)
         return False
+
+
+class LoadingImage(LookupImage):
+
+    def __init__(self, name: str):
+        super().__init__(name)
+
+    @property
+    def isCached(self) -> bool:
+        return False
+
+    @property
+    def store_key(self):
+        return self.filename
+
+    @property
+    def filename(self):
+        return "loading.png"
+

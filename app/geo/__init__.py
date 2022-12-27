@@ -8,7 +8,7 @@ import validators
 import ipaddress
 import socket
 from pathlib import Path
-from .lookup_image import LookupImage
+from .lookup_image import LookupImage, LoadingImage
 import logging
 
 bp = Blueprint("geo", __name__, url_prefix="/api")
@@ -56,6 +56,15 @@ def route_lookup():
     except AssertionError:
         abort(502)
 
+@bp.cli("loading")
+def cli_loading():
+    try:
+        image = LoadingImage("Server room")
+        image_path = image.path
+        assert image_path.exists()
+        print(f"Generated {image_path}")
+    except AssertionError:
+        print(f"Generated {image_path} failed")
 
 @bp.after_request
 def after_request(response):
