@@ -1,7 +1,30 @@
 :host {
 
-    app-lookup-image {
-        margin-bottom: 1em;
+    mat-card {
+        display: flex;
+        align-items: center;
+    }
+
+    mat-card-content {
+        min-width: 768px;
+        min-height: 512px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: background-image 0.2s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 0 0;
+    }
+
+    [data] {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 1rem;
+        transition: background-color 0.2s ease-in-out;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+        }
     }
 
     [row] {
@@ -26,5 +49,4 @@
             }
         }
     }
-
 }

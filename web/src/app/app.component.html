@@ -1,4 +1,5 @@
 <app-loader *ngIf="loading"></app-loader>
 <div class="container main">
     <app-ipinfo [lookup]=lookup *ngIf="lookup"></app-ipinfo>
+    <app-error *ngIf="error"></app-error>
 </div>

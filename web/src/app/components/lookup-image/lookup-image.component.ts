@@ -8,7 +8,12 @@ import { ApiService } from 'src/app/service/api.service';
   templateUrl: './lookup-image.component.html',
   styleUrls: ['./lookup-image.component.scss']
 })
-export class LookupImageComponent implements OnInit{
+export class LookupImageComponent implements OnInit {
+
+  @Input() lookup !: LookupEntity
+
+  loaded = false;
+  img_url?: string;
 
   constructor(
     private api: ApiService
@@ -17,6 +22,7 @@ export class LookupImageComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.loaded = false;
     this.api.fetch(ApiType.BACKGROUND, {
       path: `${this.lookup.country} ${this.lookup.city}`,
       loader: "false"
@@ -24,14 +30,10 @@ export class LookupImageComponent implements OnInit{
       const data = res as BackgroundEntity;
       this.img_url = data.name;
       this.loaded = true;
-    })
+    }).catch((err) => {
+
+    });
   }
-
-  @Input() lookup !: LookupEntity
-
-  loaded = false;
-  img_url ?: string;
-
 
   getStyle(): { [key: string]: string } {
     return {
