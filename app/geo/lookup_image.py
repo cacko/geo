@@ -24,6 +24,10 @@ class LookupImage(CachableFileImage):
     def __init__(self, name: str):
         self._name = name
 
+
+    def post_init(self):
+        self._path = self.storage.storage_path / "bg" / f"{self.store_key}"
+
     @property
     def storage(self):
         return FileStorage
@@ -75,9 +79,7 @@ class LookupImage(CachableFileImage):
                 content_type = part.headers.get(
                     b"content-type", b""  # type: ignore
                 ).decode()
-                logging.warning(f">>>>>>>>>>>> {content_type}")
-                if content_type.startswith("image"):
-                    logging.warning(f">>>>>>>>>>>>>> {self.storage.storage_path}")
+                if content_type.startswith("image"):  
                     self._path.write_bytes(part.content)
         return False
 
