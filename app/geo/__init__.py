@@ -56,7 +56,7 @@ def route_lookup():
     except AssertionError:
         abort(502)
 
-@bp.cli("loading")
+@bp.cli.command("loading")
 def cli_loading():
     try:
         image = LoadingImage("Server room")
