@@ -1,73 +1,61 @@
-<mat-card>
-    <!-- <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div> 
-      <mat-card-title></mat-card-title>
-    </mat-card-header> -->
-    <mat-card-content [ngStyle]="getStyle()">
-        <div data>
-            <div row>
-                <div label>
-                    IP
-                </div>
-                <div value>
-                    <span>{{ lookup.ip }}</span>
-                </div>
-            </div>
-            <div row *ngIf="lookup.country">
-                <div label>
-                    Country
-                </div>
-                <div value>
-                    <span>
-                        {{ lookup.country }}
-                    </span>
-                    <app-flag [isoCode]="lookup.country_iso" *ngIf="lookup.country_iso"></app-flag>
-                </div>
-            </div>
-            <div row *ngIf="lookup.city">
-                <div label>
-                    City
-                </div>
-                <div value>
-                    <span>{{ lookup.city }}</span>
-                </div>
-            </div>
-            <div row *ngIf="lookup.subdivisions">
-                <div label matTooltip="Region">
-                    Region
-                </div>
-                <div value>
-                    <span>{{ lookup.subdivisions }}</span>
-                </div>
-            </div>
-            <div row *ngIf="lookup.location">
-                <div label>
-                    GPS
-                </div>
-                <div value>
-                    <span>{{ lookup.location }}</span>
-                </div>
-            </div>
-            <div row *ngIf="lookup.timezone">
-                <div label>
-                    Timezone
-                </div>
-                <div value>
-                    <span>{{ lookup.timezone }}</span>
-                </div>
-            </div>
-            <div row *ngIf="lookup.ISP">
-                <div label>
-                    Owner
-                </div>
-                <div value>
-                    <span>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
-                </div>
-            </div>
+<div content-data>
+    <div row>
+        <div label>
+            IP
         </div>
-    </mat-card-content>
-    <!-- <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
-    </mat-card-actions> -->
-</mat-card>
+        <div value>
+            <span>{{ lookup.ip }}</span>
+        </div>
+    </div>
+    <div row *ngIf="lookup.country">
+        <div label>
+            Country
+        </div>
+        <div value>
+            <span>
+                {{ lookup.country }}
+            </span>
+            <app-flag [isoCode]="lookup.country_iso" *ngIf="lookup.country_iso"></app-flag>
+        </div>
+    </div>
+    <div row *ngIf="lookup.city">
+        <div label>
+            City
+        </div>
+        <div value>
+            <span>{{ lookup.city }}</span>
+        </div>
+    </div>
+    <div row *ngIf="lookup.subdivisions">
+        <div label matTooltip="Region">
+            Region
+        </div>
+        <div value>
+            <span>{{ lookup.subdivisions }}</span>
+        </div>
+    </div>
+    <div row *ngIf="lookup.location">
+        <div label>
+            GPS
+        </div>
+        <div value>
+            <span>{{ lookup.location }}</span>
+        </div>
+    </div>
+    <div row *ngIf="lookup.timezone">
+        <div label>
+            Timezone
+        </div>
+        <div value>
+            <span>{{ lookup.timezone }}</span>
+        </div>
+    </div>
+    <div row *ngIf="lookup.ISP">
+        <div label>
+            Owner
+        </div>
+        <div value>
+            <span>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
+        </div>
+    </div>
+</div>

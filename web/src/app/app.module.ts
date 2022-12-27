@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule, isDevMode, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -14,8 +14,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
-import { LookupImageComponent } from './components/lookup-image/lookup-image.component';
 import { ErrorComponent } from './components/error/error.component';
+import { LocationBgDirective } from './directives/location-bg.directive';
 
 
 const MaterialModules = [
@@ -33,8 +33,8 @@ const MaterialModules = [
     IPInfoComponent,
     LoaderComponent,
     FlagComponent,
-    LookupImageComponent,
     ErrorComponent,
+    LocationBgDirective,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +55,8 @@ const MaterialModules = [
       multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
 export class AppModule { }

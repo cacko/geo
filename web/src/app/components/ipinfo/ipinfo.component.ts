@@ -37,10 +37,4 @@ export class IPInfoComponent implements OnInit {
 
   }
 
-  getStyle(): { [key: string]: string } {
-    return {
-      'background-image': `url('https://geo.cacko.net/bg/${this.img_url}')`,
-    };
-  }
-
 }

@@ -6,6 +6,7 @@ import { ApiService } from './service/api.service';
 import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,7 +18,6 @@ export class AppComponent implements OnInit {
   updating = false;
   lookup?: LookupEntity;
   error = false;
-
 
   constructor(
     private api: ApiService,
@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
       });
     }
     this.api.loading.subscribe(res => {
-      console.log("api loading", res);
       this.zone.run(() => (this.loading = res));
     })
 
@@ -50,8 +49,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const params = new URLSearchParams(window.location.search);
-    console.log(params);
-    this.api.fetch(ApiType.LOOOKUP, {ip: params.get("ip")}).then((res) => {
+    this.api.fetch(ApiType.LOOOKUP, { ip: params.get("ip") }).then((res) => {
       this.lookup = res as LookupEntity;
     }).catch((err) => {
 
