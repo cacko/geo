@@ -1,22 +1,12 @@
 from cachable import Cachable
 from cachable.storage import RedisStorage
-from dataclasses_json import dataclass_json
-from dataclasses import dataclass
 from pathlib import Path
 from enum import Enum
 from geoip2.database import Reader
 from geoip2.models import City, ASN
 from validators import ip_address
-from flask import Flask
 from stringcase import snakecase
 from typing import Optional
-
-
-@dataclass_json()
-@dataclass()
-class Config:
-    db: str
-
 
 class DatabaseType(Enum):
     CITY = "GeoIP2-City.mmdb"
@@ -36,9 +26,8 @@ class GeoDbMeta(type):
             cls.__instances[db] = type.__call__(cls, db_path, *args, **kwargs)
         return cls.__instances[db]
 
-    def register(cls, app: "Flask", cfg: dict):
-        config = Config.from_dict(cfg)  # type: ignore
-        cls.__db = Path(app.instance_path) / config.db
+    def register(cls, db_path: Path):
+        cls.__db = db_path
 
     def city(cls, ip) -> City:
         return CityDb(ip).lookup()

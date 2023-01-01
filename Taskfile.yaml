@@ -6,6 +6,12 @@ vars:
   PROJECT: geo
 
 tasks:
+
+  default:
+    desc: run
+    cmds:
+      -  mamba run --live-stream -n {{.PROJECT}} python -m app
+
   stop:
     desc: stop the server
     cmds:
