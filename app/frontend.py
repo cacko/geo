@@ -53,7 +53,7 @@ def init(app: FastAPI) -> None:
         container = (
             ui.row()
             .classes("w-full h-screen items-center no-wrap root loading")
-            .style('background-image: url("/b/loading.png")')
+            .style('background-image: url("/bg/loading.png")')
         )
         with container:
             info_container = ui.row().classes("w-full info-container")
@@ -72,7 +72,7 @@ def init(app: FastAPI) -> None:
                     name = image_path.name
                     dst = Path(app_config.web.backgrounds) / name
                     dst.write_bytes(image_path.read_bytes())
-                    container.style(f'background-image: url("/b/{name}")')
+                    container.style(f'background-image: url("/bg/{name}")')
                     container.classes(remove="loading")
 
 
