@@ -12,7 +12,6 @@ from dataclasses import dataclass, field, asdict
 import logging
 
 
-
 @dataclass
 class InfoRow:
     label: str
@@ -25,7 +24,7 @@ class InfoData:
 
     def __init__(self, geo: GeoInfo):
         self.__geo = geo
-    
+
     def get_data(self) -> list[InfoRow]:
         return [
             InfoRow("IP", self.__geo.ip),
@@ -33,7 +32,7 @@ class InfoData:
             InfoRow("City", self.__geo.city),
             InfoRow("GPS", ",".join(map(str, self.__geo.location))),
             InfoRow("Timezone", self.__geo.timezone),
-            InfoRow("Owner", self.__geo.ISP.name)
+            InfoRow("Owner", self.__geo.ISP.name),
         ]
 
 
@@ -49,7 +48,12 @@ def init(app: FastAPI) -> None:
         ui.add_head_html(
             f"<style>{(Path(__file__).parent / 'css' / 'main.css').read_text()}</style>"
         )
-        ui.add_static_files("/b", app_config.web.backgrounds)
+        ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
+        ui.add_head_html(
+            '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
+        )
+        if app_config.log.level == "DEBUG":
+            ui.add_static_files("/bg", app_config.web.backgrounds)
         container = (
             ui.row()
             .classes("w-full h-screen items-center no-wrap root loading")
@@ -62,23 +66,21 @@ def init(app: FastAPI) -> None:
                     ip = get_remote_ip(request.client.host, x_forwarded_for)
                 geo = MaxMind.lookup(ip)
                 info = InfoData(geo=geo)
-                for row in info.get_data():
-                    with ui.row().classes("info-row"):
-                        ui.label(row.label).classes("label")
-                        ui.label(row.value)
+                with ui.row().classes(add="content-data", remove="gap-4"):
+                    for row in info.get_data():
+                        with ui.row().classes("info-row items-center"):
+                            ui.label(row.label).classes("label")
+                            ui.label(row.value)
 
-                def get_bg():
-                    image = LookupImage(name=f"{geo.country}, {geo.city}")
-                    image_path = image.path
-                    name = image_path.name
-                    dst = Path(app_config.web.backgrounds) / name
-                    dst.write_bytes(image_path.read_bytes())
-                    container.style(f'background-image: url("/bg/{name}")')
-                    container.classes(remove="loading")
+                    def get_bg():
+                        image = LookupImage(name=f"{geo.country}, {geo.city}")
+                        image_path = image.path
+                        name = image_path.name
+                        dst = Path(app_config.web.backgrounds) / name
+                        dst.write_bytes(image_path.read_bytes())
+                        container.style(f'background-image: url("/bg/{name}")')
+                        container.classes(remove="loading")
 
-
-
-                ui.timer(0.1, get_bg, once=True)
-
+                    ui.timer(0.1, get_bg, once=True)
 
     ui.run_with(app, dark=True, title="Geo")
