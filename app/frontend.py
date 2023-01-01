@@ -6,10 +6,11 @@ from app.geo.maxmind import MaxMind, GeoInfo
 from app.geo.lookup_image import LookupImage
 from app.core.ip import get_remote_ip
 from dataclasses import dataclass
-from pydantic import BaseModel, Field
 from typing import Optional
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass
 import logging
+
+ASSETS = Path(__file__).parent / 'assets'
 
 
 @dataclass
@@ -44,16 +45,17 @@ def init(app: FastAPI) -> None:
         ip: str = "",
         x_forwarded_for: str | None = Header(default=None),
     ):
+        if app_config.log.level == "DEBUG":
+            ui.add_static_files("/bg", app_config.web.backgrounds)
         client.content.classes(remove="q-pa-md gap-4")
         ui.add_head_html(
-            f"<style>{(Path(__file__).parent / 'css' / 'main.css').read_text()}</style>"
+            f"<style>{(ASSETS / 'css' / 'main.css').read_text()}</style>"
         )
         ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
         ui.add_head_html(
             '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
         )
-        if app_config.log.level == "DEBUG":
-            ui.add_static_files("/bg", app_config.web.backgrounds)
+
         container = (
             ui.row()
             .classes("w-full h-screen items-center no-wrap root loading")
@@ -83,4 +85,4 @@ def init(app: FastAPI) -> None:
 
                     ui.timer(0.1, get_bg, once=True)
 
-    ui.run_with(app, dark=True, title="Geo")
+    ui.run_with(app, dark=True, title="Geo", favicon=(ASSETS / "icons" / "favicon.ico").as_posix())
