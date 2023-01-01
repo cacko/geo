@@ -26,7 +26,7 @@ class LookupImage(CachableFileImage):
 
 
     def post_init(self):
-        self._path = self.storage.storage_path / "bg" / f"{self.store_key}"
+        self._path = self.storage.storage_path / f"{self.store_key}"
 
     @property
     def storage(self):

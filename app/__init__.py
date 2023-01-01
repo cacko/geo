@@ -9,4 +9,4 @@ corelog.register(app_config.log.level)
 
 FileStorage.register(Path(app_config.storage.dir))
 RedisStorage.register(app_config.redis.url)
-GeoDb.register((Path(__file__).parent.parent / "instance" / "db"))
+GeoDb.register(Path(app_config.maxmind.db))

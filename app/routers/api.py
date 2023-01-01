@@ -1,25 +1,11 @@
 from fastapi import APIRouter, Header, Request, HTTPException
 from app.geo.maxmind import MaxMind
 from app.geo.lookup_image import LookupImage
-import ipaddress
 import validators
-import socket
-import httpx
 import logging
+from app.core.ip import get_remote_ip
 
 router = APIRouter()
-
-
-def get_remote_ip(req_ip, forward_ip=None):
-    try:
-        ipv4 = ipaddress.IPv4Address(req_ip)
-        if forward_ip:
-            return forward_ip
-        if ipv4.is_private:
-            return httpx.get("https://checkip.amazonaws.com").text.strip()
-    except socket.gaierror:
-        pass
-    return req_ip
 
 
 @router.get("/api/lookup", tags=["api"])

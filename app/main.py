@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from .routers import api
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.frontend import init as frontend
 
 app = FastAPI()
 
@@ -20,6 +20,4 @@ app.add_middleware(
 
 app.include_router(api.router)
 
-@app.get("/")
-async def root():
-    return {"message": "Hello Bigger Applications!"}
+frontend(app=app)
