@@ -1,9 +1,4 @@
-from fastapi import (
-    APIRouter, 
-    Header, 
-    Request, 
-    HTTPException
-)
+from fastapi import APIRouter, Header, Request, HTTPException
 from app.geo.maxmind import MaxMind
 from app.geo.lookup_image import LookupImage
 import ipaddress
@@ -21,7 +16,7 @@ def get_remote_ip(req_ip, forward_ip=None):
         if forward_ip:
             return forward_ip
         if ipv4.is_private:
-            return httpx.get('https://checkip.amazonaws.com').text.strip()
+            return httpx.get("https://checkip.amazonaws.com").text.strip()
     except socket.gaierror:
         pass
     return req_ip
@@ -36,16 +31,14 @@ async def read_lookup(
     try:
         if not ip:
             ip = get_remote_ip(request.client.host, x_forwarded_for)
-        logging.info(ip)
         assert validators.ip_address.ipv4(ip)
         return MaxMind.lookup(ip).to_dict()
     except AssertionError:
         raise HTTPException(status_code=502)
 
+
 @router.get("/api/background/{place}", tags=["api"])
-async def read_background(
-    place: str
-):
+async def read_background(place: str):
     try:
         image = LookupImage(name=place)
         image_path = image.path
