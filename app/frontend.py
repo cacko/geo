@@ -58,7 +58,8 @@ def init(app: FastAPI) -> None:
         with container:
             info_container = ui.row().classes("w-full info-container")
             with info_container:
-                ip = get_remote_ip(request.client.host, x_forwarded_for)
+                if not ip:
+                    ip = get_remote_ip(request.client.host, x_forwarded_for)
                 geo = MaxMind.lookup(ip)
                 info = InfoData(geo=geo)
                 for row in info.get_data():
