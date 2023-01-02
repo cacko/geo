@@ -70,17 +70,6 @@ tasks:
       - task: pp
       - task: deploy
 
-  web-deploy:
-    desc: deploy
-    dir: web
-    cmds:
-      - ng build --configuration production --service-worker
-      - tar cfz dist.tgz dist/geo
-      - scp dist.tgz open:/var/www/geo
-      - ssh open rm -rf /var/www/geo/dist
-      - ssh open tar zxf /var/www/geo/dist.tgz --directory /var/www/geo
-      - ssh open rm /var/www/geo/dist.tgz
-
   deploy:
     desc: all
     cmds:

@@ -26,6 +26,13 @@
     flex-direction: column;
 }
 
+@media (min-width: 1426px) {
+    .content-data {
+        position: relative;
+        right: calc((100% - 1426px) / 4);
+    }
+}
+
 .info-row {
     display: grid;
     grid-template-columns: 5rem 1fr;
