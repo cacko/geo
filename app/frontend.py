@@ -5,18 +5,46 @@ from pathlib import Path
 from app.geo.maxmind import MaxMind, GeoInfo
 from app.geo.lookup_image import LookupImage
 from app.core.ip import get_remote_ip
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
+import flag
 from typing import Optional
-from dataclasses import dataclass
 import logging
 
 ASSETS = Path(__file__).parent / 'assets'
 
 
-@dataclass
-class InfoRow:
+class InfoRow(BaseModel):
     label: str
     value: str
+
+    @property
+    def display(self):
+        return self.value
+
+class IPRow(InfoRow):
+    label = "IP"
+
+class CountryRow(InfoRow):
+    label = "Country"
+    iso_code: str
+
+    @property
+    def display(self):
+        return f"{self.value} {flag.flag(self.iso_code)}"
+
+class CityRow(InfoRow):
+    label = "City"
+
+class GPSRow(InfoRow):
+    label = "GPS"
+
+class TimezoneRow(InfoRow):
+    label = "Timezone"
+
+class OwnerRow(InfoRow):
+    label = "Owner"
+    value: str
+    id: Optional[int] = None
 
 
 class InfoData:
@@ -28,12 +56,12 @@ class InfoData:
 
     def get_data(self) -> list[InfoRow]:
         return [
-            InfoRow("IP", self.__geo.ip),
-            InfoRow("Country", self.__geo.country),
-            InfoRow("City", self.__geo.city),
-            InfoRow("GPS", ",".join(map(str, self.__geo.location))),
-            InfoRow("Timezone", self.__geo.timezone),
-            InfoRow("Owner", self.__geo.ISP.name),
+            IPRow(value=self.__geo.ip),
+            CountryRow(value=self.__geo.country, iso_code=self.__geo.country_iso),
+            CityRow(value=self.__geo.city),
+            GPSRow(value=",".join(map(str, self.__geo.location))),
+            TimezoneRow(value=self.__geo.timezone),
+            OwnerRow(value=self.__geo.ISP.name, id=self.__geo.ISP.id),
         ]
 
 
@@ -73,7 +101,7 @@ def init(app: FastAPI) -> None:
                     for row in info.get_data():
                         with ui.row().classes("info-row items-center"):
                             ui.label(row.label).classes("label")
-                            ui.label(row.value)
+                            ui.label(row.display)
 
                     def get_bg():
                         image = LookupImage(name=f"{geo.country}, {geo.city}")
