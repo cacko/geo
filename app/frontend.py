@@ -51,6 +51,7 @@ def init(app: FastAPI) -> None:
         ui.add_head_html(
             f"<style>{(ASSETS / 'css' / 'main.css').read_text()}</style>"
         )
+        ui.add_head_html('<meta name="viewport" content="width=device-width, initial-scale=1">')
         ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
         ui.add_head_html(
             '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
