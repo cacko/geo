@@ -79,10 +79,6 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
-    def __make_request(self, path: str, **kwds):
-        logging.warning(kwds)
-        return Request(path, method=Method.POST, **kwds)
-
     def __fetch(self, json: dict):
         flick_path = Flickr.image(
             tags=self.tags, lat=self._geo.location[0], lon=self._geo.location[1]
