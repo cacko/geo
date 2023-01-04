@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Header, Request, HTTPException
 from nicegui import ui, Client
+from nicegui.element import Element
+from nicegui.elements.row import Row
 from app.config import app_config
 from pathlib import Path
 from app.geo.maxmind import MaxMind, GeoInfo
@@ -7,7 +9,7 @@ from app.geo.lookup_image import LookupImage
 from app.core.ip import get_remote_ip
 from pydantic import BaseModel, Field
 import flag
-from typing import Optional
+from typing import Optional, Callable
 import logging
 
 ASSETS = Path(__file__).parent / "assets"
@@ -82,6 +84,24 @@ class InfoData:
         )
 
 
+class IPInfo(Element):
+    def __init__(self, geo: GeoInfo):
+        super().__init__("ip-info")
+        self.populate(geo)
+
+    def populate(self, geo: GeoInfo):
+        with self:
+            info = InfoData(geo=geo)
+            for row in info.get_data():
+                with ui.row().classes("info-row items-center"):
+                    ui.label(row.label).classes("label")
+                    ui.label(row.display)
+
+    def clear(self) -> None:
+        logging.warning(self.collect_descendant_ids())
+        return super().clear()
+
+
 def init(app: FastAPI) -> None:
     @ui.page("/")
     async def main_page(
@@ -126,18 +146,24 @@ def init(app: FastAPI) -> None:
             .classes("w-full h-screen items-center no-wrap root loading")
             .style('background-image: url("/bg/loading.png")')
         )
+        ipinfo = None
+
         with container:
             info_container = ui.row().classes("w-full info-container")
             with info_container:
+
+                def update_ip():
+                    ui.notify("You clicked a button, very good!")
+                    # ipinfo.clear()
+                    # ipinfo.populate(MaxMind.lookup("12.12.12.12"))
+
+                ui.button(on_click=update_ip).classes("button-search").props(
+                    "round color='black' icon='travel_explore'"
+                )
                 if not ip:
                     ip = get_remote_ip(request.client.host, x_forwarded_for)
                 geo = MaxMind.lookup(ip)
-                info = InfoData(geo=geo)
-                with ui.row().classes(add="content-data", remove="gap-4"):
-                    for row in info.get_data():
-                        with ui.row().classes("info-row items-center"):
-                            ui.label(row.label).classes("label")
-                            ui.label(row.display)
+                with IPInfo(geo=geo) as ipinfo:
 
                     def get_bg():
                         image = LookupImage(geo=geo)

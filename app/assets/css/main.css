@@ -9,7 +9,7 @@
 .info-container {
     display: flex;
     flex: 1;
-    justify-content: center;
+    justify-content: space-around;
 
     background-color: rgba(0, 0, 0, 0.5);
     padding: 1rem;
@@ -21,16 +21,9 @@
     cursor: pointer;
 }
 
-.content-data {
+ip-info {
     display: flex;
     flex-direction: column;
-}
-
-@media (min-width: 1426px) {
-    .content-data {
-        position: relative;
-        right: calc((100% - 1426px) / 4);
-    }
 }
 
 .info-row {
@@ -78,4 +71,10 @@
         background-color: rgba(0, 0, 0, 0.5);
         ;
     }
+}
+
+.button-search {
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
 }
