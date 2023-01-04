@@ -22,6 +22,10 @@ class WebConfig(BaseModel):
 class StorageConfig(BaseModel):
     dir: str
 
+class FlickrConfig(BaseModel):
+    key: str
+    secret: str
+
 
 class Settings(BaseSettings):
     redis: RedisConfig
@@ -30,6 +34,7 @@ class Settings(BaseSettings):
     log: LogConfig
     web: WebConfig
     storage: StorageConfig
+    flickr: FlickrConfig
 
     class Config:
         env_nested_delimiter = '__'

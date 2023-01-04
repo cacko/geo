@@ -104,7 +104,7 @@ def init(app: FastAPI) -> None:
                             ui.label(row.display)
 
                     def get_bg():
-                        image = LookupImage(name=f"{geo.country}, {geo.city}")
+                        image = LookupImage(geo=geo)
                         image_path = image.path
                         name = image_path.name
                         dst = Path(app_config.web.backgrounds) / name
