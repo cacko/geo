@@ -15,7 +15,7 @@ class FlickrMeta(type):
             cls.__instance = type.__call__(cls)
         return cls.__instance
 
-    def image(cls, tags: list[str], lat: float, lon: float) -> Path:
+    def image(cls, tags: str, lat: float, lon: float) -> Path:
         return cls().get_image(tags=tags, lat=lat, lon=lon)
 
 
@@ -30,7 +30,7 @@ class Flickr(object, metaclass=FlickrMeta):
             format="json",
         )
 
-    def get_image(self, tags: list[str], lat: float, lon: float) -> Path:
+    def get_image(self, tags: str, lat: float, lon: float) -> Path:
         extras = "url_h"
         photos = self.__api.photos.search(
             tags=tags, lat=lat, lon=lon, per_page="1", extras=extras

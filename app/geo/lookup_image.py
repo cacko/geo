@@ -68,8 +68,8 @@ class LookupImage(CachableFileImage):
         )
 
     @property
-    def tags(self) -> list[str]:
-        return list(filter(None, [self._geo.country, self._geo.city, "town"]))
+    def tags(self) -> str:
+        return ",".join(filter(None, [self._geo.country, self._geo.city, "town"]))
 
     def _init(self):
         if self.isCached:

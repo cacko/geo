@@ -46,9 +46,9 @@ class MaxMind(object, metaclass=MaxMindMeta):
         asn = self.get_asn(ip)
         result = {
             "ip": ip,
-            "country": city.country.names.get("en", "N/A"),
+            "country": city.country.names.get("en", ""),
             "country_iso": city.country.iso_code,
-            "city": city.city.names.get("en", "N/A"),
+            "city": city.city.names.get("en", ""),
             "subdivisions": ",".join([s.names.get("en") for s in city.subdivisions]),
             "location": (city.location.latitude, city.location.longitude),
             "timezone": city.location.time_zone,
@@ -56,9 +56,9 @@ class MaxMind(object, metaclass=MaxMindMeta):
         }
         result_lite = {
             "ip": ip,
-            "country": city_lite.country.names.get("en", "N/A"),
+            "country": city_lite.country.names.get("en", ""),
             "country_iso": city.country.iso_code,
-            "city": city_lite.city.names.get("en", "N/A"),
+            "city": city_lite.city.names.get("en", ""),
             "subdivisions": ",".join(
                 [s.names.get("en") for s in city_lite.subdivisions]
             ),
