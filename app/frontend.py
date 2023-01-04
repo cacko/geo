@@ -86,6 +86,14 @@ def init(app: FastAPI) -> None:
         )
         ui.add_head_html('<meta name="viewport" content="width=device-width, initial-scale=1">')
         ui.add_head_html('<link rel="manifest" href="/assets/site.webmanifest">')
+        ui.add_head_html('<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">')
+        ui.add_head_html('<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">')
+        ui.add_head_html('<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">')
+        ui.add_head_html('<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#3a575f">')
+        ui.add_head_html('<link rel="shortcut icon" href="/assets/favicon.ico">')
+        ui.add_head_html('<meta name="msapplication-TileColor" content="#da532c">')
+        ui.add_head_html('<meta name="msapplication-config" content="/assets/browserconfig.xml">')
+        ui.add_head_html('<meta name="theme-color" content="#0c103b">')
         ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
         ui.add_head_html(
             '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
