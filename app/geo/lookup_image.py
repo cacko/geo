@@ -42,9 +42,16 @@ class LookupImage(CachableFileImage):
 
     @property
     def name(self) -> str:
-        return " ".join(filter(None, [
-            self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
-        ]))
+        return " ".join(
+            filter(
+                None,
+                [
+                    self._geo.country,
+                    self._geo.city,
+                    ",".join(map(str, self._geo.location)),
+                ],
+            )
+        )
 
     @property
     def filename(self):
@@ -63,7 +70,7 @@ class LookupImage(CachableFileImage):
 
     @property
     def tags(self) -> str:
-        return ",".join(filter(None, [self._geo.country, self._geo.city, "town"]))
+        return ",".join(filter(None, ["town", self._geo.city, self._geo.country]))
 
     def _init(self):
         if self.isCached:
