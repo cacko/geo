@@ -79,11 +79,13 @@ def init(app: FastAPI) -> None:
     ):
         if app_config.log.level == "DEBUG":
             ui.add_static_files("/bg", app_config.web.backgrounds)
+        ui.add_static_files("/assets", (ASSETS / "icons").as_posix())
         client.content.classes(remove="q-pa-md gap-4")
         ui.add_head_html(
             f"<style>{(ASSETS / 'css' / 'main.css').read_text()}</style>"
         )
         ui.add_head_html('<meta name="viewport" content="width=device-width, initial-scale=1">')
+        ui.add_head_html('<link rel="manifest" href="/assets/site.webmanifest">')
         ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
         ui.add_head_html(
             '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
