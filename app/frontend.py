@@ -10,7 +10,7 @@ import flag
 from typing import Optional
 import logging
 
-ASSETS = Path(__file__).parent / 'assets'
+ASSETS = Path(__file__).parent / "assets"
 
 
 class InfoRow(BaseModel):
@@ -25,8 +25,10 @@ class InfoRow(BaseModel):
     def isEmpty(self) -> bool:
         return len(self.value.strip()) < 1
 
+
 class IPRow(InfoRow):
     label = "IP"
+
 
 class CountryRow(InfoRow):
     label = "Country"
@@ -36,14 +38,18 @@ class CountryRow(InfoRow):
     def display(self):
         return f"{self.value} {flag.flag(self.iso_code)}"
 
+
 class CityRow(InfoRow):
     label = "City"
+
 
 class GPSRow(InfoRow):
     label = "GPS"
 
+
 class TimezoneRow(InfoRow):
     label = "Timezone"
+
 
 class OwnerRow(InfoRow):
     label = "Owner"
@@ -59,14 +65,21 @@ class InfoData:
         self.__geo = geo
 
     def get_data(self) -> list[InfoRow]:
-        return list(filter(lambda x: not x.isEmpty, [
-            IPRow(value=self.__geo.ip),
-            CountryRow(value=self.__geo.country, iso_code=self.__geo.country_iso),
-            CityRow(value=self.__geo.city),
-            GPSRow(value=",".join(map(str, self.__geo.location))),
-            TimezoneRow(value=self.__geo.timezone),
-            OwnerRow(value=self.__geo.ISP.name, id=self.__geo.ISP.id),
-        ]))
+        return list(
+            filter(
+                lambda x: not x.isEmpty,
+                [
+                    IPRow(value=self.__geo.ip),
+                    CountryRow(
+                        value=self.__geo.country, iso_code=self.__geo.country_iso
+                    ),
+                    CityRow(value=self.__geo.city),
+                    GPSRow(value=",".join(map(str, self.__geo.location))),
+                    TimezoneRow(value=self.__geo.timezone),
+                    OwnerRow(value=self.__geo.ISP.name, id=self.__geo.ISP.id),
+                ],
+            )
+        )
 
 
 def init(app: FastAPI) -> None:
@@ -82,23 +95,32 @@ def init(app: FastAPI) -> None:
         ui.add_static_files("/assets", (ASSETS / "icons").as_posix())
         client.content.classes(remove="q-pa-md gap-4")
         ui.add_head_html(
-            f"<style>{(ASSETS / 'css' / 'main.css').read_text()}</style>"
+            '<meta name="viewport" content="width=device-width, initial-scale=1">'
         )
-        ui.add_head_html('<meta name="viewport" content="width=device-width, initial-scale=1">')
         ui.add_head_html('<link rel="manifest" href="/assets/site.webmanifest">')
-        ui.add_head_html('<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">')
-        ui.add_head_html('<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">')
-        ui.add_head_html('<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">')
-        ui.add_head_html('<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#3a575f">')
+        ui.add_head_html(
+            '<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">'
+        )
+        ui.add_head_html(
+            '<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">'
+        )
+        ui.add_head_html(
+            '<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">'
+        )
+        ui.add_head_html(
+            '<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#3a575f">'
+        )
         ui.add_head_html('<link rel="shortcut icon" href="/assets/favicon.ico">')
         ui.add_head_html('<meta name="msapplication-TileColor" content="#da532c">')
-        ui.add_head_html('<meta name="msapplication-config" content="/assets/browserconfig.xml">')
+        ui.add_head_html(
+            '<meta name="msapplication-config" content="/assets/browserconfig.xml">'
+        )
         ui.add_head_html('<meta name="theme-color" content="#0c103b">')
         ui.add_head_html('<link rel="preconnect" href="https://fonts.gstatic.com">')
         ui.add_head_html(
             '<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&amp;family=Syne+Mono&amp;display=swap" rel="stylesheet" />'
         )
-
+        ui.add_head_html(f"<style>{(ASSETS / 'css' / 'main.css').read_text()}</style>")
         container = (
             ui.row()
             .classes("w-full h-screen items-center no-wrap root loading")
@@ -128,4 +150,9 @@ def init(app: FastAPI) -> None:
 
                     ui.timer(0.1, get_bg, once=True)
 
-    ui.run_with(app, dark=True, title="Geo", favicon=(ASSETS / "icons" / "favicon.ico").as_posix())
+    ui.run_with(
+        app,
+        dark=True,
+        title="Geo",
+        favicon=(ASSETS / "icons" / "favicon.ico").as_posix(),
+    )
