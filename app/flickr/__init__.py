@@ -35,7 +35,6 @@ class Flickr(object, metaclass=FlickrMeta):
         photos = self.__api.photos.search(
             tags=tags, lat=lat, lon=lon, per_page="1", extras=extras
         )
-
         photo = json.loads(photos).get("photos", {}).get("photo", [])[0]
         url = photo.get("url_h")
         if not url:

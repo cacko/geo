@@ -51,20 +51,14 @@ class LookupImage(CachableFileImage):
         hash = string_hash(
             self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
         )
-        return f"{hash}.png"
+        return f"{hash}.webp"
 
     @property
     def prompt(self) -> str:
         return (
-            "with  stunning 3d render + dim volumetric lighting, "
-            "8k octane beautifully detailed render, post-processing, "
-            "extremely hyperdetailed, intricate, ray of sunlight, "
-            "detailed painterly digital art style by WLOP and , "
-            "sparkling atmosphere, cinematic lighting + masterpiece, "
-            "trending on artstation, very detailed, vibrant colors, "
-            "hyperrealistic, smooth, sharp focus, lifelike, "
-            "cinematic lighting, art by artgerm and greg rutkowski "
-            "and alphonse mucha diffuse lighting, fantasy, intricate, elegant, highly detailed"
+            "classical oil painting by marc simonetti, "
+            "beautiful anime, official artwork, stylistic, "
+            "brush strokes, oil, canvas"
         )
 
     @property

@@ -21,6 +21,10 @@ class InfoRow(BaseModel):
     def display(self):
         return self.value
 
+    @property
+    def isEmpty(self) -> bool:
+        return len(self.value.strip()) < 1
+
 class IPRow(InfoRow):
     label = "IP"
 
@@ -55,14 +59,14 @@ class InfoData:
         self.__geo = geo
 
     def get_data(self) -> list[InfoRow]:
-        return [
+        return list(filter(lambda x: not x.isEmpty, [
             IPRow(value=self.__geo.ip),
             CountryRow(value=self.__geo.country, iso_code=self.__geo.country_iso),
             CityRow(value=self.__geo.city),
             GPSRow(value=",".join(map(str, self.__geo.location))),
             TimezoneRow(value=self.__geo.timezone),
             OwnerRow(value=self.__geo.ISP.name, id=self.__geo.ISP.id),
-        ]
+        ]))
 
 
 def init(app: FastAPI) -> None:
