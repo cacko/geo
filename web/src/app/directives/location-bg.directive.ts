@@ -8,7 +8,7 @@ import { ApiService } from '../service/api.service';
 })
 export class LocationBgDirective implements OnInit {
 
-  @Input() locationbg?: LookupEntity;
+  @Input() locationbg?: string;
   @HostBinding('class.loading') isLoading = false;
   constructor(
     private api: ApiService,
@@ -22,7 +22,7 @@ export class LocationBgDirective implements OnInit {
     }
     this.isLoading = true;
     this.api.fetch(ApiType.BACKGROUND, {
-      path: `${this.locationbg.country} ${this.locationbg.city}`,
+      path: `${this.locationbg}`,
       loader: "false"
     }, false).then((res) => {
       const data = res as BackgroundEntity;
