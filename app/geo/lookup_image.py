@@ -3,21 +3,19 @@ from cachable.storage import FileStorage
 from corestring import string_hash
 from typing import Optional
 from cachable.request import Request, Method, BinaryStruct
-from dataclasses import dataclass, field, asdict
 from app.flickr import Flickr
 import filetype
 import logging
 from PIL import Image
 from io import BytesIO
 from app.geo.models import GeoInfo
+from pydantic import BaseModel, Field
 
-
-@dataclass
-class LookupImageParams:
+class LookupImageParams(BaseModel):
     prompt: str
-    height: int = field(default=512)
-    width: int = field(default=768)
-    guidance_scale: float = field(default=15)
+    height: int = Field(default=512)
+    width: int = Field(default=768)
+    guidance_scale: float = Field(default=15)
     seed: Optional[int] = None
 
 
@@ -75,7 +73,7 @@ class LookupImage(CachableFileImage):
         if self.isCached:
             return
         try:
-            self.__fetch(asdict(LookupImageParams(prompt=self.prompt)))
+            self.__fetch(LookupImageParams(prompt=self.prompt).dict())
         except Exception:
             self._path = self.DEFAULT
 
@@ -86,6 +84,7 @@ class LookupImage(CachableFileImage):
         logging.warning(flick_path.exists())
         kind = filetype.guess(flick_path.as_posix())
         fp = flick_path.open("rb")
+        logging.warning(self.name)
         path = f"http://192.168.0.107:23726/image/img2img/{self.name}"
         req = Request(
             path,
@@ -100,6 +99,7 @@ class LookupImage(CachableFileImage):
                 content_type = part.headers.get(
                     b"content-type", b""  # type: ignore
                 ).decode()
+                logging.debug(conte)
                 if content_type.startswith("image"):
                     self._path.write_bytes(part.content)
         return False

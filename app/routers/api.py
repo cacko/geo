@@ -23,10 +23,10 @@ async def read_lookup(
         raise HTTPException(status_code=502)
 
 
-@router.get("/api/background/<path:place>", tags=["api"])
-async def route_background(place: str):
+@router.get("/api/background/{ip}", tags=["api"])
+async def route_background(piplace: str):
     try:
-        image = LookupImage(name=place)
+        image = LookupImage(MaxMind.lookup(ip=ip))
         image_path = image.path
         assert image_path
         assert image_path.exists()

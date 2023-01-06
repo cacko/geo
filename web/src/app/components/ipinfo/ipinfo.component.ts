@@ -24,7 +24,7 @@ export class IPInfoComponent implements OnInit {
     this.loaded = false;
     setTimeout(() => {
       this.api.fetch(ApiType.BACKGROUND, {
-        path: `${this.lookup.country} ${this.lookup.city}`,
+        path: `${this.lookup.ip}`,
         loader: "false"
       }, false).then((res) => {
         const data = res as BackgroundEntity;
