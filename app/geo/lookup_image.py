@@ -64,8 +64,7 @@ class LookupImage(CachableFileImage):
     def prompt(self) -> str:
         return (
             "classical oil painting by marc simonetti, "
-            "beautiful anime, official artwork, stylistic, "
-            "brush strokes, oil, canvas"
+            "stylistic, brush strokes, oil, canvas"
         )
 
     @property
