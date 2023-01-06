@@ -99,7 +99,6 @@ class LookupImage(CachableFileImage):
                 content_type = part.headers.get(
                     b"content-type", b""  # type: ignore
                 ).decode()
-                logging.debug(conte)
                 if content_type.startswith("image"):
                     self._path.write_bytes(part.content)
         return False

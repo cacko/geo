@@ -24,7 +24,7 @@ async def read_lookup(
 
 
 @router.get("/api/background/{ip}", tags=["api"])
-async def route_background(piplace: str):
+async def route_background(ip: str):
     try:
         image = LookupImage(MaxMind.lookup(ip=ip))
         image_path = image.path
