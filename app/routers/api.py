@@ -24,7 +24,7 @@ async def read_lookup(
 
 
 @router.get("/api/background/<path:place>", tags=["api"])
-def route_background(place: str):
+async def route_background(place: str):
     try:
         image = LookupImage(name=place)
         image_path = image.path
