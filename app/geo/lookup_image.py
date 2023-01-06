@@ -10,6 +10,8 @@ from PIL import Image
 from io import BytesIO
 from app.geo.models import GeoInfo
 from pydantic import BaseModel, Field
+from app.config import app_config
+from pathlib import Path
 
 class LookupImageParams(BaseModel):
     prompt: str
@@ -32,7 +34,7 @@ class LookupImage(CachableFileImage):
         im.save(self._path.as_posix())
 
     def post_init(self):
-        self._path = self.storage.storage_path / f"{self.store_key}"
+        self._path = Path(app_config.web.backgrounds) / f"{self.store_key}"
 
     @property
     def storage(self):
