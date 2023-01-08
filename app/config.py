@@ -18,6 +18,7 @@ class LogConfig(BaseModel):
 
 class WebConfig(BaseModel):
     backgrounds: str
+    backgrounds_path: str
 
 class StorageConfig(BaseModel):
     dir: str

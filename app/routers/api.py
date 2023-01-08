@@ -4,6 +4,7 @@ import validators
 import logging
 from app.core.ip import get_remote_ip
 from app.geo.lookup_image import LookupImage
+from app.config import app_config
 
 router = APIRouter()
 
@@ -30,7 +31,9 @@ async def route_background(ip: str):
         image_path = image.path
         assert image_path
         assert image_path.exists()
-        return {"name": image_path.name}
+        return {
+            "name": image_path.name,
+            "url": f"{app_config.web.backgrounds_path}/{image_path.name}",
+        }
     except AssertionError:
         raise HTTPException(status_code=502)
-
