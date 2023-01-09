@@ -2,6 +2,11 @@ from pydantic import BaseModel, BaseSettings, Field
 
 class MaxmindConfig(BaseModel):
     db: str
+    city_db: str
+    country_db: str
+    asn_db: str
+    city2_db: str
+    asn2_db: str
 
 class RedisConfig(BaseModel):
     cli: str

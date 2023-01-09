@@ -1,18 +1,12 @@
 from typing import Optional
-from dataclasses_json import dataclass_json
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-
-@dataclass_json
-@dataclass
-class ASNInfo:
+class ASNInfo(BaseModel):
     name: str
     id: int
 
 
-@dataclass_json
-@dataclass
-class GeoInfo:
+class GeoInfo(BaseModel):
     country: str
     country_iso: str
     city: str
@@ -21,3 +15,13 @@ class GeoInfo:
     location: Optional[tuple[float, float]]
     timezone: Optional[str]
     ISP: Optional[ASNInfo]
+
+
+class CityInfo(BaseModel):
+    country: str
+    country_iso: str
+    city: str
+    ip: str
+    subdivisions: Optional[str]
+    location: Optional[tuple[float, float]]
+    timezone: Optional[str]

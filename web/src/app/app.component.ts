@@ -28,14 +28,7 @@ export class AppComponent implements OnInit {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe((evt) => {
         this.updating = true;
-        this.snackBar
-          .open('Update is available', 'Update')
-          .onAction()
-          .subscribe(() =>
-            this.swUpdate
-              .activateUpdate()
-              .then(() => document.location.reload())
-          );
+        document.location.reload();
       });
       interval(10000).subscribe(() => {
         this.swUpdate.checkForUpdate();
