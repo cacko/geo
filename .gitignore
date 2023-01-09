@@ -7,11 +7,9 @@ output*.json
 *.gz
 .envrc
 out/
-/storage/
 scan.json
 web/settings.toml
 cache/
-tea/
 data/
 t.py
 .venv
@@ -20,7 +18,4 @@ public/
 templates/
 images_data.json
 .idea/
-processed
-processed_thumbs
-results-*/
 instance/
