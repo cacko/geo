@@ -31,9 +31,9 @@ class LookupImage(CachableFileImage):
     def __init__(self, geo: Optional[GeoInfo] = None):
         self._geo = geo
 
-    def tocache(self, res: BinaryStruct):
+    def tocache(self, image_data: bytes):
         assert self._path
-        im = Image.open(BytesIO(res.binary))
+        im = Image.open(BytesIO(image_data))
         im.save(self._path.as_posix())
 
     def post_init(self):
@@ -128,7 +128,7 @@ class LookupImage(CachableFileImage):
                     b"content-type", b""  # type: ignore
                 ).decode()
                 if content_type.startswith("image"):
-                    self._path.write_bytes(part.content)
+                    self.tocache(part.content)
         return False
 
 
