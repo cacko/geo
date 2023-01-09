@@ -1,0 +1,9 @@
+<button mat-mini-fab [color]="status ? 'info' : 'warn'">
+    <mat-icon *ngIf="status">wifi</mat-icon>
+    <mat-icon *ngIf="!status">wifi_off</mat-icon>
+</button>
+<div>
+    <div *ngFor="let msg of changes">
+        {{msg}}
+    </div>
+</div>

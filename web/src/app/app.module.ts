@@ -16,8 +16,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LocationBgDirective } from './directives/location-bg.directive';
-import {MatDialogModule} from '@angular/material/dialog';
-import { MapComponent } from './components/map/map.component'; 
+import { MatDialogModule } from '@angular/material/dialog';
+import { MapComponent } from './components/map/map.component';
+import { MatButtonModule } from '@angular/material/button';
+import { ConnectionComponent } from './components/connection/connection.component';
+import { WebsocketService } from './service/websocket.service';
 
 
 const MaterialModules = [
@@ -27,6 +30,7 @@ const MaterialModules = [
   MatIconModule,
   MatTooltipModule,
   MatDialogModule,
+  MatButtonModule
 ];
 @NgModule({
   declarations: [
@@ -39,6 +43,7 @@ const MaterialModules = [
     ErrorComponent,
     LocationBgDirective,
     MapComponent,
+    ConnectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +63,7 @@ const MaterialModules = [
       useClass: ApiService,
       multi: true,
     },
+    WebsocketService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

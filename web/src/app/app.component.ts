@@ -5,6 +5,7 @@ import { ApiType } from './entity/api.entity';
 import { ApiService } from './service/api.service';
 import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
+import { WebsocketService } from './service/websocket.service';
 
 
 @Component({
@@ -18,11 +19,15 @@ export class AppComponent implements OnInit {
   updating = false;
   lookup?: LookupEntity;
   error = false;
+  online = true;
+
+  messages: string[] = [];
 
   constructor(
     private api: ApiService,
     private zone: NgZone,
     private swUpdate: SwUpdate,
+    private ws: WebsocketService,
     private snackBar: MatSnackBar
   ) {
     if (this.swUpdate.isEnabled) {
@@ -38,6 +43,23 @@ export class AppComponent implements OnInit {
       this.zone.run(() => (this.loading = res));
     })
 
+    this.ws.messages.subscribe(msg => {
+      this.messages.push(JSON.stringify(msg));
+    });
+
+    setTimeout(() => {
+      this.sendMsg("me", "fuck");
+    }, 3000);
+
+  }
+
+  sendMsg(source: string, content: string) {
+    let message = {
+      source,
+      content
+    };
+
+    this.ws.messages.next(message);
   }
 
   ngOnInit(): void {

@@ -11,7 +11,7 @@ import { MapComponent } from '../map/map.component';
 })
 export class IPInfoComponent implements OnInit {
 
-  @Input() lookup!: LookupEntity;
+  @Input() lookup!: LookupEntity 
   img_url = "loading.png";
   loaded = false
 
