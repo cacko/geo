@@ -21,9 +21,6 @@ class CityIP(Cachable):
     def storage(self):
         return RedisStorage
 
-    @property
-    def isCached(self) -> bool:
-        return False
 
     @property
     def id(self):
@@ -40,10 +37,6 @@ class ASNIP(Cachable):
     @property
     def storage(self):
         return RedisStorage
-
-    @property
-    def isCached(self) -> bool:
-        return False
 
     @property
     def id(self):
