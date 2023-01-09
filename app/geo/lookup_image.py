@@ -12,6 +12,8 @@ from app.geo.models import GeoInfo
 from pydantic import BaseModel, Field
 from app.config import app_config
 from pathlib import Path
+from uuid import uuid4
+from corefile import TempPath
 
 class LookupImageParams(BaseModel):
     prompt: str
@@ -79,14 +81,39 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
+    
+
     def __fetch(self, json: dict):
         flick_path = Flickr.image(
             tags=self.tags, lat=self._geo.location[0], lon=self._geo.location[1]
         )
-        logging.warning(flick_path.exists())
+        if not flick_path:
+            rand_id = uuid4().hex
+            flick_path = TempPath(f"{rand_id}.png")
+            path = f"http://192.168.0.107:23726/image/txt2img/{rand_id}"     
+            params = LookupImageParams(
+                prompt=(
+                    f"{self._geo.country}, unknown area" 
+                    f"(gps coordinates:{self._geo.location[0]},{self._geo.location[1]}),"
+                    " realistic, hdr, 8k"
+                )
+            )
+            req = Request(
+                path,
+                method=Method.POST,
+                data=params.dict(),
+            )
+            is_multipart = req.is_multipart
+            if is_multipart:
+                multipart = req.multipart
+                for part in multipart.parts:
+                    content_type = part.headers.get(
+                        b"content-type", b""  # type: ignore
+                    ).decode()
+                    if content_type.startswith("image"):
+                        flick_path.write_bytes(part.content)
         kind = filetype.guess(flick_path.as_posix())
         fp = flick_path.open("rb")
-        logging.warning(self.name)
         path = f"http://192.168.0.107:23726/image/img2img/{self.name}"
         req = Request(
             path,
