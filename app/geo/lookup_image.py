@@ -15,6 +15,7 @@ from pathlib import Path
 from uuid import uuid4
 from corefile import TempPath
 
+
 class LookupImageParams(BaseModel):
     prompt: str
     height: int = Field(default=512)
@@ -81,8 +82,6 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
-    
-
     def __fetch(self, json: dict):
         flick_path = Flickr.image(
             tags=self.tags, lat=self._geo.location[0], lon=self._geo.location[1]
@@ -90,10 +89,10 @@ class LookupImage(CachableFileImage):
         if not flick_path:
             rand_id = uuid4().hex
             flick_path = TempPath(f"{rand_id}.png")
-            path = f"http://192.168.0.107:23726/image/txt2img/{rand_id}"     
+            path = f"http://192.168.0.107:23726/image/txt2img/{rand_id}"
             params = LookupImageParams(
                 prompt=(
-                    f"{self._geo.country}, unknown area" 
+                    f"{self._geo.country}, unknown area"
                     f"(gps coordinates:{self._geo.location[0]},{self._geo.location[1]}),"
                     " realistic, hdr, 8k"
                 )
