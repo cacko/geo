@@ -39,7 +39,10 @@
             GPS
         </div>
         <div value>
-            <span>{{ lookup.location }}</span>
+            <span>
+                <a target="_blank" rel="noopener"  href="https://maps.google.com/?q={{lookup.location[1]}},{{lookup.location[0]}}">open
+                    map</a>
+            </span>
         </div>
     </div>
     <div row *ngIf="lookup.timezone">

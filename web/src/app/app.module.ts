@@ -16,6 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LocationBgDirective } from './directives/location-bg.directive';
+import {MatDialogModule} from '@angular/material/dialog';
+import { MapComponent } from './components/map/map.component'; 
 
 
 const MaterialModules = [
@@ -24,6 +26,7 @@ const MaterialModules = [
   MatCardModule,
   MatIconModule,
   MatTooltipModule,
+  MatDialogModule,
 ];
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ const MaterialModules = [
     FlagComponent,
     ErrorComponent,
     LocationBgDirective,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
