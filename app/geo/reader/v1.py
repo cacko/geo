@@ -52,7 +52,9 @@ class GeoDb(object, metaclass=GeoDbMeta):
         if not ip_address.ipv4(ip):
             raise ValueError
         cache = CityIP(ip)
-        if cache.isCached:
+        logging.warning(cache)
+        logging.warning(cache.isCached)
+        if cache.load():
             return cache._struct
         res = self.__city_db.record_by_addr(ip)
         res = dict(filter(lambda x: x[1], res.items()))
@@ -70,7 +72,7 @@ class GeoDb(object, metaclass=GeoDbMeta):
         if all([not ip_address.ipv4(ip), not ip_address.ipv4_cidr(ip)]):
             raise ValueError
         cache = ASNIP(ip)
-        if cache.isCached:
+        if cache.load():
             return cache._struct
         res = self.__asn_db.org_by_addr(ip)
         asid, name = res.split(" ", 1)

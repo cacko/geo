@@ -27,7 +27,9 @@ async def read_lookup(
 @router.get("/api/background/{ip}", tags=["api"])
 async def route_background(ip: str):
     try:
-        image = LookupImage(MaxMind.lookup(ip=ip))
+        logging.warning(ip)
+        geo_info = MaxMind.lookup(ip=ip)
+        image = LookupImage(geo=geo_info)
         image_path = image.path
         assert image_path
         assert image_path.exists()
