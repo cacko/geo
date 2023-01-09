@@ -97,7 +97,7 @@ class LookupImage(CachableFileImage):
                     f"(gps coordinates:{self._geo.location[0]},{self._geo.location[1]}),"
                     " realistic, hdr, 8k"
                 ),
-                num_inference_steps=10
+                num_inference_steps=25
             )
             req = Request(
                 path,
