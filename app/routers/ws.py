@@ -23,7 +23,7 @@ class ConnectionManager:
         self.active_connections.append(websocket)
         await websocket.send_json(
             Message(
-                source="ws", content=websocket.headers.get("x-forwarded-for")
+                source="ip", content=websocket.headers.get("x-forwarded-for")
             ).dict()
         )
 
