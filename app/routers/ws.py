@@ -6,7 +6,7 @@ from uuid import uuid4
 from pydantic import BaseModel
 
 
-class Connection(BaseModel):
+class Connection(BaseModel, arbitrary_types_allowed=True):
     id: str
     ws: WebSocket
     ip: str
