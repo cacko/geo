@@ -30,11 +30,6 @@ class ConnectionManager:
             Message(source="ws", content=f"hi {websocket.client.host}").dict()
         )
 
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_json(Message(source="ws", content=message).dict())
-
-
 manager = ConnectionManager()
 
 
@@ -45,6 +40,5 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         while True:
             data = await websocket.receive_text()
             await manager.send_personal_message(f"You wrote: {data}", websocket)
-            await manager.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
         manager.disconnect(websocket)

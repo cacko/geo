@@ -46,11 +46,6 @@ export class AppComponent implements OnInit {
     this.ws.messages.subscribe(msg => {
       this.messages.push(JSON.stringify(msg));
     });
-
-    setTimeout(() => {
-      this.sendMsg("me", "fuck");
-    }, 3000);
-
   }
 
   sendMsg(source: string, content: string) {
