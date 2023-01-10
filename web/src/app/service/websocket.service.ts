@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Observable, Observer, Subscription } from 'rxjs';
+import { interval, Observable, Observer, Subscription } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
+import { now } from 'lodash-es';
 
 const WS_URL = "wss://geo.cacko.net/ws";
 
@@ -42,6 +43,12 @@ export class WebsocketService {
     if (!this.subject) {
       this.subject = this.create(url);
       console.log("Successfully connected: " + url);
+      interval(10000).subscribe(() => {
+        this.messages.next({
+          source: "PING",
+          content: `${now()}`
+        })
+      })
     }
     return this.subject;
   }

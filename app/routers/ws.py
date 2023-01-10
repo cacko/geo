@@ -31,6 +31,7 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
+        logging.debug(f"{websocket.headers.get('x-forwarded-for')}")
         await websocket.send_json(
             Message(source="ws", content=f"{message}").dict()
         )
