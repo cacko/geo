@@ -21,8 +21,9 @@ class ConnectionManager:
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
+        headers = [f"{k}={v}" for k,v in websocket.headers.items()]
         await websocket.send_json(
-            Message(source="ws", content=f"hi {repr(websocket)}").dict()
+            Message(source="ws", content=" ".join(headers)).dict()
         )
 
     def disconnect(self, websocket: WebSocket):
