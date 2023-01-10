@@ -6,6 +6,12 @@ from uuid import uuid4
 from pydantic import BaseModel
 
 
+class Connection(BaseModel):
+    id: str
+    ws: WebSocket
+    ip: str
+
+
 class Message(BaseModel):
     source: str
     content: str
@@ -16,18 +22,20 @@ router = APIRouter()
 
 class ConnectionManager:
 
-    ips: dict[str, str] = {}
+    active_connections: dict[str, Connection] = {}
 
     def __init__(self):
-        self.active_connections: list[WebSocket] = []
+        self.active_connections = {}
 
     async def connect(self, websocket: WebSocket, client_id: str):
+        if client_id in self.active_connections:
+            self.active_connections[client_id].ws.close()
         await websocket.accept()
-        self.active_connections.append(websocket)
+        self.active_connections[client_id].ws = websocket
         conn_ip = websocket.headers.get("x-forwarded-for")
-        old_ip = self.ips.get(client_id, "")
+        old_ip = self.active_connections.ip
         if old_ip != conn_ip:
-            self.ips[client_id] = conn_ip
+            self.active_connections[client_id].ip = conn_ip
             await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
     def disconnect(self, websocket: WebSocket):
