@@ -44,9 +44,7 @@ export class AppComponent implements OnInit {
     })
 
     this.ws.messages.subscribe((msg) => {
-      if (msg.source === "ip") {
-        this.messages.push(msg.content);
-      }
+      this.messages.push(msg.content);
     });
   }
 

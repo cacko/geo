@@ -21,19 +21,13 @@ class ConnectionManager:
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
-        await websocket.send_json(
-            Message(
-                source="ip", content=websocket.headers.get("x-forwarded-for")
-            ).dict()
-        )
+        await websocket.send_json(Message(source="ip", content=websocket.headers.get("x-forwarded-for")).dict())
 
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_json(
-            Message(source="ws", content=f"{message}").dict()
-        )
+        await websocket.send_json(Message(source="ws", content=f"{message}").dict())
 
 
 manager = ConnectionManager()

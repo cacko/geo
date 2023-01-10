@@ -23,7 +23,7 @@ export class WebsocketService {
   messages = this.messagesSubject.asObservable();
 
   constructor() {
-
+    this.connect();
   }
 
   get URL(): string {
