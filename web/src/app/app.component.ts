@@ -43,11 +43,16 @@ export class AppComponent implements OnInit {
       this.zone.run(() => (this.loading = res));
     })
 
-    this.ws.messages.subscribe(msg => {
+    this.ws.messages.subscribe({
+      next: (msg) => {
       if (msg.source === "ip") {
         this.messages.push(msg.content);
       }
-    });
+    }, error: (err) => {
+      this.messages.push(err.message);
+    }, complete: () => {
+      this.messages.push("complete");
+    }});
   }
 
   sendMsg(source: string, content: string) {

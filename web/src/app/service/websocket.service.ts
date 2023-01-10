@@ -43,12 +43,6 @@ export class WebsocketService {
     if (!this.subject) {
       this.subject = this.create(url);
       console.log("Successfully connected: " + url);
-      interval(10000).subscribe(() => {
-        this.messages.next({
-          source: "PING",
-          content: `${now()}`
-        })
-      })
     }
     return this.subject;
   }
@@ -63,7 +57,7 @@ export class WebsocketService {
     });
     let observer = {
       error: (err: any) => { console.log(err); },
-      complete: () => { console.log("complete") },
+      complete: () => { console.log("COMPLETEEEEEE") },
       next: (data: Object) => {
         console.log('Message sent to websocket: ', data);
         if (ws.readyState === WebSocket.OPEN) {
