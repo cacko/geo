@@ -1,17 +1,10 @@
 import { Injectable } from "@angular/core";
-import { interval, Observable, Observer, Subscription } from 'rxjs';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
+import {Observable, Observer, timer } from 'rxjs';
 import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { now } from 'lodash-es';
+import { WSConnection, WSMessage } from "../entity/websockets.entiity";
 
-const WS_URL = "wss://geo.cacko.net/ws";
 
-export interface Message {
-  source: string;
-  content: string;
-}
 
 @Injectable()
 export class WebsocketService {
@@ -19,7 +12,10 @@ export class WebsocketService {
   private out: Observer<MessageEvent<any>> | undefined;
   private in: Observable<MessageEvent<any>> | undefined;
 
-  private messagesSubject = new Subject<Message>();
+  private reconnectAfter = 0;
+  private readonly RECONNECT_START = 2000;
+
+  private messagesSubject = new Subject<WSMessage>();
   messages = this.messagesSubject.asObservable();
 
   constructor() {
@@ -27,7 +23,7 @@ export class WebsocketService {
   }
 
   get URL(): string {
-    return `${WS_URL}/${this.DEVICE_ID}`;
+    return `${WSConnection}/${this.DEVICE_ID}`;
   }
 
   get DEVICE_ID(): string {
@@ -41,13 +37,12 @@ export class WebsocketService {
 
   public connect() {
     this.create(this.URL);
-    console.log("Successfully connected: " + this.URL);
-    interval(5000).subscribe((n) => {
-      this.send({
-        source: "PING",
-        content: `${now()}`
-      });
-    })
+    // interval(5000).subscribe((n) => {
+    //   this.send({
+    //     source: "PING",
+    //     content: `${now()}`
+    //   });
+    // })
   }
 
   public send(data: any) {
@@ -57,31 +52,30 @@ export class WebsocketService {
   public reconnect() {
     try {
       this.create(`${this.URL}`);
-      console.log("Successfully REconnected: " + this.URL);
+      console.debug("Successfully REconnected: " + this.URL);
     } catch (err) {
-      console.error("RECON", err);
-      setTimeout(() => this.reconnect(), 2000);
+      console.error("Reconnect error", err);
+      timer(2000).subscribe(() => {
+        this.reconnect();
+        this.reconnectAfter += this.reconnectAfter * 0.1;
+      });
     }
   }
 
   private create(url: string | URL): void {
     let ws = new WebSocket(url);
-    this.in = new Observable((obs: Observer<MessageEvent>) => {
-      ws.onmessage = (msg) => {
-        const data = msg as unknown as Message;
-        this.messagesSubject.next(data);
-      };
-      ws.onerror = obs.error.bind(obs);
-      ws.onclose = () => {
-        this.reconnect();
-      };
-      return ws.close.bind(ws);
-    });
+    ws.onmessage = (msg) => {
+      this.messagesSubject.next(JSON.parse(msg.data));
+    };
+    ws.onclose = () => {
+      this.reconnectAfter = this.RECONNECT_START;
+      this.reconnect();
+    };
     this.out = {
       error: (err: any) => { console.log(err); },
-      complete: () => { console.log("COMPLETEEEEEE") },
+      complete: () => { },
       next: (data: Object) => {
-        console.log('Message sent to websocket: ', data);
+        console.debug('Message sent to websocket: ', data);
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify(data));
         }

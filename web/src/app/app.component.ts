@@ -6,6 +6,8 @@ import { ApiService } from './service/api.service';
 import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
 import { WebsocketService } from './service/websocket.service';
+import { WSCommand } from './entity/websockets.entiity';
+import { LocalizedString } from '@angular/compiler';
 
 
 @Component({
@@ -23,12 +25,13 @@ export class AppComponent implements OnInit {
 
   messages: string[] = [];
 
+  private readonly KEY_OWN_IP = "own-ip";
+
   constructor(
     private api: ApiService,
     private zone: NgZone,
     private swUpdate: SwUpdate,
     private ws: WebsocketService,
-    private snackBar: MatSnackBar
   ) {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe((evt) => {
@@ -44,8 +47,34 @@ export class AppComponent implements OnInit {
     })
 
     this.ws.messages.subscribe((msg) => {
-      this.messages.push(msg.content);
+      switch(msg.command)  {
+        case WSCommand.IP:
+          if (!this.ownIP) {
+            this.ownIP = msg.content;
+          }
+          return this.isIPChanged(msg.content) && this.updateGeoIP(msg.content);
+      }
+      if (msg.command === WSCommand.IP) {
+        this.messages.push(msg.content);
+      }
     });
+  }
+
+  updateGeoIP(new_ip: string) {
+    this.ownIP= new_ip;
+    alert(`new ip is ${new_ip}`);
+  }
+
+  get ownIP(): string | null {
+    return localStorage.getItem(this.KEY_OWN_IP);
+  }
+
+  set ownIP(ip: string | null) {
+    localStorage.setItem(this.KEY_OWN_IP, ip || "");
+  }
+
+  isIPChanged(current_ip: string): boolean {
+    return current_ip !== this.ownIP;
   }
 
   sendMsg(source: string, content: string) {

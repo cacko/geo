@@ -1,13 +1,16 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import logging
 from app.config import app_config
-import random
-from uuid import uuid4
 from pydantic import BaseModel
+from enum import Enum
+
+
+class WSCommand(Enum):
+    IP = "ip"
 
 
 class Message(BaseModel):
-    source: str
+    command: WSCommand
     content: str
 
 
@@ -21,7 +24,12 @@ class ConnectionManager:
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
-        await websocket.send_json(Message(source="ip", content=websocket.headers.get("x-forwarded-for")).dict())
+        await websocket.send_json(
+            Message(
+                command=WSCommand.IP, 
+                content=websocket.headers.get("x-forwarded-for")
+            ).dict()
+        )
 
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
