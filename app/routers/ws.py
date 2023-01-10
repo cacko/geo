@@ -38,6 +38,7 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket, client_id: str):
+        logging.debug(f">>>>> {client_id}")
         conn_ip = websocket.headers.get("x-forwarded-for")
         old_ip = self.ips.get(client_id, "")
         if old_ip != conn_ip:
