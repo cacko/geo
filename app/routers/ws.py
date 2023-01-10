@@ -6,12 +6,6 @@ from uuid import uuid4
 from pydantic import BaseModel
 
 
-class Connection(BaseModel, arbitrary_types_allowed=True):
-    id: str
-    ws: WebSocket
-    ip: str
-
-
 class Message(BaseModel):
     source: str
     content: str
@@ -21,39 +15,25 @@ router = APIRouter()
 
 
 class ConnectionManager:
-
-    active_connections: dict[str, Connection] = {}
-
     def __init__(self):
-        self.active_connections = {}
+        self.active_connections: list[WebSocket] = []
 
-    async def connect(self, websocket: WebSocket, client_id: str):
-        if client_id in self.active_connections:
-            ws = self.active_connections[client_id].ws
-            try:
-                await ws.close()
-            except:
-                pass
-            return
+    async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        conn_ip = websocket.headers.get("x-forwarded-for")
-        self.active_connections[client_id] = Connection(
-            id=client_id,
-            ws=websocket,
-            ip=conn_ip
+        self.active_connections.append(websocket)
+        await websocket.send_json(
+            Message(
+                source="ip", content=websocket.headers.get("x-forwarded-for")
+            ).dict()
         )
-        logging.warning(f">>> NEW CONN <SENDING NEW IP {client_id} {conn_ip}")
-        await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
-    async def disconnect(self, websocket: WebSocket, client_id: str):
-        try:
-            await websocket.close()
-        except:
-            pass
-        del self.active_connections[client_id]
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
 
-    async def send_message(self, message: Message, websocket: WebSocket):
-        await websocket.send_json(message.dict())
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_json(
+            Message(source="ws", content=f"{message}").dict()
+        )
 
 
 manager = ConnectionManager()
@@ -61,9 +41,10 @@ manager = ConnectionManager()
 
 @router.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    await manager.connect(websocket, client_id)
+    await manager.connect(websocket)
     try:
         while True:
             data = await websocket.receive_text()
+            await manager.send_personal_message(f"You wrote: {data}", websocket)
     except WebSocketDisconnect:
-        await manager.disconnect(websocket, client_id)
+        manager.disconnect(websocket)
