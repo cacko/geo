@@ -39,7 +39,6 @@ class ConnectionManager:
             ws=websocket,
             ip=conn_ip
         )
-        old_ip = self.active_connections.ip
         if old_ip != conn_ip:
             self.active_connections[client_id].ip = conn_ip
             await websocket.send_json(Message(source="ip", content=conn_ip).dict())
