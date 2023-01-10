@@ -4,6 +4,12 @@ import logging
 from app.config import app_config
 import random
 from uuid import uuid4
+from pydantic import BaseModel
+
+
+class Message(BaseModel):
+    source: str
+    content: str
 
 router = APIRouter()
 
@@ -19,11 +25,11 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+        await websocket.send_text(Message(source="ws", content=f"hi {websocket.client.host}").dict())
 
     async def broadcast(self, message: str):
         for connection in self.active_connections:
-            await connection.send_text(message)
+            await connection.send_json(Message(source="ws", content=message).dict())
 
 
 manager = ConnectionManager()
