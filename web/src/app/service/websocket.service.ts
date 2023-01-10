@@ -4,7 +4,7 @@ import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const CHAT_URL = "ws://localhost:21234/ws";
+const CHAT_URL = "wss://geo.cacko.net/ws";
 
 export interface Message {
   source: string;
