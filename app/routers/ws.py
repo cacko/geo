@@ -31,7 +31,11 @@ class ConnectionManager:
         old_ip = ""
         if client_id in self.active_connections:
             old_ip = self.active_connections[client_id].ip
-            await self.active_connections[client_id].ws.close()
+            ws = self.active_connections[client_id].ws
+            try:
+                await ws.close()
+            except:
+                pass
         await websocket.accept()
         conn_ip = websocket.headers.get("x-forwarded-for")
         self.active_connections[client_id] = Connection(
