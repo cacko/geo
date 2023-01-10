@@ -59,12 +59,13 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_text()
-            # conn_ip = websocket.headers.get("x-forwarded-for")
-            # old_ip = manager.ips.get(client_id, "")
-            # logging.warning(f">>>>> {client_id} {conn_ip} {old_ip}")
-            # if old_ip != conn_ip:
-            #     await manager.send_message(
-            #         Message(source="ip", content=conn_ip), websocket
-            #     )
+            conn_ip = websocket.headers.get("x-forwarded-for")
+            active_connection = manager.active_connections.get(client_id)
+            if active_connection and conn_ip != active_connection.ip:
+                old_ip = active_connection.ip
+                logging.warning(f">>>>> CHANGE OF IP {client_id} {conn_ip} {old_ip}")
+                await manager.send_message(
+                    Message(source="ip", content=conn_ip), websocket
+                )
     except WebSocketDisconnect:
         manager.disconnect(websocket)
