@@ -36,6 +36,7 @@ class ConnectionManager:
                 await ws.close()
             except:
                 pass
+            return
         await websocket.accept()
         conn_ip = websocket.headers.get("x-forwarded-for")
         self.active_connections[client_id] = Connection(
@@ -47,8 +48,12 @@ class ConnectionManager:
             self.active_connections[client_id].ip = conn_ip
             await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
-    def disconnect(self, websocket: WebSocket):
-        pass
+    async def disconnect(self, websocket: WebSocket, client_id: str):
+        try:
+            await websocket.close()
+        except:
+            pass
+        del self.active_connections[client_id]
 
     async def send_message(self, message: Message, websocket: WebSocket):
         await websocket.send_json(message.dict())
@@ -72,4 +77,4 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                     Message(source="ip", content=conn_ip), websocket
                 )
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        await manager.disconnect(websocket, client_id)
