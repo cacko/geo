@@ -17,7 +17,6 @@ export interface Message {
 export class WebsocketService {
   private subject: AnonymousSubject<MessageEvent> | undefined;
   public messages: Subject<Message>;
-  private ws: WebSocket | undefined;
 
   constructor() {
     this.messages = <Subject<Message>>this.connect().pipe(
@@ -48,6 +47,12 @@ export class WebsocketService {
     if (!this.subject) {
       this.subject = this.create(this.URL);
       console.log("Successfully connected: " + this.URL);
+      interval(5000).subscribe((n) => {
+        this.messages.next({
+          source: "PING",
+          content: `${now()}`
+        });
+      })
     }
     return this.subject;
   }
