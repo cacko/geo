@@ -17,9 +17,10 @@ export interface Message {
 export class WebsocketService {
   private subject: AnonymousSubject<MessageEvent> | undefined;
   public messages: Subject<Message>;
+  private ws: WebSocket | undefined;
 
   constructor() {
-    this.messages = <Subject<Message>>this.connect(`${WS_URL}/${this.DEVICE_ID}`).pipe(
+    this.messages = <Subject<Message>>this.connect().pipe(
       map(
         (response: MessageEvent): Message => {
           console.log(response.data);
@@ -28,6 +29,10 @@ export class WebsocketService {
         }
       )
     );
+  }
+
+  get URL(): string {
+    return `${WS_URL}/${this.DEVICE_ID}`;
   }
 
   get DEVICE_ID(): string {
@@ -39,12 +44,22 @@ export class WebsocketService {
     return id;
   }
 
-  public connect(url: string): AnonymousSubject<MessageEvent> {
+  public connect(): AnonymousSubject<MessageEvent> {
     if (!this.subject) {
-      this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
+      this.subject = this.create(this.URL);
+      console.log("Successfully connected: " + this.URL);
     }
     return this.subject;
+  }
+
+  public reconnect() {
+    try {
+      this.subject = this.create(`${this.URL}`);
+      console.log("Successfully REconnected: " + this.URL);
+    } catch (err) {
+      console.error("RECON", err);
+      setTimeout(() => this.reconnect(), 2000);
+    }
   }
 
   private create(url: string | URL): AnonymousSubject<MessageEvent> {
@@ -52,7 +67,9 @@ export class WebsocketService {
     let observable = new Observable((obs: Observer<MessageEvent>) => {
       ws.onmessage = obs.next.bind(obs);
       ws.onerror = obs.error.bind(obs);
-      ws.onclose = obs.complete.bind(obs);
+      ws.onclose = () => {
+        this.reconnect();
+      };
       return ws.close.bind(ws);
     });
     let observer = {
