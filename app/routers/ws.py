@@ -28,9 +28,7 @@ class ConnectionManager:
         self.active_connections = {}
 
     async def connect(self, websocket: WebSocket, client_id: str):
-        old_ip = ""
         if client_id in self.active_connections:
-            old_ip = self.active_connections[client_id].ip
             ws = self.active_connections[client_id].ws
             try:
                 await ws.close()
@@ -44,9 +42,8 @@ class ConnectionManager:
             ws=websocket,
             ip=conn_ip
         )
-        if old_ip != conn_ip:
-            self.active_connections[client_id].ip = conn_ip
-            await websocket.send_json(Message(source="ip", content=conn_ip).dict())
+        logging.warning(f">>> NEW CONN <SENDING NEW IP {client_id} {conn_ip}")
+        await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
     async def disconnect(self, websocket: WebSocket, client_id: str):
         try:
@@ -68,13 +65,5 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_text()
-            conn_ip = websocket.headers.get("x-forwarded-for")
-            active_connection = manager.active_connections.get(client_id)
-            if active_connection and conn_ip != active_connection.ip:
-                old_ip = active_connection.ip
-                logging.warning(f">>>>> CHANGE OF IP {client_id} {conn_ip} {old_ip}")
-                await manager.send_message(
-                    Message(source="ip", content=conn_ip), websocket
-                )
     except WebSocketDisconnect:
         await manager.disconnect(websocket, client_id)
