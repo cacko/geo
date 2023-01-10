@@ -38,9 +38,9 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket, client_id: str):
-        logging.warning(f">>>>> {client_id}")
         conn_ip = websocket.headers.get("x-forwarded-for")
         old_ip = self.ips.get(client_id, "")
+        logging.warning(f">>>>> {client_id} {conn_ip} {old_ip}")
         if old_ip != conn_ip:
             self.ips[client_id] = conn_ip
             await websocket.send_json(
