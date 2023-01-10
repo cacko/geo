@@ -44,7 +44,7 @@ class ConnectionManager:
             await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
     def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+        pass
 
     async def send_message(self, message: Message, websocket: WebSocket):
         await websocket.send_json(message.dict())
