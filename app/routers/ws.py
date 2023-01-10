@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import logging
 from app.config import app_config
@@ -11,7 +10,9 @@ class Message(BaseModel):
     source: str
     content: str
 
+
 router = APIRouter()
+
 
 class ConnectionManager:
     def __init__(self):
@@ -25,7 +26,9 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(Message(source="ws", content=f"hi {websocket.client.host}").dict())
+        await websocket.send_json(
+            Message(source="ws", content=f"hi {websocket.client.host}").dict()
+        )
 
     async def broadcast(self, message: str):
         for connection in self.active_connections:
@@ -33,6 +36,7 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
+
 
 @router.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
@@ -45,6 +49,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"Client #{client_id} left the chat")
+
 
 # @router.websocket("/ws")
 # async def websocket_endpoint(websocket: WebSocket):
