@@ -28,28 +28,13 @@ class ConnectionManager:
         old_ip = self.ips.get(client_id, "")
         if old_ip != conn_ip:
             self.ips[client_id] = conn_ip
-            await websocket.send_json(
-                Message(
-                    source="ip", content=conn_ip
-                ).dict()
-            )
+            await websocket.send_json(Message(source="ip", content=conn_ip).dict())
 
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
 
-    async def send_personal_message(self, message: str, websocket: WebSocket, client_id: str):
-        conn_ip = websocket.headers.get("x-forwarded-for")
-        old_ip = self.ips.get(client_id, "")
-        logging.warning(f">>>>> {client_id} {conn_ip} {old_ip}")
-        if old_ip != conn_ip:
-            self.ips[client_id] = conn_ip
-            await websocket.send_json(
-                Message(
-                    source="ip", content=conn_ip
-                ).dict()
-            )
-        logging.debug(f"{websocket.headers.get('x-forwarded-for')}")
-        await websocket.send_json(Message(source="ws", content=f"{message}").dict())
+    async def send_message(self, message: Message, websocket: WebSocket):
+        await websocket.send_json(message.dict())
 
 
 manager = ConnectionManager()
@@ -61,6 +46,12 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_text()
-            await manager.send_personal_message(f"You wrote: {data}", websocket, client_id)
+            conn_ip = websocket.headers.get("x-forwarded-for")
+            old_ip = manager.ips.get(client_id, "")
+            logging.warning(f">>>>> {client_id} {conn_ip} {old_ip}")
+            if old_ip != conn_ip:
+                await manager.send_message(
+                    Message(source="ip", content=conn_ip), websocket
+                )
     except WebSocketDisconnect:
         manager.disconnect(websocket)
