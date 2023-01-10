@@ -48,26 +48,3 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             await manager.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat")
-
-
-# @router.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     print('Accepting client connection...')
-#     await websocket.accept()
-#     await websocket.send_json({
-#         'conn': uuid4().hex
-#     });
-#     while True:
-#         try:
-#             # Wait for any message from the client
-#             message = await websocket.receive_text()
-#             websocket.client.r
-#             logging.debug(message)
-#             # Send message to the client
-#             resp = {'value': random.uniform(0, 1)}
-#             await websocket.send_json(resp)
-#         except Exception as e:
-#             print('error:', e)
-#             break
-#     print('Bye..')
