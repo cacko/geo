@@ -15,19 +15,15 @@ export interface Message {
 
 @Injectable()
 export class WebsocketService {
-  private subject: AnonymousSubject<MessageEvent> | undefined;
-  public messages: Subject<Message>;
+
+  private out: Observer<MessageEvent<any>> | undefined;
+  private in: Observable<MessageEvent<any>> | undefined;
+
+  private messagesSubject = new Subject<Message>();
+  messages = this.messagesSubject.asObservable();
 
   constructor() {
-    this.messages = <Subject<Message>>this.connect().pipe(
-      map(
-        (response: MessageEvent): Message => {
-          console.log(response.data);
-          let data = JSON.parse(response.data)
-          return data;
-        }
-      )
-    );
+
   }
 
   get URL(): string {
@@ -43,23 +39,24 @@ export class WebsocketService {
     return id;
   }
 
-  public connect(): AnonymousSubject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(this.URL);
-      console.log("Successfully connected: " + this.URL);
-      interval(5000).subscribe((n) => {
-        this.messages.next({
-          source: "PING",
-          content: `${now()}`
-        });
-      })
-    }
-    return this.subject;
+  public connect() {
+    this.create(this.URL);
+    console.log("Successfully connected: " + this.URL);
+    interval(5000).subscribe((n) => {
+      this.send({
+        source: "PING",
+        content: `${now()}`
+      });
+    })
+  }
+
+  public send(data: any) {
+    this.out?.next(data);
   }
 
   public reconnect() {
     try {
-      this.subject = this.create(`${this.URL}`);
+      this.create(`${this.URL}`);
       console.log("Successfully REconnected: " + this.URL);
     } catch (err) {
       console.error("RECON", err);
@@ -67,17 +64,20 @@ export class WebsocketService {
     }
   }
 
-  private create(url: string | URL): AnonymousSubject<MessageEvent> {
+  private create(url: string | URL): void {
     let ws = new WebSocket(url);
-    let observable = new Observable((obs: Observer<MessageEvent>) => {
-      ws.onmessage = obs.next.bind(obs);
+    this.in = new Observable((obs: Observer<MessageEvent>) => {
+      ws.onmessage = (msg) => {
+        const data = msg as unknown as Message;
+        this.messagesSubject.next(data);
+      };
       ws.onerror = obs.error.bind(obs);
       ws.onclose = () => {
         this.reconnect();
       };
       return ws.close.bind(ws);
     });
-    let observer = {
+    this.out = {
       error: (err: any) => { console.log(err); },
       complete: () => { console.log("COMPLETEEEEEE") },
       next: (data: Object) => {
@@ -87,6 +87,5 @@ export class WebsocketService {
         }
       }
     };
-    return new AnonymousSubject<MessageEvent>(observer, observable);
   }
 }

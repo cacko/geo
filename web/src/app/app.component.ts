@@ -43,16 +43,11 @@ export class AppComponent implements OnInit {
       this.zone.run(() => (this.loading = res));
     })
 
-    this.ws.messages.subscribe({
-      next: (msg) => {
+    this.ws.messages.subscribe((msg) => {
       if (msg.source === "ip") {
         this.messages.push(msg.content);
       }
-    }, error: (err) => {
-      this.messages.push(err.message);
-    }, complete: () => {
-      this.messages.push("complete");
-    }});
+    });
   }
 
   sendMsg(source: string, content: string) {
@@ -61,7 +56,7 @@ export class AppComponent implements OnInit {
       content
     };
 
-    this.ws.messages.next(message);
+    this.ws.send(message);
   }
 
   ngOnInit(): void {
