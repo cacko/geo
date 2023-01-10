@@ -28,11 +28,17 @@ class ConnectionManager:
         self.active_connections = {}
 
     async def connect(self, websocket: WebSocket, client_id: str):
+        old_ip = ""
         if client_id in self.active_connections:
+            old_ip = self.active_connections[client_id].ip
             self.active_connections[client_id].ws.close()
         await websocket.accept()
-        self.active_connections[client_id].ws = websocket
         conn_ip = websocket.headers.get("x-forwarded-for")
+        self.active_connections[client_id] = Connection(
+            id=client_id,
+            ws=websocket,
+            ip=conn_ip
+        )
         old_ip = self.active_connections.ip
         if old_ip != conn_ip:
             self.active_connections[client_id].ip = conn_ip
