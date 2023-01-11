@@ -4,7 +4,10 @@ export enum WSConnection {
 }
 
 export enum WSCommand {
-  IP = "ip"
+  IP = "ip",
+  PING = "ping",
+  LOOKUP = "lookup",
+  BACKGROUND = "background"
 }
 
 export interface WSMessage {

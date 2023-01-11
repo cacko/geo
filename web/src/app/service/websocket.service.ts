@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import {Observable, Observer, timer } from 'rxjs';
+import { now, random } from "lodash-es";
+import { interval, Observable, Observer, timer } from 'rxjs';
 import { Subject } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
-import { WSConnection, WSMessage } from "../entity/websockets.entiity";
+import { WSCommand, WSConnection, WSMessage } from "../entity/websockets.entiity";
 
 
 
@@ -23,7 +24,7 @@ export class WebsocketService {
   }
 
   get URL(): string {
-    return `${WSConnection}/${this.DEVICE_ID}`;
+    return `${WSConnection.WS_URL}/${this.DEVICE_ID}`;
   }
 
   get DEVICE_ID(): string {
@@ -37,12 +38,12 @@ export class WebsocketService {
 
   public connect() {
     this.create(this.URL);
-    // interval(5000).subscribe((n) => {
-    //   this.send({
-    //     source: "PING",
-    //     content: `${now()}`
-    //   });
-    // })
+    interval(5000 + random(1000,5000)).subscribe((n) => {
+      this.send({
+        command: WSCommand.PING,
+        content: `${now()}`
+      });
+    })
   }
 
   public send(data: any) {
@@ -55,10 +56,7 @@ export class WebsocketService {
       console.debug("Successfully REconnected: " + this.URL);
     } catch (err) {
       console.error("Reconnect error", err);
-      timer(2000).subscribe(() => {
-        this.reconnect();
-        this.reconnectAfter += this.reconnectAfter * 0.1;
-      });
+
     }
   }
 
@@ -67,9 +65,15 @@ export class WebsocketService {
     ws.onmessage = (msg) => {
       this.messagesSubject.next(JSON.parse(msg.data));
     };
+    ws.onerror = (err) => {
+      console.error(err);
+      timer(this.reconnectAfter).subscribe(() => {
+        this.reconnect();
+        this.reconnectAfter += this.reconnectAfter * 0.1;
+      });
+    };
     ws.onclose = () => {
       this.reconnectAfter = this.RECONNECT_START;
-      this.reconnect();
     };
     this.out = {
       error: (err: any) => { console.log(err); },
