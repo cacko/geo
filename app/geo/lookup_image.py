@@ -17,7 +17,7 @@ from corefile import TempPath
 
 
 class LookupImageParams(BaseModel):
-    prompt: str
+    prompt: Optional[str] = None
     height: int = Field(default=512)
     width: int = Field(default=768)
     guidance_scale: float = Field(default=15)
@@ -86,43 +86,17 @@ class LookupImage(CachableFileImage):
             self._path = self.DEFAULT
 
     def __fetch(self, json: dict):
-        flick_path = Flickr.image(
-            tags=self.tags, lat=self._geo.location[0], lon=self._geo.location[1]
+        rand_id = uuid4().hex
+        flick_path = TempPath(f"{rand_id}.png")
+        gps = ",".join(map(str,self._geo.location))
+        path = f"http://192.168.0.107:23726/image/gps2img/{gps}"
+        params = LookupImageParams(
+            num_inference_steps=25,
         )
-        if not flick_path:
-            rand_id = uuid4().hex
-            flick_path = TempPath(f"{rand_id}.png")
-            path = f"http://192.168.0.107:23726/image/txt2img/{rand_id}"
-            params = LookupImageParams(
-                prompt=(
-                    f"{self._geo.country}, unknown area"
-                    f"(gps coordinates:{self._geo.location[0]},{self._geo.location[1]}),"
-                    " realistic, hdr, 8k"
-                ),
-                num_inference_steps=25,
-            )
-            req = Request(
-                path,
-                method=Method.POST,
-                data=params.dict(),
-            )
-            is_multipart = req.is_multipart
-            if is_multipart:
-                multipart = req.multipart
-                for part in multipart.parts:
-                    content_type = part.headers.get(
-                        b"content-type", b""  # type: ignore
-                    ).decode()
-                    if content_type.startswith("image"):
-                        flick_path.write_bytes(part.content)
-        kind = filetype.guess(flick_path.as_posix())
-        fp = flick_path.open("rb")
-        path = f"http://192.168.0.107:23726/image/img2img/{self.name}"
         req = Request(
             path,
             method=Method.POST,
-            data=json,
-            files={"file": (f"{flick_path.name}", fp, kind.mime, {"Expires": "0"})},
+            data=params.dict(),
         )
         is_multipart = req.is_multipart
         if is_multipart:
@@ -132,8 +106,7 @@ class LookupImage(CachableFileImage):
                     b"content-type", b""  # type: ignore
                 ).decode()
                 if content_type.startswith("image"):
-                    self.tocache(part.content)
-        return False
+                    flick_path.write_bytes(part.content)
 
 
 class LoadingImage(LookupImage):
