@@ -81,7 +81,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 data = await websocket.receive_text()
                 assert isinstance(data, Message)
                 respponse = await manager.process_command(data)
-                websocket.send_json(respponse)
+                await websocket.send_json(respponse)
             except AssertionError:
                 raise HTTPException(400)
     except WebSocketDisconnect:
