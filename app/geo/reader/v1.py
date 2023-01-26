@@ -83,4 +83,4 @@ class GeoDb(object, metaclass=GeoDbMeta):
             return ASNInfo(name=name, id=int(asid.lstrip("AS")))
         except AssertionError as e:
             logging.exception(e)
-            raise ValueError
+            return None

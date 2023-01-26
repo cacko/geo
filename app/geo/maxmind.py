@@ -1,7 +1,9 @@
 from pathlib import Path
 from app.geo.reader.v1 import GeoDb
 from app.geo.models import ASNInfo, GeoInfo
+from typing import Optional
 import logging
+
 
 class MaxMindMeta(type):
 
@@ -21,15 +23,15 @@ class MaxMindMeta(type):
     def db_root(cls) -> Path:
         return cls.__db
 
-    def lookup(cls, ip: str) -> GeoInfo:
+    def lookup(cls, ip: str) -> Optional[GeoInfo]:
         return cls().get_info(ip)
 
-    def asn(cls, ip: str):
+    def asn(cls, ip: str) -> Optional[ASNInfo]:
         return cls().get_asn(ip)
 
 
 class MaxMind(object, metaclass=MaxMindMeta):
-    def get_info(self, ip: str):
+    def get_info(self, ip: str) -> Optional[GeoInfo]:
         city = GeoDb.city(ip)
         if not city:
             return None
@@ -39,11 +41,9 @@ class MaxMind(object, metaclass=MaxMindMeta):
             **city.dict(),
             "ISP": asn,
         }
-        return GeoInfo(
-            **result
-        )
+        return GeoInfo(**result)
 
-    def get_asn(self, ip: str) -> ASNInfo:
+    def get_asn(self, ip: str) -> Optional[ASNInfo]:
         res = GeoDb.asn(ip)
         if not res:
             return None
