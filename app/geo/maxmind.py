@@ -32,16 +32,18 @@ class MaxMindMeta(type):
 
 class MaxMind(object, metaclass=MaxMindMeta):
     def get_info(self, ip: str) -> Optional[GeoInfo]:
-        city = GeoDb.city(ip)
-        if not city:
+        try:
+            city = GeoDb.city(ip)
+            assert city
+            asn = self.get_asn(ip)
+            result = {
+                **city.dict(),
+                "ISP": asn,
+            }
+            return GeoInfo(**result)
+        except AssertionError:
             return None
 
-        asn = self.get_asn(ip)
-        result = {
-            **city.dict(),
-            "ISP": asn,
-        }
-        return GeoInfo(**result)
 
     def get_asn(self, ip: str) -> Optional[ASNInfo]:
         res = GeoDb.asn(ip)

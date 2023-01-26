@@ -11,10 +11,10 @@ class GeoInfo(BaseModel):
     country_iso: str
     city: str
     ip: str
-    subdivisions: Optional[str]
+    subdivisions: Optional[str] = None
     location: Optional[tuple[float, float]]
-    timezone: Optional[str]
-    ISP: Optional[ASNInfo]
+    timezone: Optional[str] = None
+    ISP: Optional[ASNInfo] = None
 
 
 class CityInfo(BaseModel):
@@ -22,6 +22,6 @@ class CityInfo(BaseModel):
     country_iso: str
     city: str
     ip: str
-    subdivisions: Optional[str]
-    location: Optional[tuple[float, float]]
-    timezone: Optional[str]
+    subdivisions: Optional[str] = None
+    location: Optional[tuple[float, float]] = None
+    timezone: Optional[str] = None
