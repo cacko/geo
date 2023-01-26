@@ -69,14 +69,19 @@ class GeoDb(object, metaclass=GeoDbMeta):
         ))
 
     def do_asn(self, ip: str):
-        if all([not ip_address.ipv4(ip), not ip_address.ipv4_cidr(ip)]):
+        try:
+            assert not ll([not ip_address.ipv4(ip), not ip_address.ipv4_cidr(ip)])
+            cache = ASNIP(ip)
+            if cache.load():
+                return cache._struct
+            res = self.__asn_db.org_by_addr(ip)
+            assert res
+            asid, name = res.split(" ", 1)
+            return ASNInfo(
+                name= name,
+                id=int(asid.lstrip("AS"))
+            )
+        except AssertionError as e:
+            logging.exception(e)
             raise ValueError
-        cache = ASNIP(ip)
-        if cache.load():
-            return cache._struct
-        res = self.__asn_db.org_by_addr(ip)
-        asid, name = res.split(" ", 1)
-        return ASNInfo(
-            name= name,
-            id=int(asid.lstrip("AS"))
-        )
+
