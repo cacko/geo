@@ -7,8 +7,6 @@ import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
 import { WebsocketService } from './service/websocket.service';
 import { WSCommand } from './entity/websockets.entiity';
-import { LocalizedString } from '@angular/compiler';
-
 
 @Component({
   selector: 'app-root',
@@ -32,11 +30,19 @@ export class AppComponent implements OnInit {
     private zone: NgZone,
     private swUpdate: SwUpdate,
     private ws: WebsocketService,
+    private snackBar: MatSnackBar
   ) {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe((evt) => {
         this.updating = true;
-        document.location.reload();
+        this.snackBar
+          .open('Update is available', 'Update')
+          .onAction()
+          .subscribe(() =>
+            this.swUpdate
+              .activateUpdate()
+              .then(() => document.location.reload())
+          );
       });
       interval(10000).subscribe(() => {
         this.swUpdate.checkForUpdate();

@@ -23,6 +23,8 @@ class LookupImageParams(BaseModel):
     guidance_scale: float = Field(default=15)
     num_inference_steps: int = Field(default=50)
     seed: Optional[int] = None
+    model: str = Field(default="oj2")
+    upscale: bool = Field(default=True)
 
 
 class LookupImage(CachableFileImage):
@@ -97,7 +99,7 @@ class LookupImage(CachableFileImage):
                     f"(gps coordinates:{self._geo.location[0]},{self._geo.location[1]}),"
                     " realistic, hdr, 8k"
                 ),
-                num_inference_steps=25
+                num_inference_steps=25,
             )
             req = Request(
                 path,

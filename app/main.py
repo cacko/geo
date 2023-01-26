@@ -7,7 +7,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:4200",
-    "https://geo.cacko.net"
+    "https://botyo.cacko.net"
 ]
 
 app.add_middleware(
