@@ -42,7 +42,7 @@ dependencies:
     - beautifulsoup4==4.11.1
     - better-exceptions==0.3.3
     - bidict==0.22.1
-    - cachable==0.3.34
+    - cachable==0.3.41
     - certifi==2022.12.7
     - charset-normalizer==2.1.1
     - colorama==0.4.6
