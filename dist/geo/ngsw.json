@@ -1,0 +1,97 @@
+{
+  "configVersion": 1,
+  "timestamp": 1673758561076,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main.a7f3bb0af0aa72e7.js",
+        "/manifest.webmanifest",
+        "/polyfills.f91490df90055099.js",
+        "/runtime.31c115695cec8e75.js",
+        "/styles.a3ea29c181aa0577.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/android-chrome-192x192.png",
+        "/assets/android-chrome-512x512.png",
+        "/assets/apple-touch-icon.png",
+        "/assets/browserconfig.xml",
+        "/assets/favicon-16x16.png",
+        "/assets/favicon-32x32.png",
+        "/assets/mstile-150x150.png",
+        "/assets/safari-pinned-tab.svg",
+        "/assets/site.webmanifest"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "patterns": [
+        "\\/api\\/.*"
+      ],
+      "strategy": "freshness",
+      "maxSize": 100,
+      "maxAge": 0,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
+  "hashTable": {
+    "/assets/android-chrome-192x192.png": "6f64b2636fb3d474d4f4526643a94358d0a76b3f",
+    "/assets/android-chrome-512x512.png": "26c14ed7f525008bacae82d2254a915a92d08900",
+    "/assets/apple-touch-icon.png": "d6c61f2a80a67dce03fafe993338c5c628d55bea",
+    "/assets/browserconfig.xml": "a308fac7c2637f1dcb86dace167168661cd2c64c",
+    "/assets/favicon-16x16.png": "063361c6dd7f350c2dcad53e5eacb4a57328ac7c",
+    "/assets/favicon-32x32.png": "afca15fb553476e5fab777332400609aeca8ca49",
+    "/assets/mstile-150x150.png": "4e5ffe75eeb4e30bb8a06935241199370e954fdc",
+    "/assets/safari-pinned-tab.svg": "a58116328ae557d73c52c6b897ec296663c9dd89",
+    "/assets/site.webmanifest": "3215766e60a33c9b2687d4728fe9e51a8bfbc0e4",
+    "/favicon.ico": "4f189f3d19b709f0030d19eab9e43cc534bf2b19",
+    "/index.html": "970aa9ebb43a91c353ec3b0c80512e8bb4d09b99",
+    "/main.a7f3bb0af0aa72e7.js": "cf6e05a2d45444a98c20526de6d65c7a445533c4",
+    "/manifest.webmanifest": "46edef696eb009ca40bfe7e6334efb4fcb438c33",
+    "/polyfills.f91490df90055099.js": "d537988bf5f23620e90834b25ff38ff569a1c8d3",
+    "/runtime.31c115695cec8e75.js": "60f46bf0e508f0ee3b38878156210aaf674c1b87",
+    "/styles.a3ea29c181aa0577.css": "849ec4d86038550d9e614a2125558d51e3c405a1"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
