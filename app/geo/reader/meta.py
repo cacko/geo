@@ -1,7 +1,6 @@
 from pathlib import Path
 from geoip2.models import City, ASN
 from typing import Optional, Any
-import logging
 
 class GeoDbMeta(type):
 
@@ -19,6 +18,7 @@ class GeoDbMeta(type):
 
     @property
     def db_root(cls) -> Path:
+        assert cls.__db_root
         return cls.__db_root
 
     def city(cls, ip) -> City:
@@ -26,5 +26,3 @@ class GeoDbMeta(type):
 
     def asn(cls, ip) -> ASN:
         return cls().do_asn(ip)
-
-

@@ -53,4 +53,4 @@ class Settings(BaseSettings):
         env_nested_delimiter = '__'
 
 
-app_config = Settings()
+app_config = Settings() # type: ignore

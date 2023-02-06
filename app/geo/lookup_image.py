@@ -29,8 +29,6 @@ class LookupImageParams(BaseModel):
 
 class LookupImage(CachableFileImage):
 
-    _geo: GeoInfo
-
     def __init__(self, geo: Optional[GeoInfo] = None):
         self._geo = geo
 
@@ -62,7 +60,8 @@ class LookupImage(CachableFileImage):
     @property
     def filename(self):
         hash = string_hash(
-            self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
+            self._geo.country, self._geo.city, ",".join(
+                map(str, self._geo.location))
         )
         return f"{hash}.webp"
 
@@ -87,8 +86,9 @@ class LookupImage(CachableFileImage):
 
     def __fetch(self, json: dict):
         rand_id = uuid4().hex
-        flick_path = TempPath(f"{rand_id}.png")
-        gps = ",".join(map(str,self._geo.location))
+        assert self._geo
+        assert self._geo.location
+        gps = ",".join(map(str, self._geo.location))
         path = f"http://192.168.0.107:23726/image/gps2img/{gps}"
         params = LookupImageParams(
             num_inference_steps=25,
@@ -106,7 +106,8 @@ class LookupImage(CachableFileImage):
                     b"content-type", b""  # type: ignore
                 ).decode()
                 if content_type.startswith("image"):
-                    flick_path.write_bytes(part.content)
+                    assert self._path
+                    self._path.write_bytes(part.content)
 
 
 class LoadingImage(LookupImage):

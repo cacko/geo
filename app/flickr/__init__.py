@@ -7,9 +7,10 @@ from cachable.request import Request
 from typing import Optional
 import logging
 
+
 class FlickrMeta(type):
 
-    __instance: "Flickr" = None
+    __instance: Optional["Flickr"] = None
 
     def __call__(cls):
         if not cls.__instance:

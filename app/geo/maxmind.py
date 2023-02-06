@@ -7,8 +7,8 @@ import logging
 
 class MaxMindMeta(type):
 
-    __db: Path = None
-    __instance: "MaxMind" = None
+    __db: Optional[Path] = None
+    __instance: Optional["MaxMind"] = None
 
     def __call__(cls, *args, **kwargs):
         if not cls.__instance:
@@ -21,6 +21,7 @@ class MaxMindMeta(type):
 
     @property
     def db_root(cls) -> Path:
+        assert cls.__db
         return cls.__db
 
     def lookup(cls, ip: str) -> Optional[GeoInfo]:
@@ -43,7 +44,6 @@ class MaxMind(object, metaclass=MaxMindMeta):
             return GeoInfo(**result)
         except AssertionError:
             return None
-
 
     def get_asn(self, ip: str) -> Optional[ASNInfo]:
         res = GeoDb.asn(ip)
