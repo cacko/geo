@@ -55,19 +55,18 @@ tasks:
     cmds:
       - mamba env export --no-builds --ignore-channels  -n {{.PROJECT}} > environment.yml
 
-  install:
-    desc: calls poetry install and npm ci
+  export-remote:
+    desc: export env
     cmds:
-      - task: pp
-      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}}; mamba env update -n {{.PROJECT}} -f environment.yml --prune'
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};mamba env export --no-builds -n {{.PROJECT}} > environment-remote.yml'
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};task push'
+      - git pull
 
-  update:
+  install:
     desc: update package
     cmds:
-      - mamba run --live-stream -n {{.PROJECT}} pip install {{.CLI_ARGS}} -U
-      - task: export
-      - sed -i '' -e '/libcxx/d' environment.yml
-      - task: pp
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/botyo;mamba run --live-stream -n {{.PROJECT}} pip install {{.CLI_ARGS}} -U'
+      - task: export-remote
       - task: deploy
 
   deploy:
