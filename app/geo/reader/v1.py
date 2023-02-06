@@ -66,7 +66,7 @@ class GeoDb(object, metaclass=GeoDbMeta):
                 country_iso=res.get("country_code", ""),
                 city=res.get("city", ""),
                 subdivisions=res.get("region_name", ""),
-                location=(res["longitude"], res["latitude"]),
+                location=(res["latitude"], res["latitude"]),
                 timezone=res.get("time_zone", ""),
             )
         )

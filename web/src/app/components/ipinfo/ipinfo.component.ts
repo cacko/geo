@@ -23,19 +23,19 @@ export class IPInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loaded = false;
-    setTimeout(() => {
-      this.api.fetch(ApiType.BACKGROUND, {
-        path: `${this.lookup.ip}`,
-        loader: "false"
-      }, false).then((res) => {
-        const data = res as BackgroundEntity;
-        this.img_url = data.name;
-        this.loaded = true;
-      }).catch((err) => {
+    // this.loaded = false;
+    // setTimeout(() => {
+    //   this.api.fetch(ApiType.BACKGROUND, {
+    //     path: `${this.lookup.ip}`,
+    //     loader: "false"
+    //   }, false).then((res) => {
+    //     const data = res as BackgroundEntity;
+    //     this.img_url = data.name;
+    //     this.loaded = true;
+    //   }).catch((err) => {
 
-      });
-    }, 0);
+    //   });
+    // }, 0);
 
   }
 

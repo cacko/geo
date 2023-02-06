@@ -38,8 +38,8 @@ export class LocationBgDirective implements OnInit {
   }
 
   protected setBackground(img: string) {
-    this.el.nativeElement.style.backgroundImage = `url('${img}')`;
-    this.el.nativeElement.cl
+    this.el.nativeElement.style.backgroundImage = `url('https://geo.cacko.net/${img}')`;
+    // this.el.nativeElement.cl
   }
 
 }
