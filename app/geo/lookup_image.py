@@ -2,10 +2,6 @@ from cachable.storage.filestorage.image import CachableFileImage
 from cachable.storage import FileStorage
 from corestring import string_hash
 from typing import Optional
-from cachable.request import Request, Method, BinaryStruct
-from app.flickr import Flickr
-import filetype
-import logging
 from PIL import Image
 from io import BytesIO
 from app.geo.models import GeoInfo
@@ -13,14 +9,13 @@ from pydantic import BaseModel, Field
 from app.config import app_config
 from pathlib import Path
 from uuid import uuid4
-from corefile import TempPath
 
 
 class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
     height: int = Field(default=512)
     width: int = Field(default=768)
-    guidance_scale: float = Field(default=15)
+    guidance_scale: float = Field(default=4)
     num_inference_steps: int = Field(default=25)
     seed: Optional[int] = None
     model: str = Field(default="xl")
