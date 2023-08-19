@@ -23,7 +23,7 @@ class LookupImageParams(BaseModel):
     guidance_scale: float = Field(default=15)
     num_inference_steps: int = Field(default=25)
     seed: Optional[int] = None
-    model: str = Field(default="kandy")
+    model: str = Field(default="xl")
     upscale: bool = Field(default=True)
 
 
