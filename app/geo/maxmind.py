@@ -1,5 +1,5 @@
 from pathlib import Path
-from app.geo.reader.v1 import GeoDb
+from app.geo.reader.v2import GeoDb
 from app.geo.models import ASNInfo, GeoInfo
 from typing import Optional
 import logging
