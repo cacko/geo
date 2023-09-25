@@ -69,7 +69,7 @@ class GeoDb(object, metaclass=GeoDbMeta):
         ))
 
     def do_asn(self, ip: str) -> ASNInfo:
-        if all([not ip_address.ipv4(ip), not ip_address.ipv4_cidr(ip)]):
+        if all([not ip_address.ipv4(ip), not ip_address.ipv4(ip, cidr=True)]):
             raise ValueError
         cache = ASNIP(ip)
         if cache.load():
