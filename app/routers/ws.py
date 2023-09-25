@@ -2,14 +2,14 @@ from fastapi import (
     APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 )
 from app.geo.lookup_image import LookupImage
-import logging
 from app.config import app_config
 from pydantic import BaseModel
-from enum import Enum
+from enum import StrEnum
 from app.geo.maxmind import MaxMind
 import validators
 
-class WSCommand(Enum):
+
+class WSCommand(StrEnum):
     IP = "ip"
     PING = "ping"
     LOOKUP = "lookup"
@@ -33,7 +33,7 @@ class ConnectionManager:
         self.active_connections.append(websocket)
         await websocket.send_json(
             Message(
-                command=WSCommand.IP, 
+                command=WSCommand.IP,
                 content=websocket.headers.get("x-forwarded-for")
             ).dict()
         )

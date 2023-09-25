@@ -1,11 +1,9 @@
 from cachable import Cachable
 from cachable.storage import RedisStorage
 from geoip2.database import Reader
-from geoip2.models import City, ASN
 from app.geo.models import CityInfo, ASNInfo
 from validators import ip_address
 from stringcase import snakecase
-from typing import Optional
 from app.config import app_config
 from .meta import GeoDbMeta
 
@@ -20,7 +18,6 @@ class CityIP(Cachable):
     @property
     def storage(self):
         return RedisStorage
-
 
     @property
     def id(self):
@@ -79,6 +76,6 @@ class GeoDb(object, metaclass=GeoDbMeta):
             return cache._struct
         res = self.__asn_db.asn(ip)
         return cache.tocache(ASNInfo(
-            name=res.autonomous_system_organization, 
+            name=res.autonomous_system_organization,
             id=res.autonomous_system_number
         ))

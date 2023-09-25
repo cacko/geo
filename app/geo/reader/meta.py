@@ -2,6 +2,7 @@ from pathlib import Path
 from geoip2.models import City, ASN
 from typing import Optional, Any
 
+
 class GeoDbMeta(type):
 
     __db_root: Optional[Path] = None

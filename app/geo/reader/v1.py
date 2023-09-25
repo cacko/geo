@@ -2,7 +2,6 @@ from cachable import Cachable
 from cachable.storage import RedisStorage
 from validators import ip_address
 from stringcase import snakecase
-from typing import Optional
 from app.config import app_config
 import logging
 import GeoIP

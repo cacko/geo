@@ -1,5 +1,6 @@
 from cachable.storage.filestorage.image import CachableFileImage
 from cachable.storage import FileStorage
+from cachable.request import Request, Method
 from corestring import string_hash
 from typing import Optional
 from PIL import Image
@@ -8,7 +9,6 @@ from app.geo.models import GeoInfo
 from pydantic import BaseModel, Field
 from app.config import app_config
 from pathlib import Path
-from uuid import uuid4
 
 
 class LookupImageParams(BaseModel):
@@ -80,7 +80,6 @@ class LookupImage(CachableFileImage):
             self._path = self.DEFAULT
 
     def __fetch(self, json: dict):
-        rand_id = uuid4().hex
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))

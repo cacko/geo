@@ -2,7 +2,6 @@ from pathlib import Path
 from app.geo.reader.v2 import GeoDb
 from app.geo.models import ASNInfo, GeoInfo
 from typing import Optional
-import logging
 
 
 class MaxMindMeta(type):
