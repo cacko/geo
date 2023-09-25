@@ -22,7 +22,7 @@ $theme: mat.define-dark-theme((color: (primary: $theme-primary,
 @import "./mixins.scss";
 
 :root {
-  --global-font-size: 25px;
+  --global-font-size: 20px;
   --global-line-height: 1.4em;
   --global-space: 10px;
   --font-stack: "Syne Mono", monospace, serif;
