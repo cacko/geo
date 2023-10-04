@@ -72,7 +72,7 @@ class GeoDb(object, metaclass=GeoDbMeta):
 
     def do_asn(self, ip: str):
         try:
-            assert not all([not ip_address.ipv4(ip), not ip_address.ipv4_cidr(ip)])
+            assert not all([not ip_address.ipv4(ip), not ip_address.ipv4(ip, cidr=True)])
             cache = ASNIP(ip)
             if cache.load():
                 return cache._struct
