@@ -83,7 +83,7 @@ tasks:
   redis:
     desc: open redis-cli
     cmds:
-      - keydb-cli $REDIS_CLI
+      - redis-cli $REDIS_CLI
 
   web-deploy:
     desc: deploy
