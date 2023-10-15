@@ -68,7 +68,6 @@ export class AppComponent implements OnInit {
 
   updateGeoIP(new_ip: string) {
     this.ownIP= new_ip;
-    alert(`new ip is ${new_ip}`);
   }
 
   get ownIP(): string | null {

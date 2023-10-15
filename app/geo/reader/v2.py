@@ -57,7 +57,8 @@ class GeoDb(object, metaclass=GeoDbMeta):
         cache = CityIP(ip)
         if cache.load():
             return cache._struct
-        res = self.__city_db.city(ip)
+
+        res = self.__city_db.city(ip)z
         return cache.tocache(CityInfo(
             ip=ip,
             country=res.country.names.get("en", ""),
