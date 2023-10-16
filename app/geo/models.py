@@ -26,3 +26,14 @@ class CityInfo(BaseModel):
     subdivisions: Optional[str] = None
     location: Optional[tuple[float, float]] = None
     timezone: Optional[str] = None
+
+
+class GeoLocation(BaseModel):
+    country: str
+    country_iso: str
+    city: str
+    name: str
+    subdivions: Optional[list[str]] = None
+    addressLine: Optional[str] = None
+    postCode: Optional[str] = None
+    location: Optional[list[float]] = None

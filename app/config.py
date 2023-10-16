@@ -1,4 +1,5 @@
-from pydantic import BaseModel, BaseSettings, Field
+from pydantic import BaseModel, Field
+from pydantic_settings import BaseSettings
 
 
 class MaxmindConfig(BaseModel):
@@ -40,6 +41,10 @@ class FlickrConfig(BaseModel):
     secret: str
 
 
+class GeoPyConfig(BaseModel):
+    bing_api_key: str
+
+
 class Settings(BaseSettings):
     redis: RedisConfig
     maxmind: MaxmindConfig
@@ -48,6 +53,7 @@ class Settings(BaseSettings):
     web: WebConfig
     storage: StorageConfig
     flickr: FlickrConfig
+    geopy: GeoPyConfig
 
     class Config:
         env_nested_delimiter = '__'
