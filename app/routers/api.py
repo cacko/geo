@@ -32,7 +32,7 @@ async def read_address(
     try:
         return GeoCoder.from_name(address).model_dump()
     except AssertionError:
-        raise HTTPException(status_code=403)
+        raise HTTPException(status_code=404)
 
 
 @router.get("/api/gps/{lat}/{lon}", tags=["api"])
@@ -43,7 +43,7 @@ async def read_gps(
     try:
         return GeoCoder.from_gps(lat, lon).model_dump()
     except AssertionError:
-        raise HTTPException(status_code=403)
+        raise HTTPException(status_code=404)
 
 
 @router.get("/api/background/{ip}", tags=["api"])
