@@ -34,7 +34,7 @@ class GeoBing(BaseGeoCode):
         self.__coder = Bing(api_key=app_config.geopy.bing_api_key)
 
     def get_geocode(self, name: str) -> GeoLocation:
-        res = self.__coder(name)
+        res = self.__coder.geocode(name)
         assert res
         res = BingResult(**res.raw)
         return self.__to_model(res)
