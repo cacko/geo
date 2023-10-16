@@ -52,7 +52,7 @@ class GeoBing(BaseGeoCode):
             country_iso=self.__class__.country_iso_code(res.address.countryRegion),
             city=res.address.locality,
             name=res.address.formattedAddress,
-            subdivions=[res.address.adminDistrict, res.address.adminDistrict2],
+            subdivions=list(filter(None, [res.address.adminDistrict, res.address.adminDistrict2])),
             postCode=res.address.postalCode,
             addressLine=res.address.addressLine,
             location=res.point.coordinates
