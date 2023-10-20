@@ -44,6 +44,7 @@ class FlickrConfig(BaseModel):
 class GeoPyConfig(BaseModel):
     bing_api_key: str
     here_api_key: str
+    tomtom_api_key: str
 
 
 class Settings(BaseSettings):
