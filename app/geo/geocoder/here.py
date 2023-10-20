@@ -36,14 +36,14 @@ class GeoHere(BaseGeoCode):
         self.__coder = HereV7(apikey=app_config.geopy.here_api_key)
 
     def get_geocode(self, name: str) -> GeoLocation:
-        res = self.__coder.geocode(name)
+        res = self.__coder.geocode(name, language="en-US")
         assert res
         logging.debug(pprint.pformat(res.raw))
         res = HereResult(**res.raw)
         return self.__to_model(res)
 
     def get_reverse(self, lat: float, lon: float) -> GeoLocation:
-        res = self.__coder.reverse((lat, lon))
+        res = self.__coder.reverse((lat, lon), language="en-US")
         assert res
         logging.debug(pprint.pformat(res.raw))
         res = HereResult(**res.raw)
