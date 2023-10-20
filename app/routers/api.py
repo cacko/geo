@@ -18,7 +18,7 @@ async def read_lookup(
         res = MaxMind.lookup(ip)
         return res.model_dump()
     except AssertionError:
-        raise HTTPException(status_code=502)
+        raise HTTPException(status_code=404)
 
 
 @router.get("/api/address/{address:path}", tags=["api"])
