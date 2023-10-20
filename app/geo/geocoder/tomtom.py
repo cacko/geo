@@ -6,11 +6,18 @@ from .meta import BaseGeoCode
 from geopy.geocoders import TomTom
 from app.config import app_config
 from pydantic import BaseModel
+from enum import StrEnum
+
+
+class ResultType(StrEnum):
+    GEOGRAPHY = "Geography"
+    STREET = "Street"
+    ADDRESS_RANGE = "Address Range"
 
 
 class TomTomAddress(BaseModel):
     country: str
-    localName: str
+    localName: Optional[str] = None
     postalCode: Optional[str] = None
     countrySubdivisionName: Optional[str] = None
     countrySecondarySubdivision: Optional[str] = None
@@ -21,12 +28,26 @@ class TomTomAddress(BaseModel):
 
 class Point(BaseModel):
     lat: float
-    lng: float
+    lon: float
 
 
 class TomTomResult(BaseModel):
     address: TomTomAddress
     position: Point
+    type: ResultType
+    entityType: Optional[str] = None
+
+    @property
+    def name(self):
+        if self.entityType:
+            return getattr(self.address, self.entityType.lower())
+        match self.type:
+            case ResultType.STREET:
+                return self.address.streetName
+            case ResultType.ADDRESS_RANGE:
+                return self.address.localName
+            case _:
+                return ""
 
 
 class GeoTomTom(BaseGeoCode):
@@ -38,7 +59,7 @@ class GeoTomTom(BaseGeoCode):
         res = self.__coder.geocode(name, language="en-US")
         assert res
         logging.debug(pprint.pformat(res.raw))
-        res = TomTomAddress(**res.raw)
+        res = TomTomResult(**res.raw)
         return self.__to_model(res)
 
     def get_reverse(self, lat: float, lon: float) -> GeoLocation:
@@ -52,11 +73,11 @@ class GeoTomTom(BaseGeoCode):
         res = GeoLocation(
             country=res.address.country,
             country_iso=self.__class__.country_iso_code(res.address.country),
-            city=res.address.localName,
+            city=res.name,
             name=next(filter(None, [res.address.streetName, res.address.municipality]), None),
             subdivions=list(filter(None, [res.address.countrySubdivisionName, res.address.countrySecondarySubdivision])),
             postCode=res.address.postalCode,
             addressLine=res.address.freeformAddress,
-            location=[res.position.lat, res.position.lng]
+            location=[res.position.lat, res.position.lon]
         )
         return res
