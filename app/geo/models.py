@@ -37,3 +37,4 @@ class GeoLocation(BaseModel):
     addressLine: Optional[str] = None
     postCode: Optional[str] = None
     location: Optional[list[float]] = None
+    extra: Optional[dict[str, str]] = None

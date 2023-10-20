@@ -1,3 +1,4 @@
+import logging
 import pprint
 from typing import Optional
 from app.geo.models import GeoLocation
@@ -36,13 +37,14 @@ class GeoBing(BaseGeoCode):
     def get_geocode(self, name: str) -> GeoLocation:
         res = self.__coder.geocode(name)
         assert res
+        logging.debug(pprint.pformat(res.raw))
         res = BingResult(**res.raw)
         return self.__to_model(res)
 
     def get_reverse(self, lat: float, lon: float) -> GeoLocation:
         res = self.__coder.reverse((lat, lon))
         assert res
-        pprint.pprint(res.raw)
+        logging.debug(pprint.pformat(res.raw))
         res = BingResult(**res.raw)
         return self.__to_model(res)
 

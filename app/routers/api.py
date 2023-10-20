@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header, Request, HTTPException
 from app.geo.maxmind import MaxMind
-from app.geo.geocoder import GeoCoder
+from app.geo.geocoder import GeoBing as GeoCoder
 import validators
 import logging
 from app.core.ip import get_remote_ip

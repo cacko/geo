@@ -10,7 +10,7 @@ tasks:
   default:
     desc: run
     cmds:
-      -  mamba run --live-stream -n {{.PROJECT}} python -m app
+      -  mamba run --live-stream -n {{.PROJECT}} python -m app {{.CLI_ARGS}}
 
   stop:
     desc: stop the server
