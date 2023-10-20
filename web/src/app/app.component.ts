@@ -52,7 +52,9 @@ export class AppComponent implements OnInit {
     })
 
     this.ws.messages.subscribe((msg) => {
-      switch(msg.command)  {
+      console.info(msg);
+      console.info(this.ownIP)
+      switch (msg.command) {
         case WSCommand.IP:
           if (!this.ownIP) {
             this.ownIP = msg.content;
@@ -66,7 +68,7 @@ export class AppComponent implements OnInit {
   }
 
   updateGeoIP(new_ip: string) {
-    this.ownIP= new_ip;
+    this.ownIP = new_ip;
   }
 
   get ownIP(): string | null {
@@ -75,6 +77,11 @@ export class AppComponent implements OnInit {
 
   set ownIP(ip: string | null) {
     localStorage.setItem(this.KEY_OWN_IP, ip || "");
+    this.api.fetch(ApiType.LOOOKUP, { path: ip }).then((res) => {
+      this.lookup = res as LookupEntity;
+    }).catch((err) => {
+
+    });
   }
 
   isIPChanged(current_ip: string): boolean {
