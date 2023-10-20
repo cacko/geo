@@ -7,7 +7,6 @@ import { interval } from 'rxjs';
 import { LookupEntity } from './entity/lookup.entity';
 import { WebsocketService } from './service/websocket.service';
 import { WSCommand } from './entity/websockets.entiity';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from enum import StrEnum
 from app.geo.maxmind import MaxMind
 import validators
-
+from app.core.ip import get_remote_ip
 
 class WSCommand(StrEnum):
     IP = "ip"
@@ -34,7 +34,7 @@ class ConnectionManager:
         await websocket.send_json(
             Message(
                 command=WSCommand.IP,
-                content=websocket.headers.get("x-forwarded-for")
+                content=get_remote_ip(websocket.headers.get("x-forwarded-for"))
             ).model_dump()
         )
 

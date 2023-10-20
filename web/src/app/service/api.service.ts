@@ -60,6 +60,7 @@ export class ApiService implements HttpInterceptor {
     this.zone.run(() => this.loaderSubject.next(false));
   }
 
+
   fetch(type: ApiType, params: Params = {}, cache=true): Promise<any> {
     return new Promise((resolve, reject) => {
 
