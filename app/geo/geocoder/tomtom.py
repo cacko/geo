@@ -48,7 +48,7 @@ class TomTomResult(BaseModel):
                 return self.address.localName
             case _:
                 return ""
-            
+
 
 class TomTomReverseResult(BaseModel):
     address: TomTomAddress

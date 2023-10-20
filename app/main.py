@@ -3,6 +3,7 @@ from .routers import api, ws
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
+    title="geo@cacko.net",
     docs_url="/api/docs",
     openapi_url="/api/openapi.json",
     redoc_url="/api/redoc"
