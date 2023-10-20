@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Header, Request, HTTPException
+from fastapi import APIRouter, HTTPException
 from app.geo.maxmind import MaxMind
 from app.geo.geocoder import Coders
 import validators
 import logging
-from app.core.ip import get_remote_ip
 from app.geo.lookup_image import LookupImage
 from app.config import app_config
 
@@ -12,13 +11,9 @@ router = APIRouter()
 
 @router.get("/api/ip/{ip}", tags=["api"])
 async def read_lookup(
-    request: Request,
-    ip: str = "",
-    x_forwarded_for: str | None = Header(default=None),
+    ip: str,
 ):
     try:
-        if not ip:
-            ip = get_remote_ip(request.client.host, x_forwarded_for)
         assert validators.ip_address.ipv4(ip)
         res = MaxMind.lookup(ip)
         return res.model_dump()
