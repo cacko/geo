@@ -48,6 +48,20 @@ class TomTomResult(BaseModel):
                 return self.address.localName
             case _:
                 return ""
+            
+
+class TomTomReverseResult(BaseModel):
+    address: TomTomAddress
+    position: str
+
+    @property
+    def location(self):
+        parts = self.position.split(",")
+        return [float(x) for x in parts[:2]]
+
+    @property
+    def name(self):
+        return self.address.localName
 
 
 class GeoTomTom(BaseGeoCode):
@@ -66,8 +80,21 @@ class GeoTomTom(BaseGeoCode):
         res = self.__coder.reverse((lat, lon))
         assert res
         logging.debug(pprint.pformat(res.raw))
-        res = TomTomResult(**res.raw)
-        return self.__to_model(res)
+        res = TomTomReverseResult(**res.raw)
+        return self.__to_model_from_reverse(res)
+
+    def __to_model_from_reverse(self, res: TomTomReverseResult):
+        res = GeoLocation(
+            country=res.address.country,
+            country_iso=self.__class__.country_iso_code(res.address.country),
+            city=res.name,
+            name=next(filter(None, [res.address.streetName, res.address.municipality]), None),
+            subdivions=list(filter(None, [res.address.countrySubdivisionName, res.address.countrySecondarySubdivision])),
+            postCode=res.address.postalCode,
+            addressLine=res.address.freeformAddress,
+            location=res.location
+        )
+        return res
 
     def __to_model(self, res: TomTomResult):
         res = GeoLocation(
