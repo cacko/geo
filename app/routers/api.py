@@ -20,7 +20,10 @@ async def read_lookup(
         if not ip:
             ip = get_remote_ip(request.client.host, x_forwarded_for)
         assert validators.ip_address.ipv4(ip)
-        return MaxMind.lookup(ip).model_dump()
+        res = MaxMind.lookup(ip)
+        if res.location:
+            return GeoCoder.from_gps(*res.location).model_dump()
+        return res.model_dump()
     except AssertionError:
         raise HTTPException(status_code=502)
 
