@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header, Request, HTTPException
 from app.geo.maxmind import MaxMind
-from app.geo.geocoder import GeoHere as GeoCoder
+from app.geo.geocoder import Coders
 import validators
 import logging
 from app.core.ip import get_remote_ip
@@ -28,10 +28,11 @@ async def read_lookup(
 
 @router.get("/api/address/{address:path}", tags=["api"])
 async def read_address(
-    address: str
+    address: str,
+    coder: Coders = Coders.HERE
 ):
     try:
-        return GeoCoder.from_name(address).model_dump()
+        return coder.coder.from_name(address).model_dump()
     except AssertionError:
         raise HTTPException(status_code=404)
 
@@ -39,10 +40,12 @@ async def read_address(
 @router.get("/api/gps/{lat}/{lon}", tags=["api"])
 async def read_gps(
     lat: float,
-    lon: float
+    lon: float,
+    coder: Coders = Coders.HERE
+
 ):
     try:
-        return GeoCoder.from_gps(lat, lon).model_dump()
+        return coder.coder.from_gps(lat, lon).model_dump()
     except AssertionError:
         raise HTTPException(status_code=404)
 
