@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const params = new URLSearchParams(window.location.search);
-    this.api.fetch(ApiType.LOOOKUP, { ip: params.get("ip") }).then((res) => {
+    this.api.fetch(ApiType.LOOOKUP, { path: params.get("ip") }).then((res) => {
       this.lookup = res as LookupEntity;
     }).catch((err) => {
 

@@ -1,4 +1,4 @@
 export enum ApiType {
-    LOOOKUP = 'lookup',
+    LOOOKUP = 'ip',
     BACKGROUND = 'background'
 }

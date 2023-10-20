@@ -35,7 +35,7 @@ class ConnectionManager:
             Message(
                 command=WSCommand.IP,
                 content=websocket.headers.get("x-forwarded-for")
-            ).dict()
+            ).model_dump()
         )
 
     def disconnect(self, websocket: WebSocket):
@@ -47,7 +47,7 @@ class ConnectionManager:
                 case WSCommand.LOOKUP:
                     ip = msg.content
                     assert validators.ip_address.ipv4(ip)
-                    return MaxMind.lookup(ip).dict()
+                    return MaxMind.lookup(ip).model_dump()
                 case WSCommand.BACKGROUND:
                     geo_info = MaxMind.lookup(ip=ip)
                     image = LookupImage(geo=geo_info)
