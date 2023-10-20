@@ -5,6 +5,7 @@ import validators
 import logging
 from app.geo.lookup_image import LookupImage
 from app.config import app_config
+from app.geo.models import GeoInfo
 
 router = APIRouter()
 
@@ -16,6 +17,9 @@ async def read_lookup(
     try:
         assert validators.ip_address.ipv4(ip)
         res = MaxMind.lookup(ip)
+        if res.location:
+            coder_res = Coders.HERE.coder.from_gps(*res.location)
+            res = GeoInfo(**{**res.model_dump(), **coder_res.model_dump()})
         return res.model_dump()
     except AssertionError:
         raise HTTPException(status_code=404)

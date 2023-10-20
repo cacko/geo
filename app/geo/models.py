@@ -15,6 +15,8 @@ class GeoInfo(BaseModel):
     subdivisions: Optional[str] = None
     location: Optional[tuple[float, float]]
     timezone: Optional[str] = None
+    addressLine: Optional[str] = None
+    postCode: Optional[str] = None
     ISP: Optional[ASNInfo] = None
 
 
