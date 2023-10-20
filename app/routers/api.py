@@ -10,7 +10,7 @@ from app.config import app_config
 router = APIRouter()
 
 
-@router.get("/api/lookup", tags=["api"])
+@router.get("/api/ip/{ip}", tags=["api"])
 async def read_lookup(
     request: Request,
     ip: str = "",
