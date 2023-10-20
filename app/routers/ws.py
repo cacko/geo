@@ -9,6 +9,7 @@ from app.geo.maxmind import MaxMind
 import validators
 from app.core.ip import get_remote_ip
 
+
 class WSCommand(StrEnum):
     IP = "ip"
     PING = "ping"
