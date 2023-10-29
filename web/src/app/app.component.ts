@@ -52,14 +52,9 @@ export class AppComponent implements OnInit {
     })
 
     this.ws.messages.subscribe((msg) => {
-      console.info(msg);
-      console.info(this.ownIP)
       switch (msg.command) {
         case WSCommand.IP:
-          if (!this.ownIP) {
-            this.ownIP = msg.content;
-          }
-          return this.isIPChanged(msg.content) && this.updateGeoIP(msg.content);
+          this.updateGeoIP(msg.content)
       }
       if (msg.command === WSCommand.IP) {
         this.messages.push(msg.content);
@@ -67,25 +62,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateGeoIP(new_ip: string) {
-    this.ownIP = new_ip;
-  }
-
-  get ownIP(): string | null {
-    return localStorage.getItem(this.KEY_OWN_IP);
-  }
-
-  set ownIP(ip: string | null) {
-    localStorage.setItem(this.KEY_OWN_IP, ip || "");
+  updateGeoIP(ip: string | null) {
+    console.log(ip);
     this.api.fetch(ApiType.LOOOKUP, { path: ip }).then((res) => {
       this.lookup = res as LookupEntity;
+      console.log(this.lookup);
     }).catch((err) => {
 
     });
-  }
-
-  isIPChanged(current_ip: string): boolean {
-    return current_ip !== this.ownIP;
   }
 
   sendMsg(source: string, content: string) {
@@ -99,12 +83,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const params = new URLSearchParams(window.location.search);
-    this.api.fetch(ApiType.LOOOKUP, { path: params.get("ip") }).then((res) => {
+    const ip = params.get("ip");
+    ip && this.api.fetch(ApiType.LOOOKUP, { path:  ip}).then((res) => {
       this.lookup = res as LookupEntity;
     }).catch((err) => {
 
     });
   }
   title = 'geo';
-
 }

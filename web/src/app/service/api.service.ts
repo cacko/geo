@@ -68,14 +68,22 @@ export class ApiService implements HttpInterceptor {
       let url = `${ApiService.API_BASEURL}/${type}`;
       const cached = this.inCache(cacheKey);
 
+
       if ('path' in params) {
         url += "/" + params['path'];
         params['path'] = "";
       }
 
+
+
       if (cache && cached) {
+        console.log(url, cached);
+
         return resolve(cached);
       }
+
+      console.log(url, cached);
+
 
       this.httpClient.get(url, {
         params: omitBy(params, isEmpty)

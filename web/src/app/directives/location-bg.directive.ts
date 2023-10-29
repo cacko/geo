@@ -17,6 +17,7 @@ export class LocationBgDirective implements OnInit {
   }
 
   @HostListener('change') ngOnChanges() {
+    console.log("changes",this.locationbg);
     if (!this.locationbg) {
       return this.setBackground("/bg/loading.png");
     }
@@ -38,7 +39,7 @@ export class LocationBgDirective implements OnInit {
   }
 
   protected setBackground(img: string) {
-    this.el.nativeElement.style.backgroundImage = `url('https://geo.cacko.net/${img}')`;
+    this.el.nativeElement.style.backgroundImage = `url('https://geo.cacko.net${img}')`;
     // this.el.nativeElement.cl
   }
 

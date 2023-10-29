@@ -18,7 +18,7 @@ class LookupImageParams(BaseModel):
     guidance_scale: float = Field(default=4)
     num_inference_steps: int = Field(default=25)
     seed: Optional[int] = None
-    model: str = Field(default="xl")
+    model: str = Field(default="ssd")
     upscale: bool = Field(default=True)
 
 
