@@ -77,12 +77,10 @@ export class ApiService implements HttpInterceptor {
 
 
       if (cache && cached) {
-        console.log(url, cached);
 
         return resolve(cached);
       }
 
-      console.log(url, cached);
 
 
       this.httpClient.get(url, {

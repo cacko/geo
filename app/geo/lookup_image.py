@@ -13,8 +13,8 @@ from pathlib import Path
 
 class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
-    height: int = Field(default=512)
-    width: int = Field(default=768)
+    height: int = Field(default=768)
+    width: int = Field(default=1344)
     guidance_scale: float = Field(default=4)
     num_inference_steps: int = Field(default=25)
     seed: Optional[int] = None

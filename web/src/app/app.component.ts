@@ -63,10 +63,8 @@ export class AppComponent implements OnInit {
   }
 
   updateGeoIP(ip: string | null) {
-    console.log(ip);
     this.api.fetch(ApiType.LOOOKUP, { path: ip }).then((res) => {
       this.lookup = res as LookupEntity;
-      console.log(this.lookup);
     }).catch((err) => {
 
     });

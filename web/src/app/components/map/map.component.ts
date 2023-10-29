@@ -21,7 +21,5 @@ export class MapComponent {
   ) {
     this.location = [data.latitude, data.longitude].join(",");
     this.url = `https://maps.google.com/?q=${this.location}`
-    console.log(this.location);
-    console.log(this.url);
   }
 }
