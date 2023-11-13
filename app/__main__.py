@@ -1,20 +1,17 @@
 import uvicorn
 from .config import app_config
-from app.main import app
+import logging
 import sys
-import asyncio
-from hypercorn.config import Config
-from hypercorn.asyncio import serve
 
 if len(sys.argv) == 1:
-
-    server_config = Config.from_mapping(
-        bind=f"{app_config.server.host}:{app_config.server.port}",
-        workers=app_config.server.workers,
-        worker_class="trio"
+    uvicorn.run(
+        "app.main:app",
+        host=app_config.server.host,
+        port=app_config.server.port,
+        log_level=getattr(logging, app_config.log.level),
+        reload=app_config.server.reload,
+        workers=app_config.server.workers
     )
-    server = uvicorn.Server(server_config)
-    asyncio.run(serve(app, server_config))
 else:
     import app.cli
     app.cli.run()
