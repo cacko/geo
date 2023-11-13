@@ -20,7 +20,7 @@ class ServerConfig(BaseModel):
     host: str
     port: int
     reload: bool = Field(default=False)
-    workers: int = Field(default=1)
+    workers: int = Field(default=5)
 
 
 class LogConfig(BaseModel):
