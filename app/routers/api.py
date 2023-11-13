@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/api/ip/{ip}", tags=["api"])
-async def read_lookup(
+def read_lookup(
     ip: str,
 ):
     try:
@@ -26,7 +26,7 @@ async def read_lookup(
 
 
 @router.get("/api/address/{address:path}", tags=["api"])
-async def read_address(
+def read_address(
     address: str,
     coder: Coders = Coders.HERE
 ):
@@ -37,7 +37,7 @@ async def read_address(
 
 
 @router.get("/api/gps/{lat}/{lon}", tags=["api"])
-async def read_gps(
+def read_gps(
     lat: float,
     lon: float,
     coder: Coders = Coders.HERE
@@ -50,7 +50,7 @@ async def read_gps(
 
 
 @router.get("/api/background/{ip}", tags=["api"])
-async def route_background(ip: str):
+def route_background(ip: str):
     try:
         logging.warning(ip)
         geo_info = MaxMind.lookup(ip=ip)
