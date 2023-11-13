@@ -1,3 +1,4 @@
+import { now } from "lodash-es";
 import { ISPEntity, LookupEntity } from "../entity/lookup.entity";
 
 export class LookupModel implements LookupEntity {
@@ -19,6 +20,7 @@ export class LookupModel implements LookupEntity {
     const parts = [this.ip];
     if (this.renew) {
         parts.push("renew");
+        parts.push(now().toString());
     }
     return parts.join("/")
   }

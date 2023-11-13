@@ -27,9 +27,9 @@ class LookupImage(CachableFileImage):
     def __init__(
         self,
         geo: Optional[GeoInfo] = None,
-        renew: bool = False
+        ts: Optional[int] = None
     ):
-        self._renew = renew
+        self._ts = ts
         self._geo = geo
 
     def tocache(self, image_data: bytes):
@@ -43,15 +43,6 @@ class LookupImage(CachableFileImage):
     @property
     def storage(self):
         return FileStorage
-
-    @property
-    def isCached(self) -> bool:
-        try:
-            assert not self._renew
-            assert self._path
-            return self._path.exists()
-        except AssertionError:
-            return False
 
     @property
     def name(self) -> str:
@@ -72,7 +63,7 @@ class LookupImage(CachableFileImage):
             self._geo.country, self._geo.city, ",".join(
                 map(str, self._geo.location))
         )
-        return f"{hash}.webp"
+        return f"{hash}-{self._ts}.webp"
 
     @property
     def prompt(self) -> str:

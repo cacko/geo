@@ -29,7 +29,7 @@ export class LocationBgDirective implements OnInit {
       renew: "",
       ts: ""
     }
-    if (this.locationbg.endsWith("/renew")) {
+    if (this.locationbg.includes("/renew")) {
       fetchParams.path = this.locationbg.split("/")[0];
       fetchParams.renew = "1";
       fetchParams.ts = now().toString();
@@ -42,6 +42,7 @@ export class LocationBgDirective implements OnInit {
       }
       this.setBackground(imgeUrl);
       this.isLoading = false;
+      
     }).catch((err) => {
 
     });

@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, HTTPException
 from app.geo.maxmind import MaxMind
 from app.geo.geocoder import Coders
@@ -49,15 +50,16 @@ def read_gps(
         raise HTTPException(status_code=404)
 
 
+@router.get("/api/background/{ip}/{ts}", tags=["api"])
 @router.get("/api/background/{ip}", tags=["api"])
 def route_background(
     ip: str,
-    renew: bool = False
+    ts: Optional[int] = None
 ):
     try:
-        logging.warning(ip)
+        logging.info(ip)
         geo_info = MaxMind.lookup(ip=ip)
-        image = LookupImage(geo=geo_info, renew=renew)
+        image = LookupImage(geo=geo_info, ts=ts)
         image_path = image.path
         assert image_path
         assert image_path.exists()
