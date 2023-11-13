@@ -16,9 +16,9 @@ class LookupImageParams(BaseModel):
     height: int = Field(default=768)
     width: int = Field(default=1344)
     guidance_scale: float = Field(default=4)
-    num_inference_steps: int = Field(default=25)
+    num_inference_steps: int = Field(default=10)
     seed: Optional[int] = None
-    model: str = Field(default="ssd")
+    model: str = Field(default="lcm_dream")
     upscale: bool = Field(default=True)
 
 
