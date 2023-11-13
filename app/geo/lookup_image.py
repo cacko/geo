@@ -90,7 +90,7 @@ class LookupImage(CachableFileImage):
         req = Request(
             path,
             method=Method.POST,
-            data=params.dict(),
+            data=params.model_dump(),
         )
         is_multipart = req.is_multipart
         if is_multipart:
