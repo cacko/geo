@@ -19,3 +19,4 @@ templates/
 images_data.json
 .idea/
 instance/
+.yarn/
