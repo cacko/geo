@@ -16,6 +16,12 @@ class RedisConfig(BaseModel):
     url: str
 
 
+class MashaConfig(BaseModel):
+    host: str
+    port: str
+    api_gps2img: str
+
+
 class ServerConfig(BaseModel):
     host: str
     port: int
@@ -56,6 +62,7 @@ class Settings(BaseSettings):
     storage: StorageConfig
     flickr: FlickrConfig
     geopy: GeoPyConfig
+    masha: MashaConfig
 
     class Config:
         env_nested_delimiter = '__'

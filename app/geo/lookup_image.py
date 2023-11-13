@@ -24,7 +24,12 @@ class LookupImageParams(BaseModel):
 
 class LookupImage(CachableFileImage):
 
-    def __init__(self, geo: Optional[GeoInfo] = None):
+    def __init__(
+        self,
+        geo: Optional[GeoInfo] = None,
+        renew: bool = False
+    ):
+        self._renew = renew
         self._geo = geo
 
     def tocache(self, image_data: bytes):
@@ -38,6 +43,15 @@ class LookupImage(CachableFileImage):
     @property
     def storage(self):
         return FileStorage
+
+    @property
+    def isCached(self) -> bool:
+        try:
+            assert not self._renew
+            assert self._path
+            return self._path.exists()
+        except AssertionError:
+            return False
 
     @property
     def name(self) -> str:
@@ -79,11 +93,16 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
+    @property
+    def gps2img_endpoint(self) -> str:
+        masha_config = app_config.masha
+        return f"http://{masha_config.host}:{masha_config.port}/{masha_config.api_gps2img}"
+
     def __fetch(self, json: dict):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
-        path = f"http://192.168.0.107:23726/image/gps2img/{gps}"
+        path = f"{self.gps2img_endpoint}/{gps}"
         params = LookupImageParams()
         req = Request(
             path,

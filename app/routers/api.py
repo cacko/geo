@@ -50,11 +50,14 @@ def read_gps(
 
 
 @router.get("/api/background/{ip}", tags=["api"])
-def route_background(ip: str):
+def route_background(
+    ip: str,
+    renew: bool = False
+):
     try:
         logging.warning(ip)
         geo_info = MaxMind.lookup(ip=ip)
-        image = LookupImage(geo=geo_info)
+        image = LookupImage(geo=geo_info, renew=renew)
         image_path = image.path
         assert image_path
         assert image_path.exists()
