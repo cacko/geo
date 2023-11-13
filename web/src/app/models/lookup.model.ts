@@ -12,20 +12,22 @@ export class LookupModel implements LookupEntity {
   ISP?: ISPEntity;
   renew = false;
 
+  ts ?: string;
+
   constructor(original: Object) {
     Object.assign(this, original);
   }
 
   get background(): string {
     const parts = [this.ip];
-    if (this.renew) {
-        parts.push(now().toString());
+    if (this.ts) {
+        parts.push(this.ts);
     }
     return parts.join("/")
   }
 
   renewBackground(): void {
-    this.renew = true;
+    this.ts = now().toString();
   }
 
 }

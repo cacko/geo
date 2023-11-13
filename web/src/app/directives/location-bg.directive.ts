@@ -26,8 +26,6 @@ export class LocationBgDirective implements OnInit {
     const fetchParams = {
       path: `${this.locationbg}`,
       loader: "false",
-      renew: "",
-      ts: ""
     }
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;

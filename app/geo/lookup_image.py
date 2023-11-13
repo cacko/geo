@@ -66,7 +66,8 @@ class LookupImage(CachableFileImage):
             self._geo.country, self._geo.city, ",".join(
                 map(str, self._geo.location))
         )
-        return f"{hash}{self._ts}.webp"
+        ts = "f{self._ts}" if self._ts else ""
+        return f"{hash}{ts}.webp"
 
     @property
     def prompt(self) -> str:
