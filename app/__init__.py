@@ -4,6 +4,7 @@ from pathlib import Path
 from .geo.maxmind import MaxMind
 from .config import app_config
 import corelog
+__name__ = "geo"
 
 corelog.register(app_config.log.level)
 
