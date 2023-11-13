@@ -6,15 +6,15 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
 } from "@angular/common/http";
 import { Observable, Subject } from "rxjs";
 import { ApiType } from "../entity/api.entity";
 import { tap } from "rxjs/operators";
 import { Params } from "@angular/router";
-import { omitBy, isEmpty } from 'lodash-es';
+import { omitBy, isEmpty } from "lodash-es";
 import * as md5 from "md5";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 const b64encode = window.btoa;
 
@@ -36,20 +36,28 @@ export class ApiService implements HttpInterceptor {
   errorSubject = new Subject<string>();
   error = this.errorSubject.asObservable();
 
-  constructor(private httpClient: HttpClient, private zone: NgZone) { }
+  constructor(private httpClient: HttpClient, private zone: NgZone) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if ('loader' in req.params) {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if ("loader" in req.params) {
       this.showLoader();
     }
-    return next.handle(req).pipe(tap((event: HttpEvent<any>) => {
-      if (event instanceof HttpResponse) {
-        this.onEnd();
-      }
-    }, (err: HttpErrorResponse) => {
-      this.onEnd();
-      this.errorSubject.next(err.message);
-    }));
+    return next.handle(req).pipe(
+      tap(
+        (event: HttpEvent<any>) => {
+          if (event instanceof HttpResponse) {
+            this.onEnd();
+          }
+        },
+        (err: HttpErrorResponse) => {
+          this.onEnd();
+          this.errorSubject.next(err.message);
+        }
+      )
+    );
   }
   private onEnd(): void {
     this.hideLoader();
@@ -61,45 +69,38 @@ export class ApiService implements HttpInterceptor {
     this.zone.run(() => this.loaderSubject.next(false));
   }
 
-
-  fetch(type: ApiType, params: Params = {}, cache=true): Promise<any> {
+  fetch(type: ApiType, params: Params = {}, cache = true): Promise<any> {
     return new Promise((resolve, reject) => {
-
       const cacheKey = this.cacheKey(type, params);
       let url = `${ApiService.API_BASEURL}/${type}`;
       const cached = this.inCache(cacheKey);
 
-      console.log(url);
-
-      if ('path' in params) {
-        url += "/" + params['path'];
-        params['path'] = "";
+      if ("path" in params) {
+        url += "/" + params["path"];
+        params["path"] = "";
       }
 
-
-      console.log(params);
-
+      console.log(url, params);
 
       if (cache && cached) {
-
         return resolve(cached);
       }
 
-
-
-      this.httpClient.get(url, {
-        params: omitBy(params, isEmpty)
-      }).subscribe({
-        next: (data) => {
-          if (data && cache) {
-            this.toCache(cacheKey, data);
-          }
-          return resolve(data);
-        },
-        error: (error) => {
-          return reject(error);
-        }
-      });
+      this.httpClient
+        .get(url, {
+          params: omitBy(params, isEmpty),
+        })
+        .subscribe({
+          next: (data) => {
+            if (data && cache) {
+              this.toCache(cacheKey, data);
+            }
+            return resolve(data);
+          },
+          error: (error) => {
+            return reject(error);
+          },
+        });
     });
   }
 
@@ -126,7 +127,9 @@ export class ApiService implements HttpInterceptor {
   }
 
   private toCache(key: string, data: any) {
-    localStorage.setItem(key, JSON.stringify({ data: data, timestamp: moment() }));
+    localStorage.setItem(
+      key,
+      JSON.stringify({ data: data, timestamp: moment() })
+    );
   }
-
 }

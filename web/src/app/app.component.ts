@@ -98,8 +98,6 @@ export class AppComponent implements OnInit {
       event.preventDefault();
       this.lookup?.renewBackground();
     }
-
-    console.log(event.shiftKey, event.metaKey, event);
   }
 
   title = "geo";
