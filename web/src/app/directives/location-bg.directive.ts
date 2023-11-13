@@ -19,7 +19,7 @@ export class LocationBgDirective implements OnInit {
   @HostListener('change') ngOnChanges() {
     console.log("changes",this.locationbg);
     if (!this.locationbg) {
-      return this.setBackground("/bg/loading.png");
+      this.setBackground("/bg/loading.png");
     }
     this.isLoading = true;
     this.api.fetch(ApiType.BACKGROUND, {
