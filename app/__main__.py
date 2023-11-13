@@ -1,6 +1,6 @@
 import uvicorn
 from .config import app_config
-from app.main import create_app
+from app.main import app
 import sys
 import asyncio
 from hypercorn.config import Config
@@ -14,7 +14,7 @@ if len(sys.argv) == 1:
         worker_class="trio"
     )
     server = uvicorn.Server(server_config)
-    asyncio.run(serve(create_app, server_config))
+    asyncio.run(serve(app, server_config))
 else:
     import app.cli
     app.cli.run()
