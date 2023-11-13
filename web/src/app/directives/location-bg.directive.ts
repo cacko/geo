@@ -29,20 +29,12 @@ export class LocationBgDirective implements OnInit {
       renew: "",
       ts: ""
     }
-    if (this.locationbg.includes("/renew")) {
-      fetchParams.path = this.locationbg.split("/")[0];
-      fetchParams.renew = "1";
-      fetchParams.ts = now().toString();
-    }
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
       let imgeUrl = data.url;
-      if (fetchParams.renew) {
-        imgeUrl += `?{${fetchParams.ts}}`;
-      }
       this.setBackground(imgeUrl);
       this.isLoading = false;
-      
+
     }).catch((err) => {
 
     });

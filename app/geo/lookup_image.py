@@ -36,6 +36,9 @@ class LookupImage(CachableFileImage):
         assert self._path
         im = Image.open(BytesIO(image_data))
         im.save(self._path.as_posix())
+        if self._ts:
+            nots_path = self._path.as_posix().replace(f"{self._ts}.webp", ".webp")
+            im.save(nots_path)
 
     def post_init(self):
         self._path = Path(app_config.web.backgrounds) / f"{self.store_key}"
@@ -63,7 +66,7 @@ class LookupImage(CachableFileImage):
             self._geo.country, self._geo.city, ",".join(
                 map(str, self._geo.location))
         )
-        return f"{hash}-{self._ts}.webp"
+        return f"{hash}{self._ts}.webp"
 
     @property
     def prompt(self) -> str:

@@ -19,7 +19,6 @@ export class LookupModel implements LookupEntity {
   get background(): string {
     const parts = [this.ip];
     if (this.renew) {
-        parts.push("renew");
         parts.push(now().toString());
     }
     return parts.join("/")
@@ -28,6 +27,5 @@ export class LookupModel implements LookupEntity {
   renewBackground(): void {
     this.renew = true;
   }
-
 
 }
