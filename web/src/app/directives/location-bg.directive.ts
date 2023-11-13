@@ -2,6 +2,7 @@ import { Directive, ElementRef, Input, OnInit, HostListener, HostBinding } from 
 import { ApiType } from '../entity/api.entity';
 import { BackgroundEntity, LookupEntity } from '../entity/lookup.entity';
 import { ApiService } from '../service/api.service';
+import { now } from 'lodash-es';
 
 @Directive({
   selector: '[locationbg]'
@@ -22,12 +23,24 @@ export class LocationBgDirective implements OnInit {
     if (!this.locationbg) {
       return this.setBackground("/bg/loading.png");
     }
-    this.api.fetch(ApiType.BACKGROUND, {
+    const fetchParams = {
       path: `${this.locationbg}`,
-      loader: "false"
-    }, false).then((res) => {
+      loader: "false",
+      renew: "",
+      ts: ""
+    }
+    if (this.locationbg.endsWith("/renew")) {
+      fetchParams.path = this.locationbg.split("/")[0];
+      fetchParams.renew = "1";
+      fetchParams.ts = now().toString();
+    }
+    this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
-      this.setBackground(data.url);
+      let imgeUrl = data.url;
+      if (fetchParams.renew) {
+        imgeUrl += `?{${fetchParams.ts}}`;
+      }
+      this.setBackground(imgeUrl);
       this.isLoading = false;
     }).catch((err) => {
 

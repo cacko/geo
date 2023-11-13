@@ -31,6 +31,7 @@ export class ApiService implements HttpInterceptor {
 
   private loaderSubject = new Subject<boolean>();
   loading = this.loaderSubject.asObservable();
+  renew = false;
 
   errorSubject = new Subject<string>();
   error = this.errorSubject.asObservable();
@@ -75,6 +76,8 @@ export class ApiService implements HttpInterceptor {
         params['path'] = "";
       }
 
+
+      console.log(params);
 
 
       if (cache && cached) {
