@@ -84,9 +84,7 @@ class LookupImage(CachableFileImage):
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
         path = f"http://192.168.0.107:23726/image/gps2img/{gps}"
-        params = LookupImageParams(
-            num_inference_steps=25,
-        )
+        params = LookupImageParams()
         req = Request(
             path,
             method=Method.POST,
