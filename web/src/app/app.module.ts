@@ -21,6 +21,7 @@ import { MapComponent } from './components/map/map.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ConnectionComponent } from './components/connection/connection.component';
 import { WebsocketService } from './service/websocket.service';
+import { NgxLongPress2Module } from 'ngx-long-press2';
 
 
 const MaterialModules = [
@@ -48,6 +49,7 @@ const MaterialModules = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    NgxLongPress2Module,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

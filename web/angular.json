@@ -81,10 +81,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "geo:build:production"
+              "buildTarget": "geo:build:production"
             },
             "development": {
-              "browserTarget": "geo:build:development"
+              "buildTarget": "geo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "geo:build"
+            "buildTarget": "geo:build"
           }
         },
         "test": {

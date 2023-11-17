@@ -81,12 +81,22 @@
         }
     }
 
-    mat-icon {
+    button[renew] {
+        position: fixed;
+        top: 0.5em;
+        left: 0.5em;
+        opacity: 1;
         &:hover {
-            cursor: pointer;
-            filter: drop-shadow(0 0 0.15em var(--font-color));
+            opacity: 1;
         }
     }
+
+    // mat-icon {
+    //     &:hover {
+    //         cursor: pointer;
+    //         filter: drop-shadow(0 0 0.15em var(--font-color));
+    //     }
+    // }
 
 
 

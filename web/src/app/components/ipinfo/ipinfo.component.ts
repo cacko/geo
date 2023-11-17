@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiType } from 'src/app/entity/api.entity';
-import { BackgroundEntity, LookupEntity } from 'src/app/entity/lookup.entity';
-import { ApiService } from 'src/app/service/api.service';
+import { LookupEntity } from 'src/app/entity/lookup.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { MapComponent } from '../map/map.component';
 @Component({
@@ -13,10 +11,8 @@ export class IPInfoComponent implements OnInit {
 
   @Input() lookup!: LookupEntity 
   img_url = "loading.png";
-  loaded = false
 
   constructor(
-    private api: ApiService,
     private dialog: MatDialog
   ) {
 

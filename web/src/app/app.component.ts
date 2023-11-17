@@ -1,6 +1,6 @@
-import { Component, NgZone, OnInit, HostListener } from "@angular/core";
+import { Component, NgZone, OnInit, HostListener, isDevMode } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { SwUpdate } from "@angular/service-worker";
+import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { ApiType } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
 import { interval } from "rxjs";
@@ -8,14 +8,13 @@ import { LookupEntity } from "./entity/lookup.entity";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
+import { LoaderService } from "./service/loader.service";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  loading: boolean = false;
-  updating = false;
   lookup?: LookupModel;
   error = false;
   online = true;
@@ -29,28 +28,27 @@ export class AppComponent implements OnInit {
     private zone: NgZone,
     private swUpdate: SwUpdate,
     private ws: WebsocketService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public loader: LoaderService
   ) {
-    if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe((evt) => {
-        this.updating = true;
-        this.snackBar
-          .open("Update is available", "Update")
-          .onAction()
-          .subscribe(() =>
-            this.swUpdate
-              .activateUpdate()
-              .then(() => document.location.reload())
-          );
+    if (!isDevMode()) {
+      this.swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
+        if (evt.type == "VERSION_READY") {
+          this.snackBar
+            .open("Update is available", "Update", { duration: 15000 })
+            .afterDismissed()
+            .subscribe(() =>
+              this.swUpdate
+                .activateUpdate()
+                .then(() => document.location.reload())
+            );
+        }
       });
       interval(10000).subscribe(() => {
         this.swUpdate.checkForUpdate();
       });
     }
-    this.api.loading.subscribe((res) => {
-      this.zone.run(() => (this.loading = res));
-    });
-
+  
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
@@ -98,6 +96,14 @@ export class AppComponent implements OnInit {
       event.preventDefault();
       this.lookup?.renewBackground();
     }
+  }
+
+  onRenew() {
+    this.lookup?.renewBackground();
+  }
+
+  onLongPress() {
+    this.lookup?.renewBackground();
   }
 
   title = "geo";

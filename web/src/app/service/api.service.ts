@@ -15,6 +15,7 @@ import { Params } from "@angular/router";
 import { omitBy, isEmpty } from "lodash-es";
 import * as md5 from "md5";
 import * as moment from "moment";
+import { LoaderService } from "./loader.service";
 
 const b64encode = window.btoa;
 
@@ -29,22 +30,22 @@ export class ApiService implements HttpInterceptor {
   static readonly CACHE_MINUTES = 5;
   static readonly API_BASEURL = "https://geo.cacko.net/api";
 
-  private loaderSubject = new Subject<boolean>();
-  loading = this.loaderSubject.asObservable();
   renew = false;
 
   errorSubject = new Subject<string>();
   error = this.errorSubject.asObservable();
 
-  constructor(private httpClient: HttpClient, private zone: NgZone) {}
+  constructor(
+    private httpClient: HttpClient, 
+    private loader: LoaderService,
+    private zone: NgZone
+    ) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if ("loader" in req.params) {
-      this.showLoader();
-    }
+    this.loader.show();
     return next.handle(req).pipe(
       tap(
         (event: HttpEvent<any>) => {
@@ -60,14 +61,9 @@ export class ApiService implements HttpInterceptor {
     );
   }
   private onEnd(): void {
-    this.hideLoader();
+    this.loader.hide();
   }
-  public showLoader(): void {
-    this.zone.run(() => this.loaderSubject.next(true));
-  }
-  public hideLoader(): void {
-    this.zone.run(() => this.loaderSubject.next(false));
-  }
+
 
   fetch(type: ApiType, params: Params = {}, cache = true): Promise<any> {
     return new Promise((resolve, reject) => {
