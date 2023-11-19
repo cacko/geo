@@ -1,5 +1,4 @@
 :host {
-
     .container.main {
         min-height: 100vh;
         display: flex;
@@ -31,18 +30,15 @@
             right: 0.5rem;
             font-size: 80%;
         }
-
     }
 
     @keyframes loading {
         0% {
             background-color: rgba(0, 0, 0, 0);
-            ;
         }
 
         25% {
             background-color: rgba(0, 0, 0, 0.5);
-            ;
         }
 
         50% {
@@ -51,7 +47,6 @@
 
         75% {
             background-color: rgba(0, 0, 0, 0.5);
-            ;
         }
     }
 
@@ -63,9 +58,8 @@
         bottom: 0;
         padding: 0.4em;
         font-size: 10px;
-        text-shadow: 3px 5px 2px vaR(--invert-font-color)
+        text-shadow: 3px 5px 2px vaR(--invert-font-color);
     }
-
 
     .terminal-nav {
         justify-content: space-between;
@@ -80,14 +74,17 @@
             }
         }
     }
-
     button[renew] {
+        display: none;
         position: fixed;
         top: 0.5em;
         left: 0.5em;
         opacity: 0;
         &:hover {
             opacity: 1;
+        }
+        @media (hover: hover) {
+            display: block;
         }
     }
 
@@ -97,7 +94,4 @@
     //         filter: drop-shadow(0 0 0.15em var(--font-color));
     //     }
     // }
-
-
-
 }
