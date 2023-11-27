@@ -1,3 +1,4 @@
+import logging
 from os import name, replace
 import time
 from cachable.storage.filestorage.image import CachableFileImage
@@ -36,7 +37,11 @@ class LookupImage(CachableFileImage):
         im.save(self._path.as_posix())
 
     def post_init(self):
-        self._path = Path(app_config.web.backgrounds) / f"{self.store_key}"
+        self._path = self.cache_path / f"{self.store_key}"
+
+    @property
+    def cache_path(self) -> Path:
+        return Path(app_config.web.backgrounds)
 
     @property
     def storage(self):
@@ -65,7 +70,8 @@ class LookupImage(CachableFileImage):
             ts = f"{self._ts}"
         except AssertionError:
             ts = f"{int(time.time())}"
-            for fp in filepath(root=self.storage.storage_path, prefix=hash):
+            for fp in filepath(root=self.cache_path, prefix=hash):
+                logging.warn(fp.stem)
                 ts = fp.stem.replace(hash, "")
         return f"{hash}{ts}.webp"
 
