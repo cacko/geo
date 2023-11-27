@@ -15,8 +15,8 @@ class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
     height: int = Field(default=584)
     width: int = Field(default=1024)
-    guidance_scale: float = Field(default=30)
-    num_inference_steps: int = Field(default=70)
+    guidance_scale: float = Field(default=31)
+    num_inference_steps: int = Field(default=80)
     seed: Optional[int] = None
     model:  Optional[str] = None
     upscale: bool = Field(default=True)
@@ -72,8 +72,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "masterprice, best quality, photo realistic,"
-            "stylistic, 8k, hdr"
+            "masterprice, best quality, minimalistic,"
         )
 
     @property
