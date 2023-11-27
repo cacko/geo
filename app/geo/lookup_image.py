@@ -13,6 +13,7 @@ from app.geo.models import GeoInfo
 from pydantic import BaseModel, Field
 from app.config import app_config
 from pathlib import Path
+from random import choice
 
 
 class LookupImageParams(BaseModel):
@@ -73,7 +74,9 @@ class LookupImage(CachableFileImage):
             ts = f"{int(time.time())}"
             prefix = f"{self.__class__.__name__}.{hash}"
             logging.debug(f"searching in {self.cache_path} with {prefix}")
-            for fp in filepath(root=self.cache_path, prefix=prefix):
+            found = list(filepath(root=self.cache_path, prefix=prefix))
+            if len(found):
+                fp = choice(found)
                 logging.debug(f"found {fp}")
                 ts = fp.stem.split(".")[-1].replace(hash, "")
                 logging.debug(f"ts={ts}")
