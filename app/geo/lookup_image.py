@@ -16,7 +16,7 @@ class LookupImageParams(BaseModel):
     height: int = Field(default=584)
     width: int = Field(default=1024)
     guidance_scale: float = Field(default=11)
-    num_inference_steps: int = Field(default=40)
+    num_inference_steps: int = Field(default=70)
     seed: Optional[int] = None
     model:  Optional[str] = None
     upscale: bool = Field(default=True)
@@ -84,7 +84,7 @@ class LookupImage(CachableFileImage):
         if self.isCached:
             return
         try:
-            self.__fetch(LookupImageParams(prompt=self.prompt).dict())
+            self.__fetch()
         except Exception:
             self._path = self.DEFAULT
 
@@ -93,12 +93,12 @@ class LookupImage(CachableFileImage):
         masha_config = app_config.masha
         return f"http://{masha_config.host}:{masha_config.port}/{masha_config.api_gps2img}"
 
-    def __fetch(self, json: dict):
+    def __fetch(self):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
         path = f"{self.gps2img_endpoint}/{gps}"
-        params = LookupImageParams()
+        params = LookupImageParams(prompt=self.prompt)
         req = Request(
             path,
             method=Method.POST,
