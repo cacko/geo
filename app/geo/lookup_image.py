@@ -16,19 +16,14 @@ class LookupImageParams(BaseModel):
     height: int = Field(default=584)
     width: int = Field(default=1024)
     guidance_scale: float = Field(default=11)
-    num_inference_steps: int = Field(default=80)
+    num_inference_steps: int = Field(default=20)
     seed: Optional[int] = None
-    model:  Optional[str] = None
+    model: Optional[str] = None
     upscale: bool = Field(default=True)
 
 
 class LookupImage(CachableFileImage):
-
-    def __init__(
-        self,
-        geo: Optional[GeoInfo] = None,
-        ts: Optional[int] = None
-    ):
+    def __init__(self, geo: Optional[GeoInfo] = None, ts: Optional[int] = None):
         self._ts = ts
         self._geo = geo
 
@@ -63,8 +58,7 @@ class LookupImage(CachableFileImage):
     @property
     def filename(self):
         hash = string_hash(
-            self._geo.country, self._geo.city, ",".join(
-                map(str, self._geo.location))
+            self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
         )
         ts = f"{self._ts}" if self._ts else ""
         return f"{hash}{ts}.webp"
@@ -72,7 +66,8 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "concept art,sharp focus,illustration,pixar and disney animation,"
+            "<lora:lcm_lora_weights:1>,classical oil painting by marc simonetti, "
+            "stylistic, brush strokes, oil, canvas, 8k, hdr"
         )
 
     @property
@@ -90,7 +85,9 @@ class LookupImage(CachableFileImage):
     @property
     def gps2img_endpoint(self) -> str:
         masha_config = app_config.masha
-        return f"http://{masha_config.host}:{masha_config.port}/{masha_config.api_gps2img}"
+        return (
+            f"http://{masha_config.host}:{masha_config.port}/{masha_config.api_gps2img}"
+        )
 
     def __fetch(self):
         assert self._geo
