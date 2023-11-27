@@ -15,7 +15,7 @@ class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
     height: int = Field(default=584)
     width: int = Field(default=1024)
-    guidance_scale: float = Field(default=31)
+    guidance_scale: float = Field(default=11)
     num_inference_steps: int = Field(default=80)
     seed: Optional[int] = None
     model:  Optional[str] = None
@@ -72,7 +72,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "masterprice, best quality, minimalistic,"
+            "concept art,sharp focus,illustration,pixar and disney animation,"
         )
 
     @property
