@@ -71,7 +71,8 @@ class LookupImage(CachableFileImage):
         except AssertionError:
             ts = f"{int(time.time())}"
             for fp in filepath(root=self.cache_path, prefix=hash):
-                logging.warn(fp.stem)
+                logging.warning(fp)
+                logging.warning(hash)
                 ts = fp.stem.replace(hash, "")
         return f"{hash}{ts}.webp"
 
