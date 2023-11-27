@@ -66,7 +66,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "<lora:lcm_lora_weights:1>,cinematic,vibrant colors,realistic, hdr, 8k"
+            "<lora:lcm_lora_weights:1>,illustration,hdr,8k"
         )
 
     @property
