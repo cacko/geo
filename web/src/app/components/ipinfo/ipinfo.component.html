@@ -1,64 +1,90 @@
 <div content-data>
     <div row>
-        <div label>
-            IP
-        </div>
+        <div label>IP</div>
         <div value>
             <span>{{ lookup.ip }}</span>
         </div>
     </div>
-    <div row *ngIf="lookup.country">
-        <div label>
-            Country
-        </div>
+    <div
+        row
+        *ngIf="lookup.country"
+    >
+        <div label>Country</div>
         <div value>
-            <span>
-                {{ lookup.country }}
-            </span>
-            <app-flag [isoCode]="lookup.country_iso" *ngIf="lookup.country_iso"></app-flag>
+            <span>{{ lookup.country }}</span>
+            <app-flag
+                [isoCode]="lookup.country_iso"
+                *ngIf="lookup.country_iso"
+            ></app-flag>
         </div>
     </div>
-    <div row *ngIf="lookup.city">
-        <div label>
-            City
-        </div>
+    <div
+        row
+        *ngIf="lookup.city"
+    >
+        <div label>City</div>
         <div value>
             <span>{{ lookup.city }}</span>
         </div>
     </div>
-    <div row *ngIf="lookup.subdivisions">
-        <div label matTooltip="Region">
+    <div
+        row
+        *ngIf="lookup.subdivisions"
+    >
+        <div
+            label
+            matTooltip="Region"
+        >
             Region
         </div>
         <div value>
             <span>{{ lookup.subdivisions }}</span>
         </div>
     </div>
-    <div row *ngIf="lookup.location">
-        <div label>
-            GPS
-        </div>
+    <div
+        row
+        *ngIf="lookup.location"
+    >
+        <div label>GPS</div>
         <div value>
             <span>
-                <a target="_blank" rel="noopener"  href="https://maps.google.com/?q={{lookup.location[0]}},{{lookup.location[1]}}">open
-                    map</a>
+                <a
+                    target="_blank"
+                    rel="noopener"
+                    href="https://maps.google.com/?q={{lookup.location[0]}},{{lookup.location[1]}}"
+                >
+                    open
+                    map
+                </a>
+                <button
+                    mat-icon-button
+                    [cdkCopyToClipboard]="gps"
+                    (cdkCopyToClipboardCopied)="onCopy($event)"
+                >
+                    <mat-icon>content_copy</mat-icon>
+                </button>
             </span>
+            <span></span>
         </div>
     </div>
-    <div row *ngIf="lookup.timezone">
-        <div label>
-            Timezone
-        </div>
+    <div
+        row
+        *ngIf="lookup.timezone"
+    >
+        <div label>Timezone</div>
         <div value>
             <span>{{ lookup.timezone }}</span>
         </div>
     </div>
-    <div row *ngIf="lookup.ISP">
-        <div label>
-            Owner
-        </div>
+    <div
+        row
+        *ngIf="lookup.ISP"
+    >
+        <div label>Owner</div>
         <div value>
-            <span>{{ lookup.ISP.name }} ({{lookup.ISP.id}})</span>
+            <span>
+                {{ lookup.ISP.name }} ({{lookup.ISP.id}})
+            </span>
         </div>
     </div>
 </div>

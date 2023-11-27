@@ -22,7 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ConnectionComponent } from './components/connection/connection.component';
 import { WebsocketService } from './service/websocket.service';
 import { NgxLongPress2Module } from 'ngx-long-press2';
-
+import {ClipboardModule} from '@angular/cdk/clipboard'; 
 
 const MaterialModules = [
   MatSnackBarModule,
@@ -31,7 +31,8 @@ const MaterialModules = [
   MatIconModule,
   MatTooltipModule,
   MatDialogModule,
-  MatButtonModule
+  MatButtonModule,
+  ClipboardModule
 ];
 @NgModule({
   declarations: [
