@@ -71,10 +71,11 @@ class LookupImage(CachableFileImage):
             logging.debug(f"getting filename {hash} ts={ts}")
         except AssertionError:
             ts = f"{int(time.time())}"
-            logging.debug(f"searching in {self.cache_path} with {hash}")
-            for fp in filepath(root=self.cache_path, prefix=hash):
+            prefix = f"{self.__class__.__name__}.{hash}"
+            logging.debug(f"searching in {self.cache_path} with {prefix}")
+            for fp in filepath(root=self.cache_path, prefix=prefix):
                 logging.debug(f"found {fp}")
-                ts = fp.stem.replace(hash, "")
+                ts = fp.stem..split(".")[-1].replace(hash, "")
                 logging.debug(f"ts={ts}")
         return f"{hash}{ts}.webp"
 
