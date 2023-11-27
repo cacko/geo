@@ -1,12 +1,12 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException
-from app.geo.maxmind import MaxMind
-from app.geo.geocoder import Coders
+from geo.geo.maxmind import MaxMind
+from geo.geo.geocoder import Coders
 import validators
 import logging
-from app.geo.lookup_image import LookupImage
-from app.config import app_config
-from app.geo.models import GeoInfo
+from geo.geo.lookup_image import LookupImage
+from geo.config import app_config
+from geo.geo.models import GeoInfo
 
 router = APIRouter()
 

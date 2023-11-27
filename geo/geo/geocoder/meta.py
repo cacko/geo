@@ -2,7 +2,7 @@
 
 from typing import Any
 from pycountry import countries
-from app.geo.models import GeoLocation
+from geo.geo.models import GeoLocation
 
 
 class GeoCoderMeta(type):

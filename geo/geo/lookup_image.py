@@ -9,9 +9,9 @@ from corefile import filepath
 from typing import Optional
 from PIL import Image
 from io import BytesIO
-from app.geo.models import GeoInfo
+from geo.geo.models import GeoInfo
 from pydantic import BaseModel, Field
-from app.config import app_config
+from geo.config import app_config
 from pathlib import Path
 from random import choice
 

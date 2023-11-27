@@ -1,10 +1,10 @@
 from cachable import Cachable
 from cachable.storage import RedisStorage
 from geoip2.database import Reader
-from app.geo.models import CityInfo, ASNInfo
+from geo.geo.models import CityInfo, ASNInfo
 from validators import ip_address
 from stringcase import snakecase
-from app.config import app_config
+from geo.config import app_config
 from .meta import GeoDbMeta
 
 

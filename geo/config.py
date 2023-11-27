@@ -42,11 +42,6 @@ class StorageConfig(BaseModel):
     dir: str
 
 
-class FlickrConfig(BaseModel):
-    key: str
-    secret: str
-
-
 class GeoPyConfig(BaseModel):
     bing_api_key: str
     here_api_key: str
@@ -60,12 +55,11 @@ class Settings(BaseSettings):
     log: LogConfig
     web: WebConfig
     storage: StorageConfig
-    flickr: FlickrConfig
     geopy: GeoPyConfig
     masha: MashaConfig
 
     class Config:
-        env_nested_delimiter = '__'
+        env_nested_delimiter = "__"
 
 
 app_config = Settings()  # type: ignore

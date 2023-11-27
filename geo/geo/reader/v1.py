@@ -2,11 +2,11 @@ from cachable import Cachable
 from cachable.storage import RedisStorage
 from validators import ip_address
 from stringcase import snakecase
-from app.config import app_config
+from geo.config import app_config
 import logging
 import GeoIP
 from .meta import GeoDbMeta
-from app.geo.models import ASNInfo, CityInfo
+from geo.geo.models import ASNInfo, CityInfo
 
 
 class CityIP(Cachable):

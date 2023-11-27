@@ -1,9 +1,9 @@
 import typer
 from rich import print
-from app.geo.geocoder import Coders
-from app.geo.maxmind import MaxMind
+from geo.geo.geocoder import Coders
+from geo.geo.maxmind import MaxMind
 import validators
-from app.geo.models import GeoInfo
+from geo.geo.models import GeoInfo
 
 
 cli = typer.Typer()

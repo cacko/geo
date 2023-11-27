@@ -1,10 +1,10 @@
 import logging
 import pprint
 from typing import Optional
-from app.geo.models import GeoLocation
+from geo.geo.models import GeoLocation
 from .meta import BaseGeoCode
 from geopy.geocoders import HereV7
-from app.config import app_config
+from geo.config import app_config
 from pydantic import BaseModel
 
 

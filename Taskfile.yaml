@@ -10,7 +10,7 @@ tasks:
   default:
     desc: run
     cmds:
-      -  mamba run --live-stream -n {{.PROJECT}} python -m app {{.CLI_ARGS}}
+      -  mamba run --live-stream -n {{.PROJECT}} python -m {{.PROJECT}} {{.CLI_ARGS}}
 
   stop:
     desc: stop the server
@@ -48,7 +48,7 @@ tasks:
   systemd-exec:
     desc: systemd exec
     cmds:
-      - direnv exec . mamba run --live-stream -n {{.PROJECT}} python -m app
+      - direnv exec . mamba run --live-stream -n {{.PROJECT}} python -m {{.PROJECT}}
 
   export:
     desc: export env

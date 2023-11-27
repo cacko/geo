@@ -1,7 +1,7 @@
 import pprint
 import logging
 from typing import Optional
-from app.geo.models import GeoLocation
+from geo.geo.models import GeoLocation
 from .meta import BaseGeoCode
 from geopy.geocoders import Nominatim
 from pydantic import BaseModel

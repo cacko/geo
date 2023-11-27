@@ -1,13 +1,13 @@
 from fastapi import (
     APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 )
-from app.geo.lookup_image import LookupImage
-from app.config import app_config
+from geo.geo.lookup_image import LookupImage
+from geo.config import app_config
 from pydantic import BaseModel
 from enum import StrEnum
-from app.geo.maxmind import MaxMind
+from geo.geo.maxmind import MaxMind
 import validators
-from app.core.ip import get_remote_ip
+from geo.core.ip import get_remote_ip
 
 
 class WSCommand(StrEnum):

@@ -1,5 +1,5 @@
 from .config import app_config
-from app.main import app
+from geo.main import app
 import sys
 import asyncio
 from hypercorn.config import Config
@@ -11,7 +11,7 @@ if len(sys.argv) == 1:
         bind=f"{app_config.server.host}:{app_config.server.port}",
         worker_class="trio"
     )
-    asyncio.run(serve(app, server_config))
+    asyncio.run(serve(geo, server_config))
 else:
-    import app.cli
-    app.cli.run()
+    import geo.cli
+    geo.cli.run()
