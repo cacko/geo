@@ -21,7 +21,7 @@ export class LocationBgDirective implements OnInit {
     console.log("changes",this.locationbg);
     this.isLoading = true;
     if (!this.locationbg) {
-      return this.setBackground("/bg/loading.png");
+      return this.setBackground("/bg/loading.webp");
     }
     const fetchParams = {
       path: `${this.locationbg}`,
@@ -38,7 +38,7 @@ export class LocationBgDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setBackground("/bg/loading.png");
+    this.setBackground("/bg/loading.webp");
   }
 
   protected setBackground(img: string) {
