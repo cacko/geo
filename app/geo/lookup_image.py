@@ -66,8 +66,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "<lora:lcm_lora_weights:1>,classical oil painting by marc simonetti, "
-            "stylistic, brush strokes, oil, canvas, 8k, hdr"
+            "<lora:lcm_lora_weights:1>,cinematic,vibrant colors,realistic, hdr, 8k"
         )
 
     @property
