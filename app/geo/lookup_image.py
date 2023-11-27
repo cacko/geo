@@ -1,7 +1,10 @@
+from os import name, replace
+import time
 from cachable.storage.filestorage.image import CachableFileImage
 from cachable.storage import FileStorage
 from cachable.request import Request, Method
 from corestring import string_hash
+from corefile import filepath
 from typing import Optional
 from PIL import Image
 from io import BytesIO
@@ -31,9 +34,6 @@ class LookupImage(CachableFileImage):
         assert self._path
         im = Image.open(BytesIO(image_data))
         im.save(self._path.as_posix())
-        if self._ts:
-            nots_path = self._path.as_posix().replace(f"{self._ts}.webp", ".webp")
-            im.save(nots_path)
 
     def post_init(self):
         self._path = Path(app_config.web.backgrounds) / f"{self.store_key}"
@@ -60,7 +60,13 @@ class LookupImage(CachableFileImage):
         hash = string_hash(
             self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
         )
-        ts = f"{self._ts}" if self._ts else ""
+        try:
+            assert self._ts
+            ts = f"{self._ts}"
+        except AssertionError:
+            ts = f"{int(time.time())}"
+            for fp in filepath(root=self.storage.storage_path, prefix=hash):
+                ts = fp.stem.replace(hash, "")
         return f"{hash}{ts}.webp"
 
     @property

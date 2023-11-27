@@ -1,6 +1,14 @@
 {
-    "name": "Geo",
-    "short_name": "Geo",
+    "name": "geo@cacko",
+    "short_name": "geo",
+    "theme_color": "#0c103b",
+    "background_color": "#0c103b",
+    "display": "standalone",
+    "scope": "./",
+    "start_url": "./",
+    "launch_handler": {
+        "client_mode": "focus-existing"
+    },
     "icons": [
         {
             "src": "/assets/android-chrome-192x192.png",
@@ -12,11 +20,5 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ],
-    "theme_color": "#0c103b",
-    "background_color": "#0c103b",
-    "display": "standalone",
-    "scope": "./",
-    "url": "https://geo.cacko.net",
-    "manifestUrl": "https://geo.cacko.net/manifest.webmanifest"
+    ]
 }

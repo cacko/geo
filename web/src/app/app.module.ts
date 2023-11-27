@@ -11,7 +11,6 @@ import { IPInfoComponent } from './components/ipinfo/ipinfo.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
 import { ErrorComponent } from './components/error/error.component';
@@ -22,7 +21,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { ConnectionComponent } from './components/connection/connection.component';
 import { WebsocketService } from './service/websocket.service';
 import { NgxLongPress2Module } from 'ngx-long-press2';
-import {ClipboardModule} from '@angular/cdk/clipboard'; 
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { QueryInputComponent } from './components/query-input/query-input.component';
+import { QueryButtonComponent } from './components/query-button/query-button.component';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 
 const MaterialModules = [
   MatSnackBarModule,
@@ -46,6 +48,8 @@ const MaterialModules = [
     LocationBgDirective,
     MapComponent,
     ConnectionComponent,
+    QueryInputComponent,
+    QueryButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -72,4 +76,14 @@ const MaterialModules = [
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(private readonly iconRegistry: MatIconRegistry) {
+    const defaultFontSetClasses = iconRegistry.getDefaultFontSetClass();
+    const outlinedFontSetClasses = defaultFontSetClasses
+      .filter((fontSetClass) => fontSetClass !== 'material-icons')
+      .concat(['material-symbols-outlined']);
+    iconRegistry.setDefaultFontSetClass(...outlinedFontSetClasses);
+  }
+
+}

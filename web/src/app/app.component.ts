@@ -93,16 +93,19 @@ export class AppComponent implements OnInit {
   @HostListener("window:keydown", ["$event"])
   hardREfresh(event: KeyboardEvent) {
     if (event.shiftKey && event.metaKey && event.key === "r") {
+      this.loader.show();
       event.preventDefault();
       this.lookup?.renewBackground();
     }
   }
 
   onRenew() {
+    this.loader.show();
     this.lookup?.renewBackground();
   }
 
   onLongPress() {
+    this.loader.show();
     this.lookup?.renewBackground();
   }
 

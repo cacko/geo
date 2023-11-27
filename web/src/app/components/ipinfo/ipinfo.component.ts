@@ -36,6 +36,12 @@ export class IPInfoComponent implements OnInit {
       .open("GPS copied to clipboard", "Ok", { duration: 2000 })
   }
 
+  onOpenMap($event: MouseEvent) {
+    $event.preventDefault();
+    const q = this.lookup.location?.slice(2).join(",");
+    return window.open(`https://maps.google.com/?q=${q}`, "_blank",);
+  }
+
   openMap(): void {
     if (!this.lookup) {
       return;

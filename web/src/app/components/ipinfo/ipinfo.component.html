@@ -47,24 +47,21 @@
     >
         <div label>GPS</div>
         <div value>
-            <span>
-                <a
-                    target="_blank"
-                    rel="noopener"
-                    href="https://maps.google.com/?q={{lookup.location[0]}},{{lookup.location[1]}}"
-                >
-                    open
-                    map
-                </a>
                 <button
-                    mat-icon-button
-                    [cdkCopyToClipboard]="gps"
-                    (cdkCopyToClipboardCopied)="onCopy($event)"
+                    mat-button
+                    (click)="onOpenMap($event)"
                 >
-                    <mat-icon>content_copy</mat-icon>
+                    <mat-icon>map</mat-icon>
+                    map
                 </button>
-            </span>
-            <span></span>
+            <button
+                mat-button
+                [cdkCopyToClipboard]="gps"
+                (cdkCopyToClipboardCopied)="onCopy($event)"
+            >
+                <mat-icon>content_copy</mat-icon>
+                gps
+            </button>
         </div>
     </div>
     <div

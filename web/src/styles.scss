@@ -1,224 +1,210 @@
 @use "@angular/material" as mat;
+@use "theme/components/ipinfo" as myipinfo;
+@use "theme/components/query-button" as myquerybutton;
+@use "sass:map";
 @include mat.core();
 
-
-
-$theme-primary: mat.define-palette(mat.$blue-grey-palette, 800);
-$theme-accent: mat.define-palette(mat.$blue-palette, 700, 600, 500);
+$theme-primary: mat.define-palette(mat.$teal-palette, 400);
+$theme-accent: mat.define-palette(mat.$light-green-palette, 600);
 $theme-warn: mat.define-palette(mat.$red-palette);
-$custom-typography: mat.define-typography-config($font-family: 'Syne Mono',
+$custom-typography: mat.define-typography-config(
+  $font-family: "Syne Mono"
   );
 
+$mytheme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $theme-primary,
+      accent: $theme-accent,
+      warn: $theme-warn,
+    ),
+    typography: $custom-typography,
+  )
+);
 
-$theme: mat.define-dark-theme((color: (primary: $theme-primary,
-        accent: $theme-accent,
-        warn: $theme-warn,
-      ),
-      typography: $custom-typography,
-    ));
-@include mat.all-component-colors($theme);
-@include mat.all-component-typographies($theme);
-@include mat.all-component-bases($theme);
+@include mat.core-theme($mytheme);
+@include mat.all-component-bases($mytheme);
+@include mat.all-component-themes($mytheme);
+@include mat.all-component-colors($mytheme);
+@include mat.all-component-typographies($mytheme);
+
+@import 'theme/components/app-truncate';
+@include myipinfo.apply-theme($mytheme);
+@include myquerybutton.apply-theme($mytheme);
 
 
-// @import "~@angular/cdk/overlay-prebuilt.css";
-@import "./terminal.css";
-@import "./mixins.scss";
-
-:root {
-  --global-font-size: 20px;
-  --global-line-height: 1.4em;
-  --global-space: 10px;
-  --font-stack: "Syne Mono", monospace, serif;
-  --mono-font-stack: "Syne Mono", monospace, serif;
-  --background-color: #303030;
-  --page-width: 100%;
-  --font-color: #e8e9ed;
-  --invert-font-color: #303030;
-  --secondary-color: #374764;
-  --tertiary-color: #a3abba;
-  --primary-color: #4cbfaf;
-  --error-color: #ff3c74;
-  --progress-bar-background: #3f3f44;
-  --progress-bar-fill: #62c4ff;
-  --code-bg-color: #3f3f44;
-  --input-style: solid;
-  --display-h1-decoration: none;
-  --list-hover-font-color: #fff;
-
-  .mat-paginator {
-    background: var(--background-color);
-    color: var(--font-color);
-
-    .mat-button.mat-primary.mat-button-disabled,
-    .mat-button.mat-accent.mat-button-disabled,
-    .mat-button.mat-warn.mat-button-disabled,
-    .mat-button.mat-button-disabled.mat-button-disabled,
-    .mat-icon-button.mat-primary.mat-button-disabled,
-    .mat-icon-button.mat-accent.mat-button-disabled,
-    .mat-icon-button.mat-warn.mat-button-disabled,
-    .mat-icon-button.mat-button-disabled.mat-button-disabled,
-    .mat-stroked-button.mat-primary.mat-button-disabled,
-    .mat-stroked-button.mat-accent.mat-button-disabled,
-    .mat-stroked-button.mat-warn.mat-button-disabled,
-    .mat-stroked-button.mat-button-disabled.mat-button-disabled {
-      color: var(--tertiary-color);
-    }
-  }
+html {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-
-:root {
-  --global-font-color: var(--font-color);
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 html,
 body {
-  height: 100%;
-}
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 0;
+  margin: 0;
+  font-size-adjust: 0.7;
 
-app-root {
-  flex: 1;
-}
+  app-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-img {
-  width: auto;
-  max-width: 100%;
-}
-
-header[title] {
-  padding: 1em 0;
-  font-size: 120%;
-  font-weight: bold;
-  font-variant: small-caps;
-}
-
-@media only screen and (max-width: 30em) {
-  .terminal-nav {
-    flex-direction: row;
-    align-items: center;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
-[timestamp] {
-  font-size: 60%;
-  font-kerning: 0.7;
-  text-transform: uppercase;
+a {
+  color: inherit;
 }
 
-[username] {
-  font-kerning: 0.7;
-  font-variant: small-caps;
-  font-size: 80%;
-  font-weight: bold;
-}
 
-div.terminal-card {
-  >header {
-    color: var(--font-color);
-  }
-}
+// img {
+//   width: auto;
+//   max-width: 100%;
+// }
 
-table {
+// header[title] {
+//   padding: 1em 0;
+//   font-size: 120%;
+//   font-weight: bold;
+//   font-variant: small-caps;
+// }
 
-  td,
-  td {
-    border: none;
-  }
-}
+// @media only screen and (max-width: 30em) {
+//   .terminal-nav {
+//     flex-direction: row;
+//     align-items: center;
+//   }
+// }
 
-.lb-controlContainer {
-  display: none;
-}
+// [timestamp] {
+//   font-size: 60%;
+//   font-kerning: 0.7;
+//   text-transform: uppercase;
+// }
+
+// [username] {
+//   font-kerning: 0.7;
+//   font-variant: small-caps;
+//   font-size: 80%;
+//   font-weight: bold;
+// }
+
+// div.terminal-card {
+//   >header {
+//     color: var(--font-color);
+//   }
+// }
+
+// table {
+
+//   td,
+//   td {
+//     border: none;
+//   }
+// }
+
+// .lb-controlContainer {
+//   display: none;
+// }
 
 .search-backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.search-overlay {
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
+// .search-overlay {
+//   flex-grow: 1;
+//   justify-content: center;
+//   align-items: center;
 
-  form {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
+//   form {
+//     display: flex;
+//     flex-grow: 1;
+//     align-items: center;
+//     justify-content: center;
 
-    mat-form-field {
-      width: 90%;
-      max-width: 500px;
+//     mat-form-field {
+//       width: 90%;
+//       max-width: 500px;
 
-      input {
-        font-family: var(--font-stack);
-        font-size: 2em;
-        text-transform: lowercase;
-        font-variant: small-caps;
-      }
-    }
-  }
-}
+//       input {
+//         font-family: var(--font-stack);
+//         font-size: 2em;
+//         text-transform: lowercase;
+//         font-variant: small-caps;
+//       }
+//     }
+//   }
+// }
 
-.mat-expansion-panel {
-  color: var(--font-color);
+// .mat-expansion-panel {
+//   color: var(--font-color);
 
-  .mat-expansion-panel-content {
-    font-size: var(--global-font-size);
-    line-height: var(--global-line-height);
-    padding: 0;
+//   .mat-expansion-panel-content {
+//     font-size: var(--global-font-size);
+//     line-height: var(--global-line-height);
+//     padding: 0;
 
-    >.mat-expansion-panel-body {
-      padding: 0;
-      font-size: var(--global-font-size);
-      line-height: var(--global-line-height);
-    }
-  }
+//     >.mat-expansion-panel-body {
+//       padding: 0;
+//       font-size: var(--global-font-size);
+//       line-height: var(--global-line-height);
+//     }
+//   }
 
-  [timestamp] {
-    font-size: 70%;
-  }
-}
+//   [timestamp] {
+//     font-size: 70%;
+//   }
+// }
 
-.mat-expansion-panel-header {
-  &[aria-expanded="false"] {
-    app-avatar {
-      [photo] {
-        height: 2em;
-        width: 2em;
-      }
-    }
-  }
-}
+// .mat-expansion-panel-header {
+//   &[aria-expanded="false"] {
+//     app-avatar {
+//       [photo] {
+//         height: 2em;
+//         width: 2em;
+//       }
+//     }
+//   }
+// }
 
-.terminal-card {
-  font-size: 1.1rem;
-  border-radius: 1em;
+// .terminal-card {
+//   font-size: 1.1rem;
+//   border-radius: 1em;
 
-  .terminal-card-header {
-    height: unset;
-    text-align: center;
-    font-size: var(--global-font-size);
-    line-height: var(--global-line-height);
-    padding: 0.5em 0;
-    padding: 0;
+//   .terminal-card-header {
+//     height: unset;
+//     text-align: center;
+//     font-size: var(--global-font-size);
+//     line-height: var(--global-line-height);
+//     padding: 0.5em 0;
+//     padding: 0;
 
-    app-header-user {
-      flex: 1;
-      padding: 0.8em;
-    }
-  }
+//     app-header-user {
+//       flex: 1;
+//       padding: 0.8em;
+//     }
+//   }
 
-  [content] {
-    padding: 0.8em;
-  }
+//   [content] {
+//     padding: 0.8em;
+//   }
 
-  app-attachments {
-    padding: 0.8em;
-  }
-}
+//   app-attachments {
+//     padding: 0.8em;
+//   }
+// }

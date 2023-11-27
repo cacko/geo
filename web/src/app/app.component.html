@@ -1,9 +1,24 @@
 <app-loader *ngIf="loader.visible | async"></app-loader>
-<button *ngIf="!(loader.visible | async)" color="primary" mat-icon-button renew (click)="onRenew()">
+<button
+    *ngIf="!(loader.visible | async)"
+    color="primary"
+    mat-icon-button
+    renew
+    (click)="onRenew()"
+>
     <mat-icon>cached</mat-icon>
-  </button>
-<div class="container main"  [locationbg]="lookup?.background">
-    <app-ipinfo [lookup]=lookup *ngIf="lookup" ngxLongPress2 [minTime]="1500" (onLongPress)="onLongPress()">
+</button>
+<div
+    class="container main"
+    [locationbg]="lookup?.background"
+>
+    <app-ipinfo
+        [lookup]=lookup
+        *ngIf="lookup"
+        ngxLongPress2
+        [minTime]="1500"
+        (onLongPress)="onLongPress()"
+    >
     </app-ipinfo>
     <div debug>
         <div *ngFor="let msg of messages">{{msg}}</div>
