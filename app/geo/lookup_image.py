@@ -65,10 +65,10 @@ class LookupImage(CachableFileImage):
         hash = string_hash(
             self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
         )
-        logging.debug(f"getting filename {hash} ts={ts}")
         try:
             assert self._ts
             ts = f"{self._ts}"
+            logging.debug(f"getting filename {hash} ts={ts}")
         except AssertionError:
             ts = f"{int(time.time())}"
             logging.debug(f"searching in {self.cache_path} with {hash}")
@@ -80,9 +80,7 @@ class LookupImage(CachableFileImage):
 
     @property
     def prompt(self) -> str:
-        return (
-            "illustration,hdr,8k"
-        )
+        return "illustration,hdr,8k"
 
     @property
     def tags(self) -> str:
