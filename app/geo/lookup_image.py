@@ -15,9 +15,9 @@ class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
     height: int = Field(default=576)
     width: int = Field(default=1024)
-    guidance_scale: float = Field(default=11)
-    num_inference_steps: int = Field(default=20)
-    seed: Optional[int] = None
+    guidance_scale: float = Field(default=25)
+    num_inference_steps: int = Field(default=50)
+    strength: float = Field(default=0.45)
     model: Optional[str] = None
     upscale: bool = Field(default=True)
 
@@ -66,7 +66,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "<lora:lcm_lora_weights:1>,illustration,hdr,8k"
+            "illustration,hdr,8k"
         )
 
     @property
