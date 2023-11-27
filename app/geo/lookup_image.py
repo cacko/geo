@@ -72,7 +72,7 @@ class LookupImage(CachableFileImage):
     @property
     def prompt(self) -> str:
         return (
-            "masterprice, best quality, disney pixar style,"
+            "masterprice, best quality, photo realistic,"
             "stylistic, 8k, hdr"
         )
 
