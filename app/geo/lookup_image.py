@@ -15,7 +15,7 @@ class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
     height: int = Field(default=584)
     width: int = Field(default=1024)
-    guidance_scale: float = Field(default=11)
+    guidance_scale: float = Field(default=30)
     num_inference_steps: int = Field(default=70)
     seed: Optional[int] = None
     model:  Optional[str] = None
