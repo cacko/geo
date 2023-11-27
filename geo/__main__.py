@@ -11,7 +11,7 @@ if len(sys.argv) == 1:
         bind=f"{app_config.server.host}:{app_config.server.port}",
         worker_class="trio"
     )
-    asyncio.run(serve(geo, server_config))
+    asyncio.run(serve(app, server_config))
 else:
-    import geo.cli
-    geo.cli.run()
+    from geo.cli import run
+    run()
