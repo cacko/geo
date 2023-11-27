@@ -18,8 +18,8 @@ from random import choice
 
 class LookupImageParams(BaseModel):
     prompt: Optional[str] = None
-    height: int = Field(default=576)
-    width: int = Field(default=1024)
+    height: int = Field(default=640)
+    width: int = Field(default=640)
     guidance_scale: float = Field(default=25)
     num_inference_steps: int = Field(default=50)
     strength: float = Field(default=0.45)
