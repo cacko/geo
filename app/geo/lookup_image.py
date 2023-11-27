@@ -75,7 +75,7 @@ class LookupImage(CachableFileImage):
             logging.debug(f"searching in {self.cache_path} with {prefix}")
             for fp in filepath(root=self.cache_path, prefix=prefix):
                 logging.debug(f"found {fp}")
-                ts = fp.stem..split(".")[-1].replace(hash, "")
+                ts = fp.stem.split(".")[-1].replace(hash, "")
                 logging.debug(f"ts={ts}")
         return f"{hash}{ts}.webp"
 
