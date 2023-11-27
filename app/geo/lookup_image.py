@@ -65,15 +65,17 @@ class LookupImage(CachableFileImage):
         hash = string_hash(
             self._geo.country, self._geo.city, ",".join(map(str, self._geo.location))
         )
+        logging.debug(f"getting filename {hash} ts={ts}")
         try:
             assert self._ts
             ts = f"{self._ts}"
         except AssertionError:
             ts = f"{int(time.time())}"
+            logging.debug(f"searching in {self.cache_path} with {hash}")
             for fp in filepath(root=self.cache_path, prefix=hash):
-                logging.warning(fp)
-                logging.warning(hash)
+                logging.debug(f"found {fp}")
                 ts = fp.stem.replace(hash, "")
+                logging.debug(f"ts={ts}")
         return f"{hash}{ts}.webp"
 
     @property
