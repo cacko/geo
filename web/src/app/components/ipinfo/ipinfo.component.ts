@@ -38,8 +38,8 @@ export class IPInfoComponent implements OnInit {
 
   onOpenMap($event: MouseEvent) {
     $event.preventDefault();
-    const q = this.lookup.location?.slice(0,2).join(",");
-    return window.open(`https://maps.google.com/?q=${q}`, "_blank",);
+    const query = this.lookup.location?.slice(0,2).join(",");
+    return window.open(`https://maps.google.com/?q=${query}`, "_blank",);
   }
 
   openMap(): void {

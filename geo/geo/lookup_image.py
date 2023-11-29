@@ -24,7 +24,7 @@ class LookupImageParams(BaseModel):
     num_inference_steps: int = Field(default=50)
     strength: float = Field(default=0.45)
     model: Optional[str] = None
-    upscale: bool = Field(default=True)
+    upscale: int = Field(default=2)
 
 
 class LookupImage(CachableFileImage):
