@@ -1,30 +1,17 @@
 import logging
-from os import name, replace
 import time
 from cachable.storage.filestorage.image import CachableFileImage
 from cachable.storage import FileStorage
-from cachable.request import Request, Method
+from cachable.request import Request
 from corestring import string_hash
 from corefile import filepath
 from typing import Optional
 from PIL import Image
 from io import BytesIO
-from geo.geo.models import GeoInfo
-from pydantic import BaseModel, Field
+from geo.geo.models import GeoInfo, ImageStyle
 from geo.config import app_config
 from pathlib import Path
 from random import choice
-
-
-class LookupImageParams(BaseModel):
-    prompt: Optional[str] = None
-    height: int = Field(default=640)
-    width: int = Field(default=640)
-    guidance_scale: float = Field(default=25)
-    num_inference_steps: int = Field(default=50)
-    strength: float = Field(default=0.45)
-    model: Optional[str] = None
-    upscale: int = Field(default=2)
 
 
 class LookupImage(CachableFileImage):
@@ -83,10 +70,6 @@ class LookupImage(CachableFileImage):
         return f"{hash}{ts}.webp"
 
     @property
-    def prompt(self) -> str:
-        return "illustration,hdr,8k"
-
-    @property
     def tags(self) -> str:
         return ",".join(filter(None, ["town", self._geo.city, self._geo.country]))
 
@@ -109,13 +92,9 @@ class LookupImage(CachableFileImage):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
-        path = f"{self.gps2img_endpoint}/{gps}"
-        params = LookupImageParams(prompt=self.prompt)
-        req = Request(
-            path,
-            method=Method.POST,
-            data=params.model_dump(),
-        )
+        style = choice(ImageStyle.values())
+        path = f"{self.gps2img_endpoint}/{style}/{gps}"
+        req = Request(path)
         is_multipart = req.is_multipart
         if is_multipart:
             multipart = req.multipart
