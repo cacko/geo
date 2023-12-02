@@ -60,3 +60,12 @@ class GeoLocation(BaseModel):
     postCode: Optional[str] = None
     location: Optional[list[float]] = None
     extra: Optional[dict[str, str]] = None
+
+
+class ImageOptions(BaseModel):
+    model: list[str]
+    resolution: list[str]
+    category: list[str]
+    template: list[str]
+    qrcode: list[str]
+    styles: list[str]

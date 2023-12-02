@@ -8,7 +8,7 @@ from corefile import filepath
 from typing import Optional
 from PIL import Image
 from io import BytesIO
-from geo.geo.models import GeoInfo, ImageStyle
+from geo.geo.models import GeoInfo, ImageOptions
 from geo.config import app_config
 from pathlib import Path
 from random import choice
@@ -82,18 +82,21 @@ class LookupImage(CachableFileImage):
             self._path = self.DEFAULT
 
     @property
-    def gps2img_endpoint(self) -> str:
+    def styles(self) -> list[str]:
+        res = Request(self.__endpoint(app_config.masha.api_options))
+        options = ImageOptions(**res.json)
+        return options.styles
+
+    def __endpoint(self, path: str) -> str:
         masha_config = app_config.masha
-        return (
-            f"http://{masha_config.host}:{masha_config.port}/{masha_config.api_gps2img}"
-        )
+        return f"http://{masha_config.host}:{masha_config.port}/{path}"
 
     def __fetch(self):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
-        style = choice(ImageStyle.values())
-        path = f"{self.gps2img_endpoint}/{style}/{gps}"
+        style = choice(self.styles)
+        path = f"{self.__endpoint(app_config.masha.api_gps2img)}/{style}/{gps}"
         req = Request(path)
         is_multipart = req.is_multipart
         if is_multipart:

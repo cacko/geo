@@ -20,6 +20,7 @@ class MashaConfig(BaseModel):
     host: str
     port: str
     api_gps2img: str
+    api_options: str
 
 
 class ServerConfig(BaseModel):
