@@ -4,6 +4,17 @@
     top: 0;
     left: 0;
     height: 64px;
+
+    [debug] {
+      display: -webkit-box;
+      line-clamp: 1;
+      overflow-y: hidden;
+      div {
+        font-size: 70%;
+        font-variant: small-caps;
+
+      }
+    }
   }
   .container.main {
     height: 100vh;

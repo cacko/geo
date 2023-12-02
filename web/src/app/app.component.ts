@@ -157,6 +157,7 @@ export class AppComponent implements OnInit {
           next: (res: GeolocationPosition) => {
             console.debug(res);
             this.updateLocation(res);
+            this.messages = ["My Location"];
           }, error: (err: GeolocationPositionError) => {
             console.error(err);
             this.snackBar
@@ -166,6 +167,7 @@ export class AppComponent implements OnInit {
         break;
       case this.modes.IP:
         this.currentLookup && this.backgroundSubject.next(this.currentLookup.background);
+        this.currentLookup && (this.messages = [this.currentLookup.ip]);    
     }
   }
 
