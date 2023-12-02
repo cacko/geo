@@ -63,12 +63,9 @@ tasks:
       - git pull
 
   cache:
-    desc: update package
+    desc: clean cached
     cmds:
       - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};direnv exec . find $STORAGE__DIR -type f -name "LookupImage.*" -delete'
-      - task: export-remote
-      - task: deploy
-
 
   deploy:
     desc: all
