@@ -7,6 +7,9 @@ import logging
 from geo.geo.lookup_image import LookupImage
 from geo.config import app_config
 from geo.geo.models import GeoInfo
+import re
+
+PATTERN_GPS = re.compile(r"(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)")
 
 router = APIRouter()
 
@@ -58,7 +61,12 @@ def route_background(
 ):
     try:
         logging.info(ip)
-        geo_info = MaxMind.lookup(ip=ip)
+        geo_info = None
+        if gps := PATTERN_GPS.search(ip):
+            lat, lng = map(float, gps.groups())
+            geo_info = Coders.HERE.coder.from_gps(lat, lng)
+        else:
+            geo_info = MaxMind.lookup(ip=ip)
         image = LookupImage(geo=geo_info, ts=ts)
         image_path = image.path
         assert image_path

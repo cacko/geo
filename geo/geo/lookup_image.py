@@ -8,14 +8,14 @@ from corefile import filepath
 from typing import Optional
 from PIL import Image
 from io import BytesIO
-from geo.geo.models import GeoInfo, ImageOptions
+from geo.geo.models import GeoInfo, GeoLocation, ImageOptions
 from geo.config import app_config
 from pathlib import Path
 from random import choice
 
 
 class LookupImage(CachableFileImage):
-    def __init__(self, geo: Optional[GeoInfo] = None, ts: Optional[int] = None):
+    def __init__(self, geo: Optional[GeoInfo|GeoLocation] = None, ts: Optional[int] = None):
         self._ts = ts
         self._geo = geo
 

@@ -29,6 +29,7 @@ $mytheme: mat.define-dark-theme(
 @include mat.all-component-typographies($mytheme);
 
 @import 'theme/components/app-truncate';
+@import 'theme/components/spacer';
 @include myipinfo.apply-theme($mytheme);
 @include myquerybutton.apply-theme($mytheme);
 

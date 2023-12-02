@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   lookup?: LookupModel;
   error = false;
   online = true;
+  fullview = false;
+  location = false;
 
   messages: string[] = [];
 
@@ -48,7 +50,7 @@ export class AppComponent implements OnInit {
         this.swUpdate.checkForUpdate();
       });
     }
-  
+
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
@@ -66,7 +68,7 @@ export class AppComponent implements OnInit {
       .then((res) => {
         this.lookup = new LookupModel(res as LookupEntity);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   sendMsg(source: string, content: string) {
@@ -87,7 +89,7 @@ export class AppComponent implements OnInit {
         .then((res) => {
           this.lookup = new LookupModel(res as LookupEntity);
         })
-        .catch((err) => {});
+        .catch((err) => { });
   }
 
   @HostListener("window:keydown", ["$event"])
@@ -102,6 +104,14 @@ export class AppComponent implements OnInit {
   onRenew() {
     this.loader.show();
     this.lookup?.renewBackground();
+  }
+
+  onFullView() {
+    this.fullview = !this.fullview;
+  }
+
+  onLocation() {
+    this.location = !this.location;
   }
 
   onLongPress() {
