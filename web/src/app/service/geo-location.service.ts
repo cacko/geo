@@ -18,11 +18,6 @@ export class GeoLocationService {
           },
           (error) => {
             observer.error(error);
-          }
-          , {
-            enableHighAccuracy: true,
-            timeout: 50000,
-            maximumAge: 0
           });
       } else {
         observer.error('Geolocation is not available in this browser.');
