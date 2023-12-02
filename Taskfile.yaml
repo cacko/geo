@@ -62,12 +62,13 @@ tasks:
       - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};task push'
       - git pull
 
-  install:
+  cache:
     desc: update package
     cmds:
-      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/botyo;mamba run --live-stream -n {{.PROJECT}} pip install {{.CLI_ARGS}} -U'
+      - ssh $REMOTE_HOST 'source ~/.zshrc;cd /var/www/{{.PROJECT}};direnv exec . find $STORAGE__DIR -type f -name "LookupImage.*" -delete'
       - task: export-remote
       - task: deploy
+
 
   deploy:
     desc: all
