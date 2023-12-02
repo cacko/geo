@@ -26,6 +26,7 @@ import { QueryInputComponent } from './components/query-input/query-input.compon
 import { QueryButtonComponent } from './components/query-button/query-button.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar'; 
+import { LocationinfoComponent } from './components/locationinfo/locationinfo.component';
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -42,7 +43,7 @@ const MaterialModules = [
     AppComponent,
     LoaderComponent,
     IPInfoComponent,
-    IPInfoComponent,
+    LocationinfoComponent,
     LoaderComponent,
     FlagComponent,
     ErrorComponent,

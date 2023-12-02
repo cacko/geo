@@ -10,7 +10,7 @@
     $map: $color-config,
     $key: foreground,
   );
-  app-ipinfo {
+  app-locationinfo {
     display: flex;
     position: relative;
     width: 100%;
@@ -22,8 +22,9 @@
     transition: background-color 0.2s ease-in-out;
 
     &.inactive {
-      display: none;
-    }
+        display: none;
+      }
+  
 
     &.fullview {
       opacity: 0;

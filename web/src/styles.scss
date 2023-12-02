@@ -1,5 +1,6 @@
 @use "@angular/material" as mat;
 @use "theme/components/ipinfo" as myipinfo;
+@use "theme/components/locationinfo" as mylocationinfo;
 @use "theme/components/query-button" as myquerybutton;
 @use "sass:map";
 @include mat.core();
@@ -32,6 +33,7 @@ $mytheme: mat.define-dark-theme(
 @import 'theme/components/spacer';
 @include myipinfo.apply-theme($mytheme);
 @include myquerybutton.apply-theme($mytheme);
+@include mylocationinfo.apply-theme($mytheme);
 
 
 html {

@@ -9,13 +9,13 @@
         </mat-icon>
     </button>
     <button
-    mat-icon-button
-    (click)="onLocation()"
->
-    <mat-icon>
-        {{location ? 'my_location' : 'location_disabled'}}
-    </mat-icon>
-</button>
+        mat-icon-button
+        (click)="onLocation($event)"
+    >
+        <mat-icon>
+            {{mode === modes.GPS ? 'my_location' : 'location_disabled'}}
+        </mat-icon>
+    </button>
     <button
         mat-icon-button
         (click)="onRenew()"
@@ -30,17 +30,23 @@
 </mat-toolbar>
 <div
     class="container main"
-    [locationbg]="lookup?.background"
+    [locationbg]="$background | async"
 >
-    <app-ipinfo
-        [lookup]=lookup
-        *ngIf="lookup"
-        ngxLongPress2
-        [minTime]="1500"
-        [class.fullview]="fullview"
-        (onLongPress)="onLongPress()"
-    >
-
-    </app-ipinfo>
+    <section>
+        <app-ipinfo
+            [lookup]="lookup"
+            *ngIf="$lookup | async as lookup"
+            [class.fullview]="fullview"
+            [class.inactive]="mode!=modes.IP"
+        >
+        </app-ipinfo>
+        <app-locationinfo
+            [hidden]="mode!=modes.GPS"
+            [location]="location"
+            *ngIf="$location | async as location"
+            [class.fullview]="fullview"
+            [class.inactive]="mode!=modes.GPS"
+        ></app-locationinfo>
+    </section>
 
 </div>

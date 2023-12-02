@@ -9,7 +9,7 @@ import { now } from 'lodash-es';
 })
 export class LocationBgDirective implements OnInit {
 
-  @Input() locationbg?: string;
+  @Input() locationbg?: string | null;
   @HostBinding('class.loading') isLoading = false;
   constructor(
     private api: ApiService,

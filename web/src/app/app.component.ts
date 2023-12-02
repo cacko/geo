@@ -1,30 +1,45 @@
-import { Component, NgZone, OnInit, HostListener, isDevMode } from "@angular/core";
+import { Component, OnInit, HostListener, isDevMode } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { ApiType } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { interval } from "rxjs";
+import { Subject, combineLatest, interval, last, lastValueFrom, shareReplay, withLatestFrom } from "rxjs";
 import { LookupEntity } from "./entity/lookup.entity";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
 import { LoaderService } from "./service/loader.service";
 import { GeoLocationService } from "./service/geo-location.service";
+import { LocationModel } from "./models/location.model";
+import { LocationEntity } from "./entity/location.entity";
+
+export enum ApiMode {
+  IP = "ip",
+  GPS = "gps"
+}
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  lookup?: LookupModel;
+  private lookupSubject = new Subject<LookupModel>();
+  $lookup = this.lookupSubject.asObservable();
+  private locationSubject = new Subject<LocationModel>();
+  $location = this.locationSubject.asObservable();
+  private backgroundSubject = new Subject<string>();
+  $background = this.backgroundSubject.asObservable();
+
   error = false;
   online = true;
   fullview = false;
-  location = false;
-
+  modes = ApiMode;
+  mode = ApiMode.IP;
   messages: string[] = [];
 
-  private readonly KEY_OWN_IP = "own-ip";
+  private currentLookup?: LookupModel;
+  private currentLocation?: LocationModel;
 
   constructor(
     private api: ApiService,
@@ -63,15 +78,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateGeoIP(ip: string | null) {
-    this.api
-      .fetch(ApiType.LOOKUP, { path: ip })
-      .then((res) => {
-        this.lookup = new LookupModel(res as LookupEntity);
-      })
-      .catch((err) => { });
-  }
-
   sendMsg(source: string, content: string) {
     let message = {
       source,
@@ -84,54 +90,87 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const params = new URLSearchParams(window.location.search);
     const ip = params.get("ip");
-    ip &&
-      this.api
-        .fetch(ApiType.LOOKUP, { path: ip })
-        .then((res) => {
-          this.lookup = new LookupModel(res as LookupEntity);
-        })
-        .catch((err) => { });
+    ip && this.updateGeoIP(ip);
   }
 
   @HostListener("window:keydown", ["$event"])
-  hardREfresh(event: KeyboardEvent) {
+  hardRefresh(event: KeyboardEvent) {
     if (event.shiftKey && event.metaKey && event.key === "r") {
       this.loader.show();
       event.preventDefault();
-      this.lookup?.renewBackground();
+      // this.$lookup?.renewBackground();
     }
   }
 
   onRenew() {
     this.loader.show();
-    this.lookup?.renewBackground();
+    switch (this.mode) {
+      case this.modes.GPS:
+        this.currentLocation && 
+        this.currentLocation?.renewBackground() &&
+        this.backgroundSubject.next(this.currentLocation?.background)
+        break;
+
+      case this.modes.IP:
+        this.currentLookup &&
+        this.currentLookup.renewBackground() &&
+        this.backgroundSubject.next(this.currentLookup.background);     
+        break;
+    }
   }
 
   onFullView() {
     this.fullview = !this.fullview;
   }
 
-  async onLocation() {
-    this.location = !this.location;
-    if (this.location) {
-      this.geoService.getCurrentPosition().subscribe({
-        next: (res: GeolocationPosition) => {
-          console.log(res);
-          this.snackBar
-            .open(`${res.coords.latitude} ${res.coords.longitude}`, "Ok", { duration: 20000, });
-        }, error: (err: GeolocationPositionError) => {
-          console.error(err);
-          this.location = false;
-          this.snackBar
-            .open(err.message, "Ok", { duration: 2000, panelClass: 'warn' });
-        }
-      });
+  private updateLocation(res: GeolocationPosition) {
+    this.api
+      .fetch(ApiType.GPS, { path: `${res.coords.latitude}/${res.coords.longitude}` })
+      .then((res) => {
+        const model = new LocationModel(res as LocationEntity)
+        this.locationSubject.next(model);
+        this.backgroundSubject.next(model.background);
+        this.currentLocation = model;
+      })
+      .catch((err) => { });
+  }
+
+
+  private updateGeoIP(ip: string | null) {
+    this.api
+      .fetch(ApiType.LOOKUP, { path: ip })
+      .then((res) => {
+        const model = new LookupModel(res as LookupEntity)
+        this.lookupSubject.next(model);
+        this.backgroundSubject.next(model.background);
+        this.currentLookup = model;
+      })
+      .catch((err) => { });
+  }
+
+
+  async onLocation($event: MouseEvent) {
+    this.mode = this.mode === this.modes.IP ? this.modes.GPS : this.modes.IP;
+    switch (this.mode) {
+      case this.modes.GPS:
+        this.geoService.getCurrentPosition().subscribe({
+          next: (res: GeolocationPosition) => {
+            console.debug(res);
+            this.updateLocation(res);
+          }, error: (err: GeolocationPositionError) => {
+            console.error(err);
+            this.snackBar
+              .open(err.message, "Ok", { duration: 2000, panelClass: 'warn' });
+          }
+        });
+        break;
+      case this.modes.IP:
+        this.currentLookup && this.backgroundSubject.next(this.currentLookup.background);
     }
   }
 
   onLongPress() {
     this.loader.show();
-    this.lookup?.renewBackground();
   }
 
   title = "geo";

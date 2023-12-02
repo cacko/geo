@@ -11,9 +11,9 @@ export class LookupModel implements LookupEntity {
   timezone?: string;
   ISP?: ISPEntity;
   renew = false;
-  ts ?: string;
+  ts?: string;
 
-  private backgroundSrc !: string;
+  backgroundSrc !: string;
 
   constructor(original: Object) {
     Object.assign(this, original);
@@ -28,9 +28,10 @@ export class LookupModel implements LookupEntity {
     this.backgroundSrc = path;
   }
 
-  renewBackground(): void {
+  renewBackground(): boolean {
     const ts = now().toString();
     this.background = `${this.ip}/${ts}`;
+    return true;
   }
 
 }

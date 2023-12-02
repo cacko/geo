@@ -1,38 +1,39 @@
 <div content-data>
     <div
         row
-        *ngIf="lookup.ip"
+        *ngIf="location.name"
     >
-        <div label>IP</div>
+        <div label>Place</div>
         <div value>
-            <span>{{ lookup.ip }}</span>
+            <span>{{ location.name }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="lookup.country"
-    >
-        <div label>Country</div>
-        <div value>
-            <span>{{ lookup.country }}</span>
-            <app-flag
-                [isoCode]="lookup.country_iso"
-                *ngIf="lookup.country_iso"
-            ></app-flag>
-        </div>
-    </div>
-    <div
-        row
-        *ngIf="lookup.city"
+        *ngIf="location.city"
     >
         <div label>City</div>
         <div value>
-            <span>{{ lookup.city }}</span>
+            <span>{{ location.city }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="lookup.subdivisions"
+        *ngIf="location.country"
+    >
+        <div label>Country</div>
+        <div value>
+            <span>{{ location.country }}</span>
+            <app-flag
+                [isoCode]="location.country_iso"
+                *ngIf="location.country_iso"
+            ></app-flag>
+        </div>
+    </div>
+
+    <div
+        row
+        *ngIf="location.subdivisions"
     >
         <div
             label
@@ -41,12 +42,12 @@
             Region
         </div>
         <div value>
-            <span>{{ lookup.subdivisions }}</span>
+            <span>{{ location.subdivisions }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="lookup.location"
+        *ngIf="location.location"
     >
         <div label>GPS</div>
         <div value>
@@ -69,22 +70,11 @@
     </div>
     <div
         row
-        *ngIf="lookup.timezone"
+        *ngIf="location.timezone"
     >
         <div label>Timezone</div>
         <div value>
-            <span>{{ lookup.timezone }}</span>
-        </div>
-    </div>
-    <div
-        row
-        *ngIf="lookup.ISP"
-    >
-        <div label>Owner</div>
-        <div value>
-            <span>
-                {{ lookup.ISP.name }} ({{lookup.ISP.id}})
-            </span>
+            <span>{{ location.timezone }}</span>
         </div>
     </div>
 </div>
