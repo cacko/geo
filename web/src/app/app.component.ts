@@ -9,6 +9,7 @@ import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
 import { LoaderService } from "./service/loader.service";
+import { GeoLocationService } from "./service/geo-location.service";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private zone: NgZone,
+    private geoService: GeoLocationService,
     private swUpdate: SwUpdate,
     private ws: WebsocketService,
     private snackBar: MatSnackBar,
@@ -110,8 +111,22 @@ export class AppComponent implements OnInit {
     this.fullview = !this.fullview;
   }
 
-  onLocation() {
+  async onLocation() {
     this.location = !this.location;
+    if (this.location) {
+      this.geoService.getCurrentPosition().subscribe({
+        next: (res: GeolocationPosition) => {
+          console.log(res);
+          this.snackBar
+            .open(`${res.coords.latitude} ${res.coords.longitude}`, "Ok", { duration: 20000, });
+        }, error: (err: GeolocationPositionError) => {
+          console.error(err);
+          this.location = false;
+          this.snackBar
+            .open(err.message, "Ok", { duration: 2000, panelClass: 'warn' });
+        }
+      });
+    }
   }
 
   onLongPress() {
