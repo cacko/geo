@@ -96,9 +96,8 @@ export class AppComponent implements OnInit {
   @HostListener("window:keydown", ["$event"])
   hardRefresh(event: KeyboardEvent) {
     if (event.shiftKey && event.metaKey && event.key === "r") {
-      this.loader.show();
       event.preventDefault();
-      // this.$lookup?.renewBackground();
+      this.onRenew();
     }
   }
 
@@ -106,15 +105,15 @@ export class AppComponent implements OnInit {
     this.loader.show();
     switch (this.mode) {
       case this.modes.GPS:
-        this.currentLocation && 
-        this.currentLocation?.renewBackground() &&
-        this.backgroundSubject.next(this.currentLocation?.background)
+        this.currentLocation &&
+          this.currentLocation?.renewBackground() &&
+          this.backgroundSubject.next(this.currentLocation?.background)
         break;
 
       case this.modes.IP:
         this.currentLookup &&
-        this.currentLookup.renewBackground() &&
-        this.backgroundSubject.next(this.currentLookup.background);     
+          this.currentLookup.renewBackground() &&
+          this.backgroundSubject.next(this.currentLookup.background);
         break;
     }
   }
@@ -167,12 +166,8 @@ export class AppComponent implements OnInit {
         break;
       case this.modes.IP:
         this.currentLookup && this.backgroundSubject.next(this.currentLookup.background);
-        this.currentLookup && (this.messages = [this.currentLookup.ip]);    
+        this.currentLookup && (this.messages = [this.currentLookup.ip]);
     }
-  }
-
-  onLongPress() {
-    this.loader.show();
   }
 
   title = "geo";

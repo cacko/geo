@@ -19,6 +19,15 @@
     </div>
     <div
         row
+        *ngIf="location.postCode"
+    >
+        <div label>Post Code</div>
+        <div value>
+            <span>{{ location.postCode }}</span>
+        </div>
+    </div>
+    <div
+        row
         *ngIf="location.country"
     >
         <div label>Country</div>

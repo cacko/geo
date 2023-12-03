@@ -25,8 +25,11 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { QueryInputComponent } from './components/query-input/query-input.component';
 import { QueryButtonComponent } from './components/query-button/query-button.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import {MatToolbarModule} from '@angular/material/toolbar'; 
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { LocationinfoComponent } from './components/locationinfo/locationinfo.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -36,7 +39,8 @@ const MaterialModules = [
   MatDialogModule,
   MatButtonModule,
   ClipboardModule,
-  MatToolbarModule
+  MatToolbarModule,
+  DragDropModule
 ];
 @NgModule({
   declarations: [

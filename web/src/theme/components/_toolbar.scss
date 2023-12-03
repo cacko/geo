@@ -1,0 +1,35 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+@use 'sass:color';
+
+@mixin apply-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  $palette: map.get($color-config, primary);
+  $warn: map.get($color-config, warn);
+  $background-palette: map-get(
+    $map: $color-config,
+    $key: background,
+  );
+  mat-toolbar {
+    &.mat-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0em;
+      height: 64px;
+      background: color.adjust(
+        mat.get-color-from-palette($background-palette, app-bar),
+        $alpha: -0.5
+      );
+
+      [debug] {
+        display: -webkit-box;
+        line-clamp: 1;
+        overflow-y: hidden;
+        div {
+          font-size: 70%;
+          font-variant: small-caps;
+        }
+      }
+    }
+  }
+}

@@ -37,10 +37,6 @@
     [content-data] {
       display: flex;
       flex-direction: column;
-      @media (min-width: 1426px) {
-        position: relative;
-        right: calc((100% - 1426px) / 4);
-      }
     }
 
     [row] {

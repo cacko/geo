@@ -2,6 +2,7 @@
 @use "theme/components/ipinfo" as myipinfo;
 @use "theme/components/locationinfo" as mylocationinfo;
 @use "theme/components/query-button" as myquerybutton;
+@use "theme/components/toolbar" as mytoolbar;
 @use "sass:map";
 @include mat.core();
 
@@ -9,8 +10,8 @@ $theme-primary: mat.define-palette(mat.$teal-palette, 400);
 $theme-accent: mat.define-palette(mat.$light-green-palette, 600);
 $theme-warn: mat.define-palette(mat.$red-palette);
 $custom-typography: mat.define-typography-config(
-  $font-family: "Syne Mono"
-  );
+  $font-family: "Syne Mono",
+);
 
 $mytheme: mat.define-dark-theme(
   (
@@ -29,13 +30,12 @@ $mytheme: mat.define-dark-theme(
 @include mat.all-component-colors($mytheme);
 @include mat.all-component-typographies($mytheme);
 
-@import 'theme/components/app-truncate';
-@import 'theme/components/spacer';
+@import "theme/components/app-truncate";
+@import "theme/components/spacer";
 @include myipinfo.apply-theme($mytheme);
 @include myquerybutton.apply-theme($mytheme);
 @include mylocationinfo.apply-theme($mytheme);
-
-
+@include mytoolbar.apply-theme($mytheme);
 html {
   box-sizing: border-box;
   padding: 0;
@@ -58,7 +58,7 @@ body {
   padding: 0;
   margin: 0;
   font-size-adjust: 0.7;
-
+  overscroll-behavior: none;
   app-root {
     display: flex;
     flex-direction: column;
@@ -73,7 +73,6 @@ body {
 a {
   color: inherit;
 }
-
 
 // img {
 //   width: auto;
