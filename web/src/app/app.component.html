@@ -1,52 +1,54 @@
 <app-loader *ngIf="loader.visible | async"></app-loader>
 <mat-toolbar>
-    <button
-        mat-icon-button
-        (click)="onFullView()"
-    >
-        <mat-icon>
-            {{fullview ? 'visibility' : 'visibility_off'}}
-        </mat-icon>
-    </button>
-    <button
-        mat-icon-button
-        (click)="onLocation($event)"
-    >
-        <mat-icon>
-            {{mode === modes.GPS ? 'my_location' : 'location_disabled'}}
-        </mat-icon>
-    </button>
-    <button
-        mat-icon-button
-        (click)="onRenew()"
-    >
-        <mat-icon>cached</mat-icon>
-    </button>
+    <section left>
+        <button
+            mat-icon-button
+            (click)="onFullView()"
+        >
+            <mat-icon>
+                {{fullview ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+        </button>
+        <button
+            mat-icon-button
+            (click)="onRenew()"
+        >
+            <mat-icon>cached</mat-icon>
+        </button>
+    </section>
+
     <span class="spacer"></span>
-    <div debug>
-        <div *ngFor="let msg of messages">{{msg}}</div>
-    </div>
-    <app-error *ngIf="error"></app-error>
+    <section right>
+        <mat-slide-toggle
+            (change)="onModeSwitch($event)"
+        >
+            <div debug>
+                <div *ngFor="let msg of messages">{{msg}}</div>
+            </div>
+        </mat-slide-toggle>
+
+        <app-error *ngIf="error"></app-error>
+    </section>
+
 </mat-toolbar>
 <div
     class="container main"
     [locationbg]="$background | async"
-    cdkDragLockAxis="x" cdkDrag>
 >
     <section>
         <app-ipinfo
             [lookup]="lookup"
             *ngIf="$lookup | async as lookup"
             [class.fullview]="fullview"
-            [class.inactive]="mode!=modes.IP"
+            [class.inactive]="mode!=queryMode.IP"
         >
         </app-ipinfo>
         <app-locationinfo
-            [hidden]="mode!=modes.GPS"
+            [hidden]="mode!=queryMode.GPS"
             [location]="location"
             *ngIf="$location | async as location"
             [class.fullview]="fullview"
-            [class.inactive]="mode!=modes.GPS"
+            [class.inactive]="mode!=queryMode.GPS"
         ></app-locationinfo>
     </section>
 

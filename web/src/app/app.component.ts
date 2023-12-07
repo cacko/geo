@@ -12,8 +12,9 @@ import { LoaderService } from "./service/loader.service";
 import { GeoLocationService } from "./service/geo-location.service";
 import { LocationModel } from "./models/location.model";
 import { LocationEntity } from "./entity/location.entity";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 
-export enum ApiMode {
+export enum QueryMode {
   IP = "ip",
   GPS = "gps"
 }
@@ -34,9 +35,12 @@ export class AppComponent implements OnInit {
   error = false;
   online = true;
   fullview = false;
-  modes = ApiMode;
-  mode = ApiMode.IP;
+  queryMode = QueryMode;
+  isToggled = false;
+  mode: QueryMode = QueryMode.IP;
+  modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
+  icons: string[] = ['location_disabled','my_location'];
 
   private currentLookup?: LookupModel;
   private currentLocation?: LocationModel;
@@ -73,7 +77,7 @@ export class AppComponent implements OnInit {
           this.updateGeoIP(msg.content);
       }
       if (msg.command === WSCommand.IP) {
-        this.messages.push(msg.content);
+        this.messages.push( "IP");
       }
     });
   }
@@ -104,13 +108,13 @@ export class AppComponent implements OnInit {
   onRenew() {
     this.loader.show();
     switch (this.mode) {
-      case this.modes.GPS:
+      case this.queryMode.GPS:
         this.currentLocation &&
           this.currentLocation?.renewBackground() &&
           this.backgroundSubject.next(this.currentLocation?.background)
         break;
 
-      case this.modes.IP:
+      case this.queryMode.IP:
         this.currentLookup &&
           this.currentLookup.renewBackground() &&
           this.backgroundSubject.next(this.currentLookup.background);
@@ -148,15 +152,16 @@ export class AppComponent implements OnInit {
   }
 
 
-  async onLocation($event: MouseEvent) {
-    this.mode = this.mode === this.modes.IP ? this.modes.GPS : this.modes.IP;
+  async onModeSwitch($event: MatSlideToggleChange) {
+    this.mode = this.modes.shift() as QueryMode;
+    this.modes.push(this.mode);
     switch (this.mode) {
-      case this.modes.GPS:
+      case this.queryMode.GPS:
         this.geoService.getCurrentPosition().subscribe({
           next: (res: GeolocationPosition) => {
             console.debug(res);
             this.updateLocation(res);
-            this.messages = ["My Location"];
+            this.messages = ["GPS"];
           }, error: (err: GeolocationPositionError) => {
             console.error(err);
             this.snackBar
@@ -164,7 +169,7 @@ export class AppComponent implements OnInit {
           }
         });
         break;
-      case this.modes.IP:
+      case this.queryMode.IP:
         this.currentLookup && this.backgroundSubject.next(this.currentLookup.background);
         this.currentLookup && (this.messages = [this.currentLookup.ip]);
     }

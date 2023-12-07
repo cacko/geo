@@ -26,7 +26,7 @@ $mytheme: mat.define-dark-theme(
 
 @include mat.core-theme($mytheme);
 @include mat.all-component-bases($mytheme);
-@include mat.all-component-themes($mytheme);
+// @include mat.all-component-themes($mytheme);
 @include mat.all-component-colors($mytheme);
 @include mat.all-component-typographies($mytheme);
 
@@ -59,6 +59,7 @@ body {
   margin: 0;
   font-size-adjust: 0.7;
   overscroll-behavior: none;
+  user-select: none;
   app-root {
     display: flex;
     flex-direction: column;

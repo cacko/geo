@@ -8,8 +8,13 @@
     align-items: center;
     background-size: auto 100vh;
     background-repeat: no-repeat;
-    background-position: center;
+    background-attachment: fixed;
+    background-position: top left;
     transition: all 0.2s ease-in-out;
+    animation-name: scrolling;
+    animation-duration: 25s;
+    animation-iteration-count: infinite;
+
     padding: 0;
 
 
@@ -34,6 +39,21 @@
       position: absolute;
       top: 0.5rem;
       left: 0.5rem;
+    }
+  }
+
+
+  @keyframes scrolling {
+    0% {
+     background-position-x: left;
+    }
+
+    50% {
+      background-position-x: right;
+    }
+
+    100% {
+      background-position-x: left;
     }
   }
 

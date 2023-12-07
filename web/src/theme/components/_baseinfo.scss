@@ -1,0 +1,94 @@
+@use "sass:map";
+@use "sass:color";
+@use "@angular/material" as mat;
+@use "../mixins.scss" as misc;
+
+@mixin apply-info($theme, $node) {
+  $color-config: mat.get-color-config($theme);
+  $palette: map.get($color-config, primary);
+  $warn: map.get($color-config, warn);
+  $foreground-palette: map-get(
+    $map: $color-config,
+    $key: foreground,
+  );
+  $background-palette: map-get(
+    $map: $color-config,
+    $key: background,
+  );
+  #{$node} {
+    display: flex;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+    background-color: color.adjust(
+      mat.get-color-from-palette($background-palette, app-bar),
+      $alpha: -0.4
+    );
+    padding: 1rem;
+    transition: background-color 0.2s ease-in-out;
+
+    &.inactive {
+      display: none;
+    }
+
+    &.fullview {
+      opacity: 0;
+    }
+
+    &:hover {
+      background-color: color.adjust(
+        mat.get-color-from-palette($background-palette, app-bar),
+        $alpha: -0.2
+      );
+      cursor: pointer;
+    }
+
+    [content-data] {
+      display: flex;
+      flex-direction: column;
+    }
+
+    [row] {
+      display: grid;
+      grid-template-columns: 4.2rem 1fr;
+      column-gap: 1rem;
+      align-items: center;
+
+      div {
+        display: flex;
+        column-gap: 0.3rem;
+      }
+
+      [label] {
+        justify-content: flex-end;
+        font-size: 80%;
+        font-variant: small-caps;
+        font-weight: bold;
+        color: darken(
+          mat.get-color-from-palette($foreground-palette, text),
+          25%
+        );
+      }
+
+      [value] {
+        > span {
+          @include misc.truncate();
+        }
+        a,
+        .mdc-button__label {
+          font-size: 1rem;
+          text-decoration: none;
+          text-transform: none;
+          font-variant: small-caps;
+        }
+        column-gap: 0.1rem;
+        align-items: center;
+        mat-icon {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

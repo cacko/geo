@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "@angular/material" as mat;
-@use 'sass:color';
+@use "sass:color";
 
 @mixin apply-theme($theme) {
   $color-config: mat.get-color-config($theme);
@@ -12,21 +12,47 @@
   );
   mat-toolbar {
     &.mat-toolbar {
+      border: none;
       position: fixed;
       top: 0;
-      left: 0em;
-      height: 64px;
+      left: 0;
+      padding: 0 !important;
       background: color.adjust(
         mat.get-color-from-palette($background-palette, app-bar),
-        $alpha: -0.5
+        $alpha: -1
       );
+
+      section {
+        height: 49px;
+        display: flex;
+        align-items: center;
+        background: color.adjust(
+          mat.get-color-from-palette($background-palette, app-bar),
+          $alpha: -0.4
+        );
+        &[left] {
+          border-top-right-radius: 1em;
+          border-bottom-right-radius: 1em;
+        }
+        &[right] {
+          border-top-left-radius: 1em;
+          border-bottom-left-radius: 1em;
+          padding: 0 1em;
+        }
+        &:hover {
+          background-color: color.adjust(
+            mat.get-color-from-palette($background-palette, app-bar),
+            $alpha: -0.2
+          );
+          cursor: pointer;
+        }
+      }
 
       [debug] {
         display: -webkit-box;
         line-clamp: 1;
         overflow-y: hidden;
         div {
-          font-size: 70%;
           font-variant: small-caps;
         }
       }

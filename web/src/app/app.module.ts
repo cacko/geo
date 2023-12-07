@@ -28,7 +28,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LocationinfoComponent } from './components/locationinfo/locationinfo.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
+import {MatSlideToggleModule} from '@angular/material/slide-toggle'; 
 
 const MaterialModules = [
   MatSnackBarModule,
@@ -40,7 +40,8 @@ const MaterialModules = [
   MatButtonModule,
   ClipboardModule,
   MatToolbarModule,
-  DragDropModule
+  DragDropModule,
+  MatSlideToggleModule
 ];
 @NgModule({
   declarations: [
