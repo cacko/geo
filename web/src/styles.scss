@@ -3,6 +3,7 @@
 @use "theme/components/locationinfo" as mylocationinfo;
 @use "theme/components/query-button" as myquerybutton;
 @use "theme/components/toolbar" as mytoolbar;
+@use "theme/components/geo-input" as mygeoinput;
 @use "sass:map";
 @include mat.core();
 
@@ -36,6 +37,7 @@ $mytheme: mat.define-dark-theme(
 @include myquerybutton.apply-theme($mytheme);
 @include mylocationinfo.apply-theme($mytheme);
 @include mytoolbar.apply-theme($mytheme);
+@include mygeoinput.apply-theme($mytheme);
 html {
   box-sizing: border-box;
   padding: 0;

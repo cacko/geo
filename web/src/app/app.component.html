@@ -20,6 +20,7 @@
     <span class="spacer"></span>
     <section right>
         <mat-slide-toggle
+            [checked]="mode == queryMode.GPS"
             (change)="onModeSwitch($event)"
         >
             <div debug>
@@ -36,21 +37,5 @@
     [class.fullview]="fullview"
     [locationbg]="$background | async"
 >
-    <section>
-        <!-- <app-ipinfo
-            [lookup]="lookup"
-            *ngIf="$lookup | async as lookup"
-            [class.fullview]="fullview"
-            [class.inactive]="mode!=queryMode.IP"
-        >
-        </app-ipinfo>
-        <app-locationinfo
-            [hidden]="mode!=queryMode.GPS"
-            [location]="location"
-            *ngIf="$location | async as location"
-            [class.fullview]="fullview"
-            [class.inactive]="mode!=queryMode.GPS"
-        ></app-locationinfo> -->
-    </section>
     <router-outlet></router-outlet>
 </div>

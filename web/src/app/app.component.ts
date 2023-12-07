@@ -15,7 +15,8 @@ import { LocationEntity } from "./entity/location.entity";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, EventType, Router } from "@angular/router";
+import { LocationinfoComponent } from "./components/locationinfo/locationinfo.component";
 
 export enum QueryMode {
   IP = "ip",
@@ -43,6 +44,8 @@ export class AppComponent implements OnInit {
   $background = this.api.$background;
   $lookup = this.api.$lookup;
   $location = this.api.$location;
+  page = this.activatedRoute.title;
+  myIp?: string;
 
   private currentLookup?: LookupModel;
   private currentLocation?: LocationModel;
@@ -79,11 +82,9 @@ export class AppComponent implements OnInit {
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
-          (new URL(this.router.url)).pathname == "" &&
-          this.router.navigate(['ip', msg.content]);
-      }
-      if (msg.command === WSCommand.IP) {
-        this.messages.push("IP");
+          this.myIp = msg.content;
+          this.router.routerState.snapshot.url == "/" &&
+            this.router.navigate(['ip', this.myIp]);
       }
     });
     this.$location.subscribe(res => (this.currentLocation = res));
@@ -103,7 +104,11 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.loader.show();
     this.router.events.subscribe(res => {
-      console.log(res);
+      switch (res.type) {
+        case EventType.ActivationEnd:
+          this.mode = res.snapshot.component?.name == "LocationinfoComponent" ? QueryMode.GPS : QueryMode.IP;
+          this.messages = [this.mode];
+      }
     })
     // const params = window.location.search;
     // this.router.routerState.root.fragment.subscribe((res) => {
@@ -111,7 +116,9 @@ export class AppComponent implements OnInit {
     // });
     // const ip = params.get("ip");
     // ip && this.updateGeoIP(ip);
+    this.openSearchDialog()
   }
+
 
   @HostListener("window:keydown", ["$event"])
   hardRefresh(event: KeyboardEvent) {
@@ -130,15 +137,15 @@ export class AppComponent implements OnInit {
     this.loader.show();
     switch (this.mode) {
       case this.queryMode.GPS:
-        // this.currentLocation &&
-        //   this.currentLocation?.renewBackground() &&
-        //   this.backgroundSubject.next(this.currentLocation?.background)
+        this.currentLocation &&
+          this.currentLocation?.renewBackground() &&
+          this.api.backgroundSubject.next(this.currentLocation?.background)
         break;
 
       case this.queryMode.IP:
-        // this.currentLookup &&
-        //   this.currentLookup.renewBackground() &&
-        //   this.backgroundSubject.next(this.currentLookup.background);
+        this.currentLookup &&
+          this.currentLookup.renewBackground() &&
+          this.api.backgroundSubject.next(this.currentLookup.background);
         break;
     }
   }
@@ -150,13 +157,11 @@ export class AppComponent implements OnInit {
 
 
   async onModeSwitch($event: MatSlideToggleChange) {
-    this.mode = this.modes.shift() as QueryMode;
-    this.modes.push(this.mode);
+    this.mode = $event.checked ? this.queryMode.GPS : this.queryMode.IP;
     switch (this.mode) {
       case this.queryMode.GPS:
         this.geoService.getCurrentPosition().subscribe({
           next: (res: GeolocationPosition) => {
-            console.debug(res);
             this.router.navigate(["location", `${res.coords.latitude},${res.coords.longitude}`]);
           }, error: (err: GeolocationPositionError) => {
             console.error(err);
@@ -166,7 +171,7 @@ export class AppComponent implements OnInit {
         });
         break;
       case this.queryMode.IP:
-        this.currentLookup && this.router.navigate(["ip", this.currentLookup.ip]);
+        this.router.navigate(["ip", this.currentLookup?.ip || this.myIp]);
     }
   }
 
@@ -179,8 +184,7 @@ export class AppComponent implements OnInit {
       ],
       // position: this.isMobile ? { top: '0' } : {},
       backdropClass: 'search-backdrop',
-      // hasBackdrop: true,
-      autoFocus: 'dialog',
+      delayFocusTrap: true,
       maxWidth: '800px',
       width: '80vw',
       // data: input,
@@ -190,16 +194,6 @@ export class AppComponent implements OnInit {
       // this.searching = false;
       if (input) {
         this.router.navigate(["location", input]);
-        // this.mode = this.queryMode.GPS;
-        // this.updateAddress(input);
-        // const msg: WSRequest = {
-        //   ztype: WSType.REQUEST,
-        //   query: input,
-        //   client: this.ws.DEVICE_ID,
-        //   group: this.ws.DEVICE_ID,
-        //   id: uuidv4(),
-        // };
-        // this.ws.send(msg);
       }
     });
   }
