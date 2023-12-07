@@ -116,7 +116,7 @@ export class AppComponent implements OnInit {
     // });
     // const ip = params.get("ip");
     // ip && this.updateGeoIP(ip);
-    this.openSearchDialog()
+    // this.openSearchDialog()
   }
 
 
