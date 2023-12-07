@@ -77,7 +77,7 @@ export class WebsocketService {
       this.reconnectAfter = this.RECONNECT_START;
     };
     this.out = {
-      error: (err: any) => { console.log(err); },
+      error: (err: any) => { console.debug(err); },
       complete: () => { },
       next: (data: Object) => {
         console.debug('Message sent to websocket: ', data);

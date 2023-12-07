@@ -17,10 +17,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
 import { ActivatedRoute, EventType, Router } from "@angular/router";
 import { LocationinfoComponent } from "./components/locationinfo/locationinfo.component";
+import { MatButtonToggleChange } from "@angular/material/button-toggle";
 
 export enum QueryMode {
   IP = "ip",
-  GPS = "gps"
+  GPS = "gps",
 }
 
 @Component({
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
   queryMode = QueryMode;
   isToggled = false;
   mode: QueryMode = QueryMode.IP;
+  isAutoMode: boolean = true;
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
@@ -110,13 +112,6 @@ export class AppComponent implements OnInit {
           this.messages = [this.mode];
       }
     })
-    // const params = window.location.search;
-    // this.router.routerState.root.fragment.subscribe((res) => {
-    //   console.log(res);
-    // });
-    // const ip = params.get("ip");
-    // ip && this.updateGeoIP(ip);
-    // this.openSearchDialog()
   }
 
 
@@ -154,21 +149,34 @@ export class AppComponent implements OnInit {
   }
 
 
+  async onAutoMode($event: MatSlideToggleChange) {
+    console.log($event);
+  }
 
 
-  async onModeSwitch($event: MatSlideToggleChange) {
-    this.mode = $event.checked ? this.queryMode.GPS : this.queryMode.IP;
-    switch (this.mode) {
+  tryGeoLocation() {
+    this.geoService.getCurrentPosition().subscribe({
+      next: (res: GeolocationPosition) => {
+        this.router.navigate(["location", `${res.coords.latitude},${res.coords.longitude}`]);
+      }, error: (err: GeolocationPositionError) => {
+        console.error(err);
+        this.snackBar
+          .open(err.message, "Ok", { duration: 2000, panelClass: 'warn' });
+      }
+    });
+  }
+
+
+  async onModeSwitch($event: MatButtonToggleChange) {
+    switch ($event.value) {
       case this.queryMode.GPS:
-        this.geoService.getCurrentPosition().subscribe({
-          next: (res: GeolocationPosition) => {
-            this.router.navigate(["location", `${res.coords.latitude},${res.coords.longitude}`]);
-          }, error: (err: GeolocationPositionError) => {
-            console.error(err);
-            this.snackBar
-              .open(err.message, "Ok", { duration: 2000, panelClass: 'warn' });
-          }
-        });
+        if (this.isAutoMode) {
+          this.tryGeoLocation();
+        } else if (this.currentLocation) {
+          this.router.navigate(["location", this.currentLocation?.background]);
+        } else {
+          this.openSearchDialog();
+        }
         break;
       case this.queryMode.IP:
         this.router.navigate(["ip", this.currentLookup?.ip || this.myIp]);
@@ -190,7 +198,7 @@ export class AppComponent implements OnInit {
       // data: input,
     });
     dialogRef.afterClosed().subscribe((input) => {
-      console.log(input);
+      console.debug(input);
       // this.searching = false;
       if (input) {
         this.router.navigate(["location", input]);

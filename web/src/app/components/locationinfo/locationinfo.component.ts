@@ -14,9 +14,9 @@ import { ApiType } from 'src/app/entity/api.entity';
 })
 export class LocationinfoComponent implements OnInit {
 
-  location ?: LocationModel;
+  location?: LocationModel;
   img_url = "loading.png";
-  gps ?: string;
+  gps?: string;
 
   constructor(
     private dialog: MatDialog,
@@ -37,14 +37,6 @@ export class LocationinfoComponent implements OnInit {
         this.updateAddress(location);
       }
     });
-
-    if (!this.location) {
-      return;
-    }
-    if (!this.location.location) {
-      return;
-    }
-    this.gps = `${this.location.location[0]},${this.location.location[1]}`
   }
 
   private updateLocation(lat: number, lng: number) {
@@ -55,6 +47,7 @@ export class LocationinfoComponent implements OnInit {
         this.location = model;
         this.api.locationSubject.next(this.location);
         this.api.backgroundSubject.next(model.background);
+        this.gps = model.background
       })
       .catch((err) => { });
   }
@@ -68,6 +61,7 @@ export class LocationinfoComponent implements OnInit {
         this.location = model;
         this.api.locationSubject.next(this.location);
         this.api.backgroundSubject.next(model.background);
+        this.gps = model.background;
       })
       .catch((err) => { });
   }

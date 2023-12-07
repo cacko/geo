@@ -86,8 +86,6 @@ export class ApiService implements HttpInterceptor {
         params["path"] = "";
       }
 
-      console.log(url, params);
-
       if (cache && cached) {
         return resolve(cached);
       }

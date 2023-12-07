@@ -19,13 +19,28 @@
 
     <span class="spacer"></span>
     <section right>
-        <mat-slide-toggle
-            [checked]="mode == queryMode.GPS"
+        <mat-button-toggle-group
+        appearance="legacy"
+            [(ngModel)]="mode"
             (change)="onModeSwitch($event)"
         >
-            <div debug>
-                <div *ngFor="let msg of messages">{{msg}}</div>
-            </div>
+            <mat-button-toggle
+                value="{{queryMode.IP}}"
+                aria-label="By IP"
+            >
+                <mat-icon>globe</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle
+                value="{{queryMode.GPS}}"
+                aria-label
+            >
+                <mat-icon>my_location</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-slide-toggle
+            [ngModel]="isAutoMode"
+            (change)="onAutoMode($event)"
+        >
         </mat-slide-toggle>
 
         <app-error *ngIf="error"></app-error>

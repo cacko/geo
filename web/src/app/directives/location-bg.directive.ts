@@ -18,7 +18,6 @@ export class LocationBgDirective implements OnInit {
   }
 
   @HostListener('change') ngOnChanges() {
-    console.log("changes",this.locationbg);
     this.isLoading = true;
     if (!this.locationbg) {
       return this.setBackground("/bg/loading.webp");
