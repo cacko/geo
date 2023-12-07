@@ -1,28 +1,22 @@
 import { Component, OnInit, HostListener, isDevMode } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
-import { ApiType } from "./entity/api.entity";
+import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { Subject, interval } from "rxjs";
-import { LookupEntity } from "./entity/lookup.entity";
+import { interval } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
 import { LoaderService } from "./service/loader.service";
 import { GeoLocationService } from "./service/geo-location.service";
 import { LocationModel } from "./models/location.model";
-import { LocationEntity } from "./entity/location.entity";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
 import { ActivatedRoute, EventType, Router } from "@angular/router";
-import { LocationinfoComponent } from "./components/locationinfo/locationinfo.component";
 import { MatButtonToggleChange } from "@angular/material/button-toggle";
 
-export enum QueryMode {
-  IP = "ip",
-  GPS = "gps",
-}
+
 
 @Component({
   selector: "app-root",
@@ -150,7 +144,17 @@ export class AppComponent implements OnInit {
 
 
   async onAutoMode($event: MatSlideToggleChange) {
-    console.log($event);
+    if ($event.checked) {
+      switch (this.mode) {
+        case this.queryMode.IP:
+          return this.router.navigate(["ip", this.myIp]);
+        case this.queryMode.GPS:
+          return this.tryGeoLocation()
+      }
+    } else {
+      this.openSearchDialog();
+    }
+
   }
 
 
@@ -195,13 +199,14 @@ export class AppComponent implements OnInit {
       delayFocusTrap: true,
       maxWidth: '800px',
       width: '80vw',
-      // data: input,
+      data: this.mode,
     });
     dialogRef.afterClosed().subscribe((input) => {
-      console.debug(input);
-      // this.searching = false;
-      if (input) {
-        this.router.navigate(["location", input]);
+      switch (this.mode) {
+        case this.queryMode.IP:
+          return this.router.navigate(["ip", input]);
+        case this.queryMode.GPS:
+          return this.router.navigate(["location", input]);
       }
     });
   }

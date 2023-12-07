@@ -8,7 +8,7 @@
 @include mat.core();
 
 $theme-primary: mat.define-palette(mat.$teal-palette, 400);
-$theme-accent: mat.define-palette(mat.$light-green-palette, 600);
+$theme-accent: mat.define-palette(mat.$cyan-palette, 600);
 $theme-warn: mat.define-palette(mat.$red-palette);
 $custom-typography: mat.define-typography-config(
   $font-family: "Syne Mono",
@@ -27,7 +27,6 @@ $mytheme: mat.define-dark-theme(
 
 @include mat.core-theme($mytheme);
 @include mat.all-component-bases($mytheme);
-// @include mat.all-component-themes($mytheme);
 @include mat.all-component-colors($mytheme);
 @include mat.all-component-typographies($mytheme);
 

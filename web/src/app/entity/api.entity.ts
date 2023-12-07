@@ -4,3 +4,8 @@ export enum ApiType {
     ADDRESS = "address",
     BACKGROUND = 'background'
 }
+
+export enum QueryMode {
+    IP = "ip",
+    GPS = "gps",
+  }

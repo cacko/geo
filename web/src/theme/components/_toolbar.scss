@@ -5,6 +5,7 @@
 @mixin apply-theme($theme) {
   $color-config: mat.get-color-config($theme);
   $palette: map.get($color-config, primary);
+  $accent: map.get($color-config, accent);
   $warn: map.get($color-config, warn);
   $background-palette: map-get(
     $map: $color-config,
@@ -38,6 +39,7 @@
           border-top-left-radius: 1em;
           border-bottom-left-radius: 1em;
           padding: 0 1em;
+          column-gap: 0.4em;
         }
         &:hover {
           background-color: color.adjust(
@@ -56,6 +58,10 @@
           font-variant: small-caps;
         }
       }
+    }
+    .mat-button-toggle-checked {
+      background-color: unset;
+      color: mat.get-color-from-palette($accent);
     }
   }
 }

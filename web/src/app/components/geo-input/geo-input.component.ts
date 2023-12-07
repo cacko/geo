@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { QueryMode } from 'src/app/entity/api.entity';
 
 @Component({
   selector: 'app-geo-input',
@@ -13,6 +14,8 @@ export class GeoInputComponent {
   constructor(
     private builder: FormBuilder,
     public dialogRef: MatDialogRef<string>,
+    @Inject(MAT_DIALOG_DATA)
+    public data?: QueryMode
   ) {
     this.form = this.builder.group({
       geoInput: this.geoInput,
