@@ -1,0 +1,12 @@
+<form
+    (keydown.enter)="triggerSubmit($event)"
+    (ngSubmit)="submitForm()"
+>
+    <mat-form-field>
+        <mat-label>type command</mat-label>
+        <input
+            matInput
+            [formControl]="geoInput"
+        >
+    </mat-form-field>
+</form>

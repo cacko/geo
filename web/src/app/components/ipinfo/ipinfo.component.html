@@ -1,4 +1,4 @@
-<div content-data>
+<div content-data *ngIf="lookup">
     <div
         row
         *ngIf="lookup.ip"
@@ -59,7 +59,7 @@
             </button>
             <button
                 mat-button
-                [cdkCopyToClipboard]="gps"
+                [cdkCopyToClipboard]="gps || ''"
                 (cdkCopyToClipboardCopied)="onCopy($event)"
             >
                 <mat-icon>content_copy</mat-icon>

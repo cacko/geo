@@ -15,6 +15,12 @@
     $map: $color-config,
     $key: background,
   );
+  .container.main.fullview {
+    #{$node} {
+      transition: background-color 0.2s ease-in-out;
+      opacity: 0;
+    }
+  }
   #{$node} {
     display: flex;
     position: relative;
@@ -31,10 +37,6 @@
 
     &.inactive {
       display: none;
-    }
-
-    &.fullview {
-      opacity: 0;
     }
 
     &:hover {

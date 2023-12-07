@@ -16,6 +16,8 @@ import { omitBy, isEmpty } from "lodash-es";
 import * as md5 from "md5";
 import * as moment from "moment";
 import { LoaderService } from "./loader.service";
+import { LookupModel } from "../models/lookup.model";
+import { LocationModel } from "../models/location.model";
 
 const b64encode = window.btoa;
 
@@ -35,11 +37,19 @@ export class ApiService implements HttpInterceptor {
   errorSubject = new Subject<string>();
   error = this.errorSubject.asObservable();
 
+  backgroundSubject = new Subject<string>();
+  $background = this.backgroundSubject.asObservable();
+
+  lookupSubject = new Subject<LookupModel>();
+  $lookup = this.lookupSubject.asObservable();
+  locationSubject = new Subject<LocationModel>();
+  $location = this.locationSubject.asObservable();
+
   constructor(
-    private httpClient: HttpClient, 
+    private httpClient: HttpClient,
     private loader: LoaderService,
     private zone: NgZone
-    ) {}
+  ) { }
 
   intercept(
     req: HttpRequest<any>,

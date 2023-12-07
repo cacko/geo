@@ -1,5 +1,7 @@
 import { NgModule, isDevMode, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -28,8 +30,14 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LocationinfoComponent } from './components/locationinfo/locationinfo.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle'; 
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatInputModule } from '@angular/material/input';
+import {
+  MatFormFieldModule,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+} from '@angular/material/form-field';
+import { GeoInputComponent } from './components/geo-input/geo-input.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle'; 
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -41,7 +49,10 @@ const MaterialModules = [
   ClipboardModule,
   MatToolbarModule,
   DragDropModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatButtonToggleModule
 ];
 @NgModule({
   declarations: [
@@ -56,12 +67,16 @@ const MaterialModules = [
     MapComponent,
     ConnectionComponent,
     QueryInputComponent,
-    QueryButtonComponent
+    QueryButtonComponent,
+    GeoInputComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     HttpClientModule,
     NgxLongPress2Module,
+    FormsModule,
+    ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
@@ -76,6 +91,10 @@ const MaterialModules = [
       provide: HTTP_INTERCEPTORS,
       useClass: ApiService,
       multi: true,
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { subscriptSizing: 'dynamic' },
     },
     WebsocketService
   ],

@@ -33,10 +33,11 @@
 </mat-toolbar>
 <div
     class="container main"
+    [class.fullview]="fullview"
     [locationbg]="$background | async"
 >
     <section>
-        <app-ipinfo
+        <!-- <app-ipinfo
             [lookup]="lookup"
             *ngIf="$lookup | async as lookup"
             [class.fullview]="fullview"
@@ -49,7 +50,7 @@
             *ngIf="$location | async as location"
             [class.fullview]="fullview"
             [class.inactive]="mode!=queryMode.GPS"
-        ></app-locationinfo>
+        ></app-locationinfo> -->
     </section>
-
+    <router-outlet></router-outlet>
 </div>

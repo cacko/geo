@@ -1,4 +1,4 @@
-import { now } from "lodash-es";
+import { now, toNumber } from "lodash-es";
 import { LocationEntity } from "../entity/location.entity";
 
 export class LocationModel implements LocationEntity {
@@ -33,6 +33,16 @@ export class LocationModel implements LocationEntity {
         const ts = now().toString();
         this.background = `${this.location.join(",")}/${ts}`;
         return true;
+    }
+
+    static isGPS(query: string): boolean {
+        return /(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/.test(query);
+    }
+
+    static parseGPS(query: string): [number, number] {
+        const match = /(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/.exec(query);
+        return (match ? [match[1], match[2]].map(toNumber) : [0, 0]) as [number, number];
+
     }
 
 }
