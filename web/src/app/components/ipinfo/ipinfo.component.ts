@@ -1,12 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LookupEntity } from 'src/app/entity/lookup.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { MapComponent } from '../map/map.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LookupModel } from 'src/app/models/lookup.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/service/api.service';
 import { ApiType } from 'src/app/entity/api.entity';
+import { Title } from '@angular/platform-browser';
+import { StorageService } from 'src/app/service/storage.service';
+
 @Component({
   selector: 'app-ipinfo',
   templateUrl: './ipinfo.component.html',
@@ -14,24 +17,30 @@ import { ApiType } from 'src/app/entity/api.entity';
 })
 export class IPInfoComponent implements OnInit {
 
-  lookup ?: LookupModel;
+  lookup?: LookupModel;
   img_url = "loading.png";
-  gps ?: string;
+  gps?: string;
   title = "ip";
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private acitivatedRoute: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private titleService: Title,
+    private storage: StorageService,
+    private router: Router
   ) {
 
   }
 
   ngOnInit(): void {
-
-    this.acitivatedRoute.params.subscribe(params => {
-      this.updateGeoIP(params["ip"]);
+    this.acitivatedRoute.params.subscribe((params) => {
+      const ip = params["ip"] || this.storage.myip;
+      if (this.storage.autoMode && ip != this.storage.myip) {
+        return this.router.navigate(["ip", this.storage.myip]);
+      }
+      return this.updateGeoIP(ip);
     });
 
 
@@ -47,6 +56,7 @@ export class IPInfoComponent implements OnInit {
         this.gps = `${location[0]},${location[1]}`;
         this.api.backgroundSubject.next(model.background);
         this.api.lookupSubject.next(this.lookup);
+        this.titleService.setTitle(`${model.ip}`);
       })
       .catch((err) => { });
   }

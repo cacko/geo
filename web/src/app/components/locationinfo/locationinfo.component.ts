@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/service/api.service';
 import { LocationEntity } from 'src/app/entity/location.entity';
 import { ApiType } from 'src/app/entity/api.entity';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-locationinfo',
   templateUrl: './locationinfo.component.html',
@@ -17,12 +18,14 @@ export class LocationinfoComponent implements OnInit {
   location?: LocationModel;
   img_url = "loading.png";
   gps?: string;
+  title : string = "geo@location";
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private titleService: Title
   ) {
 
   }
@@ -48,6 +51,7 @@ export class LocationinfoComponent implements OnInit {
         this.api.locationSubject.next(this.location);
         this.api.backgroundSubject.next(model.background);
         this.gps = model.background
+        this.titleService.setTitle(`${model.name}`);
       })
       .catch((err) => { });
   }
@@ -62,6 +66,8 @@ export class LocationinfoComponent implements OnInit {
         this.api.locationSubject.next(this.location);
         this.api.backgroundSubject.next(model.background);
         this.gps = model.background;
+        this.titleService.setTitle(`${model.name}`);
+
       })
       .catch((err) => { });
   }

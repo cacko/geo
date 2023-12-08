@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
 import { ActivatedRoute, EventType, Router } from "@angular/router";
 import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { StorageService } from "./service/storage.service";
 
 
 
@@ -25,15 +26,11 @@ import { MatButtonToggleChange } from "@angular/material/button-toggle";
 })
 export class AppComponent implements OnInit {
 
-
-
   error = false;
   online = true;
   fullview = false;
   queryMode = QueryMode;
   isToggled = false;
-  mode: QueryMode = QueryMode.IP;
-  isAutoMode: boolean = true;
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
@@ -41,13 +38,12 @@ export class AppComponent implements OnInit {
   $lookup = this.api.$lookup;
   $location = this.api.$location;
   page = this.activatedRoute.title;
-  myIp?: string;
 
   private currentLookup?: LookupModel;
   private currentLocation?: LocationModel;
 
   constructor(
-    private api: ApiService,
+    public api: ApiService,
     private geoService: GeoLocationService,
     private swUpdate: SwUpdate,
     private ws: WebsocketService,
@@ -55,7 +51,8 @@ export class AppComponent implements OnInit {
     public loader: LoaderService,
     public dialog: MatDialog,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public storage: StorageService
   ) {
     if (!isDevMode()) {
       this.swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
@@ -78,9 +75,10 @@ export class AppComponent implements OnInit {
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
-          this.myIp = msg.content;
+          this.storage.myip = msg.content;
+          this.storage.myip = msg.content;
           this.router.routerState.snapshot.url == "/" &&
-            this.router.navigate(['ip', this.myIp]);
+            this.router.navigate(['ip', this.storage.myip]);
       }
     });
     this.$location.subscribe(res => (this.currentLocation = res));
@@ -102,8 +100,8 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(res => {
       switch (res.type) {
         case EventType.ActivationEnd:
-          this.mode = res.snapshot.component?.name == "LocationinfoComponent" ? QueryMode.GPS : QueryMode.IP;
-          this.messages = [this.mode];
+          this.storage.mode = res.snapshot.component?.name == "LocationinfoComponent" ? QueryMode.GPS : QueryMode.IP;
+          this.messages = [this.storage.mode];
       }
     })
   }
@@ -124,7 +122,7 @@ export class AppComponent implements OnInit {
 
   onRenew() {
     this.loader.show();
-    switch (this.mode) {
+    switch (this.storage.mode) {
       case this.queryMode.GPS:
         this.currentLocation &&
           this.currentLocation?.renewBackground() &&
@@ -145,9 +143,9 @@ export class AppComponent implements OnInit {
 
   async onAutoMode($event: MatSlideToggleChange) {
     if ($event.checked) {
-      switch (this.mode) {
+      switch (this.storage.mode) {
         case this.queryMode.IP:
-          return this.router.navigate(["ip", this.myIp]);
+          return this.router.navigate(["ip", this.storage.myip]);
         case this.queryMode.GPS:
           return this.tryGeoLocation()
       }
@@ -174,7 +172,7 @@ export class AppComponent implements OnInit {
   async onModeSwitch($event: MatButtonToggleChange) {
     switch ($event.value) {
       case this.queryMode.GPS:
-        if (this.isAutoMode) {
+        if (this.storage.autoMode) {
           this.tryGeoLocation();
         } else if (this.currentLocation) {
           this.router.navigate(["location", this.currentLocation?.background]);
@@ -183,7 +181,7 @@ export class AppComponent implements OnInit {
         }
         break;
       case this.queryMode.IP:
-        this.router.navigate(["ip", this.currentLookup?.ip || this.myIp]);
+        this.router.navigate(["ip", this.currentLookup?.ip || this.storage.myip]);
     }
   }
 
@@ -199,10 +197,9 @@ export class AppComponent implements OnInit {
       delayFocusTrap: true,
       maxWidth: '800px',
       width: '80vw',
-      data: this.mode,
     });
     dialogRef.afterClosed().subscribe((input) => {
-      switch (this.mode) {
+      switch (this.storage.mode) {
         case this.queryMode.IP:
           return this.router.navigate(["ip", input]);
         case this.queryMode.GPS:

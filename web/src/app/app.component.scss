@@ -29,6 +29,7 @@
     &.loading {
       animation-name: loading;
       animation-duration: 4s;
+      animation-timing-function: linear;
       background-blend-mode: color-burn;
       animation-iteration-count: infinite;
       transition: background-color 1s;

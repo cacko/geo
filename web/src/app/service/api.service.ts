@@ -45,10 +45,10 @@ export class ApiService implements HttpInterceptor {
   locationSubject = new Subject<LocationModel>();
   $location = this.locationSubject.asObservable();
 
+
   constructor(
     private httpClient: HttpClient,
-    private loader: LoaderService,
-    private zone: NgZone
+    private loader: LoaderService
   ) { }
 
   intercept(

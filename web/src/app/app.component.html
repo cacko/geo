@@ -21,7 +21,7 @@
     <section right>
         <mat-button-toggle-group
         appearance="legacy"
-            [(ngModel)]="mode"
+            [ngModel]="storage.mode"
             (change)="onModeSwitch($event)"
         >
             <mat-button-toggle
@@ -38,7 +38,7 @@
             </mat-button-toggle>
         </mat-button-toggle-group>
         <mat-slide-toggle
-            [ngModel]="isAutoMode"
+            [ngModel]="storage.autoMode"
             (change)="onAutoMode($event)"
         >
         </mat-slide-toggle>
