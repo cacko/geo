@@ -1,3 +1,4 @@
+from email import message
 import ipaddress
 import logging
 from turtle import st
@@ -19,8 +20,11 @@ def get_remote_ip(req_ip, forward_ip=None):
     return req_ip
 
 def resolve_hostname(hostname: str) -> str:
-    assert validators.hostname(hostname, skip_ipv4_addr=True, skip_ipv6_addr=True)
-    return socket.gethostbyname(hostname)
+    try:
+        assert validators.hostname(hostname, skip_ipv4_addr=True, skip_ipv6_addr=True)
+        return socket.gethostbyname(hostname)
+    except (AssertionError, socket.gaierror) as e:
+        raise AssertionError(message=e.strerror)
 
 def get_ip_from_input(input: str) -> str:
     try:
