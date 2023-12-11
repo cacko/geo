@@ -20,7 +20,6 @@ export class StorageService {
 
   private fetch(key: string, def: any = null): any {
     const data = localStorage.getItem(key);
-    console.log(data);
     return data !== null ? JSON.parse(data) : def;
   }
 

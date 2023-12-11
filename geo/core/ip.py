@@ -1,7 +1,6 @@
 import ipaddress
 import logging
 from turtle import st
-from typing import Optional
 import validators
 import httpx
 import socket
@@ -28,4 +27,7 @@ def get_ip_from_input(input: str) -> str:
         assert validators.ip_address.ipv4(input)
         return input
     except AssertionError:
-        return resolve_hostname(input)    
+        try:
+            return resolve_hostname(input) 
+        except AssertionError as e:
+            raise e

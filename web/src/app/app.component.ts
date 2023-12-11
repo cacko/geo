@@ -74,7 +74,8 @@ export class AppComponent implements OnInit {
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
-          this.storage.myip = msg.content;
+          storage.myip = msg.content;
+          console.log("my ip is", storage.myip);
           if (this.router.routerState.snapshot.url == "/") {
             storage.mode = this.queryMode.IP;
             this.router.navigateByUrl(`ip/${this.storage.myip}`);
@@ -150,14 +151,13 @@ export class AppComponent implements OnInit {
   }
 
 
-  async onModeSwitch($event: MouseEvent) {
+  onModeSwitch($event: MouseEvent) {
     switch (this.storage.mode) {
       case this.queryMode.GPS:
         this.loader.show();
         return this.tryGeoLocation();
       case this.queryMode.IP:
-        this.loader.show();
-        return this.router.navigate(["ip", this.currentLookup?.ip || this.storage.myip]);
+        return this.router.navigate(["ip", this.storage.myip]);
       case this.queryMode.MANUAL:
         return this.openSearchDialog()
     }

@@ -21,9 +21,6 @@ export class WebsocketService {
 
   constructor() {
     this.connect();
-    if ('connection' in navigator) {
-      console.log(navigator.connection);
-    }
   }
 
   get URL(): string {
