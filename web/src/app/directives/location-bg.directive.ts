@@ -18,10 +18,10 @@ export class LocationBgDirective implements OnInit {
   }
 
   @HostListener('change') ngOnChanges() {
-    this.isLoading = true;
     if (!this.locationbg) {
       return this.setBackground("/bg/loading.webp");
     }
+    this.isLoading = true;
     const fetchParams = {
       path: `${this.locationbg}`,
     }
@@ -32,7 +32,7 @@ export class LocationBgDirective implements OnInit {
       this.isLoading = false;
 
     }).catch((err) => {
-
+      this.isLoading = false;
     });
   }
 

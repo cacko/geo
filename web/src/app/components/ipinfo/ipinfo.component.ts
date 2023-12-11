@@ -9,6 +9,7 @@ import { ApiService } from 'src/app/service/api.service';
 import { ApiType } from 'src/app/entity/api.entity';
 import { Title } from '@angular/platform-browser';
 import { StorageService } from 'src/app/service/storage.service';
+import { LoaderService } from 'src/app/service/loader.service';
 
 @Component({
   selector: 'app-ipinfo',
@@ -18,6 +19,7 @@ import { StorageService } from 'src/app/service/storage.service';
 export class IPInfoComponent implements OnInit {
 
   lookup?: LookupModel;
+  error: string = "";
   img_url = "loading.png";
   gps?: string;
   title = "ip";
@@ -29,18 +31,17 @@ export class IPInfoComponent implements OnInit {
     private api: ApiService,
     private titleService: Title,
     private storage: StorageService,
-    private router: Router
+    private loader: LoaderService
   ) {
 
   }
 
   ngOnInit(): void {
     this.acitivatedRoute.params.subscribe((params) => {
+      this.error = "";
       const ip = params["ip"] || this.storage.myip;
       return this.updateGeoIP(ip);
     });
-
-
   }
 
   private updateGeoIP(ip: string | null) {
@@ -55,7 +56,10 @@ export class IPInfoComponent implements OnInit {
         this.api.lookupSubject.next(this.lookup);
         this.titleService.setTitle(`${model.ip}`);
       })
-      .catch((err) => { });
+      .catch((err) => {
+        this.error = err.error.detail || "Error has occured";
+        this.loader.hide();
+       });
   }
 
   onCopy($ev: boolean) {

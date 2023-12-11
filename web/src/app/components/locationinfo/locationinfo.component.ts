@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/service/api.service';
 import { LocationEntity } from 'src/app/entity/location.entity';
 import { ApiType } from 'src/app/entity/api.entity';
 import { Title } from '@angular/platform-browser';
+import { LoaderService } from 'src/app/service/loader.service';
 @Component({
   selector: 'app-locationinfo',
   templateUrl: './locationinfo.component.html',
@@ -19,13 +20,15 @@ export class LocationinfoComponent implements OnInit {
   img_url = "loading.png";
   gps?: string;
   title : string = "geo@location";
+  error: string = "";
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private api: ApiService,
-    private titleService: Title
+    private titleService: Title,
+    private loader: LoaderService
   ) {
 
   }
@@ -33,6 +36,7 @@ export class LocationinfoComponent implements OnInit {
   ngOnInit(): void {
 
     this.activatedRoute.params.subscribe(params => {
+      this.error = "";
       const location = params["location"];
       if (LocationModel.isGPS(location)) {
         this.updateLocation(...LocationModel.parseGPS(location));
@@ -53,7 +57,10 @@ export class LocationinfoComponent implements OnInit {
         this.gps = model.background
         this.titleService.setTitle(`${model.name}`);
       })
-      .catch((err) => { });
+      .catch((err) => {
+        this.error = err.error.detail || "Error has occured";
+        this.loader.hide();
+       });
   }
 
 
@@ -69,7 +76,10 @@ export class LocationinfoComponent implements OnInit {
         this.titleService.setTitle(`${model.name}`);
 
       })
-      .catch((err) => { });
+      .catch((err) => { 
+        this.error = err.error.detail || "Error has occured";
+        this.loader.hide();
+      });
   }
 
 
@@ -101,7 +111,7 @@ export class LocationinfoComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.info(`Dialog result: ${result}`);
+      console.debug(`Dialog result: ${result}`);
     });
   }
 

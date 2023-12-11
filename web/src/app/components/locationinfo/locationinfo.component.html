@@ -1,48 +1,48 @@
-<div content-data *ngIf="location">
+<div content-data>
     <div
         row
-        *ngIf="location.name"
+        *ngIf="location?.name"
     >
         <div label>Place</div>
         <div value>
-            <span>{{ location.name }}</span>
+            <span>{{ location?.name }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="location.city"
+        *ngIf="location?.city"
     >
         <div label>City</div>
         <div value>
-            <span>{{ location.city }}</span>
+            <span>{{ location?.city }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="location.postCode"
+        *ngIf="location?.postCode"
     >
         <div label>Post Code</div>
         <div value>
-            <span>{{ location.postCode }}</span>
+            <span>{{ location?.postCode }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="location.country"
+        *ngIf="location?.country"
     >
         <div label>Country</div>
         <div value>
-            <span>{{ location.country }}</span>
+            <span>{{ location?.country }}</span>
             <app-flag
                 [isoCode]="location.country_iso"
-                *ngIf="location.country_iso"
+                *ngIf="location && location.country_iso"
             ></app-flag>
         </div>
     </div>
 
     <div
         row
-        *ngIf="location.subdivisions"
+        *ngIf="location?.subdivisions"
     >
         <div
             label
@@ -51,12 +51,12 @@
             Region
         </div>
         <div value>
-            <span>{{ location.subdivisions }}</span>
+            <span>{{ location?.subdivisions }}</span>
         </div>
     </div>
     <div
         row
-        *ngIf="location.location"
+        *ngIf="location?.location"
     >
         <div label>GPS</div>
         <div value>
@@ -79,11 +79,20 @@
     </div>
     <div
         row
-        *ngIf="location.timezone"
+        *ngIf="location?.timezone"
     >
         <div label>Timezone</div>
         <div value>
-            <span>{{ location.timezone }}</span>
+            <span>{{ location?.timezone }}</span>
+        </div>
+    </div>
+    <div row *ngIf="error">
+        <div label>Error</div>
+        <div
+            value
+            error
+        >
+            <span>{{ error }}</span>
         </div>
     </div>
 </div>

@@ -91,6 +91,9 @@
           cursor: pointer;
         }
       }
+      [error] {
+        color: mat.get-color-from-palette($warn);
+      }
     }
   }
 }
