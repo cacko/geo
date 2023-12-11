@@ -56,20 +56,20 @@ def read_gps(
         raise HTTPException(status_code=404)
 
 
-@router.get("/api/background/{ip}/{ts}", tags=["api"])
-@router.get("/api/background/{ip}", tags=["api"])
+@router.get("/api/background/{ip_gps}/{ts}", tags=["api"])
+@router.get("/api/background/{ip_gps}", tags=["api"])
 def route_background(
-    ip: str,
+    ip_gps: str,
     ts: Optional[int] = None
 ):
     try:
-        logging.info(ip)
+        logging.info(ip_gps)
         geo_info = None
-        if gps := PATTERN_GPS.search(ip):
+        if gps := PATTERN_GPS.search(ip_gps):
             lat, lng = map(float, gps.groups())
             geo_info = Coders.HERE.coder.from_gps(lat, lng)
         else:
-            geo_info = MaxMind.lookup(ip=ip)
+            geo_info = MaxMind.lookup(ip=ip_gps)
         image = LookupImage(geo=geo_info, ts=ts)
         image_path = image.path
         assert image_path
