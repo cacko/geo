@@ -36,13 +36,13 @@
             >
                 <mat-icon>my_location</mat-icon>
             </mat-button-toggle>
+            <mat-button-toggle
+                value="{{queryMode.MANUAL}}"
+                aria-label
+            >
+                <mat-icon>edit_note</mat-icon>
+            </mat-button-toggle>
         </mat-button-toggle-group>
-        <mat-slide-toggle
-            [ngModel]="storage.autoMode"
-            (change)="onAutoMode($event)"
-        >
-        </mat-slide-toggle>
-
         <app-error *ngIf="error"></app-error>
     </section>
 

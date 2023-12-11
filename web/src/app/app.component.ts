@@ -27,10 +27,8 @@ import { StorageService } from "./service/storage.service";
 export class AppComponent implements OnInit {
 
   error = false;
-  online = true;
   fullview = false;
   queryMode = QueryMode;
-  isToggled = false;
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
@@ -141,22 +139,8 @@ export class AppComponent implements OnInit {
   }
 
 
-  async onAutoMode($event: MatSlideToggleChange) {
-    if ($event.checked) {
-      switch (this.storage.mode) {
-        case this.queryMode.IP:
-          return this.router.navigate(["ip", this.storage.myip]);
-        case this.queryMode.GPS:
-          return this.tryGeoLocation()
-      }
-    } else {
-      this.openSearchDialog();
-    }
-
-  }
-
-
   tryGeoLocation() {
+
     this.geoService.getCurrentPosition().subscribe({
       next: (res: GeolocationPosition) => {
         this.router.navigate(["location", `${res.coords.latitude},${res.coords.longitude}`]);
@@ -172,16 +156,13 @@ export class AppComponent implements OnInit {
   async onModeSwitch($event: MatButtonToggleChange) {
     switch ($event.value) {
       case this.queryMode.GPS:
-        if (this.storage.autoMode) {
-          this.tryGeoLocation();
-        } else if (this.currentLocation) {
-          this.router.navigate(["location", this.currentLocation?.background]);
-        } else {
-          this.openSearchDialog();
-        }
-        break;
+        this.loader.show();
+        return this.tryGeoLocation();
       case this.queryMode.IP:
-        this.router.navigate(["ip", this.currentLookup?.ip || this.storage.myip]);
+        this.loader.show();
+        return this.router.navigate(["ip", this.currentLookup?.ip || this.storage.myip]);
+      case this.queryMode.MANUAL:
+        return this.openSearchDialog()
     }
   }
 
@@ -199,12 +180,12 @@ export class AppComponent implements OnInit {
       width: '80vw',
     });
     dialogRef.afterClosed().subscribe((input) => {
-      switch (this.storage.mode) {
-        case this.queryMode.IP:
-          return this.router.navigate(["ip", input]);
-        case this.queryMode.GPS:
-          return this.router.navigate(["location", input]);
-      }
+      // switch (this.storage.mode) {
+      //   case this.queryMode.IP:
+      //     return this.router.navigate(["ip", input]);
+      //   case this.queryMode.GPS:
+      //     return this.router.navigate(["location", input]);
+      // }
     });
   }
 

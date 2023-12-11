@@ -7,6 +7,7 @@ import logging
 from geo.geo.lookup_image import LookupImage
 from geo.config import app_config
 from geo.geo.models import GeoInfo
+from geo.core.ip import get_ip_from_input
 import re
 
 PATTERN_GPS = re.compile(r"(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)")
@@ -15,11 +16,11 @@ router = APIRouter()
 
 
 @router.get("/api/ip/{ip}", tags=["api"])
-def read_lookup(
+def read_ip(
     ip: str,
 ):
     try:
-        assert validators.ip_address.ipv4(ip)
+        ip = get_ip_from_input(ip)
         res = MaxMind.lookup(ip)
         if res.location:
             coder_res = Coders.HERE.coder.from_gps(*res.location)
@@ -27,6 +28,7 @@ def read_lookup(
         return res.model_dump()
     except AssertionError:
         raise HTTPException(status_code=404)
+
 
 
 @router.get("/api/address/{address:path}", tags=["api"])

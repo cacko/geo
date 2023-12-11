@@ -7,7 +7,6 @@ import { QueryMode } from '../entity/api.entity';
 export class StorageService {
 
   private _myIp = "";
-  private _autoMode = true;
   private _mode: QueryMode = QueryMode.IP;
   constructor(
 
@@ -20,15 +19,6 @@ export class StorageService {
   get myip() {
     return this._myIp
   }
-
-  set autoMode(value: boolean) {
-    this._autoMode = value;
-  }
-
-  get autoMode() {
-    return this._autoMode;
-  }
-
 
   set mode(value: QueryMode) {
     this._mode = value;

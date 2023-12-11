@@ -37,9 +37,6 @@ export class IPInfoComponent implements OnInit {
   ngOnInit(): void {
     this.acitivatedRoute.params.subscribe((params) => {
       const ip = params["ip"] || this.storage.myip;
-      if (this.storage.autoMode && ip != this.storage.myip) {
-        return this.router.navigate(["ip", this.storage.myip]);
-      }
       return this.updateGeoIP(ip);
     });
 

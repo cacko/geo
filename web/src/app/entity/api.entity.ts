@@ -8,4 +8,5 @@ export enum ApiType {
 export enum QueryMode {
     IP = "ip",
     GPS = "gps",
+    MANUAL = "manual"
   }
