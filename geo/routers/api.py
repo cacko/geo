@@ -1,5 +1,6 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException
+from geo.core import IPError
 from geo.geo.maxmind import MaxMind
 from geo.geo.geocoder import Coders
 import validators
@@ -26,8 +27,8 @@ def read_ip(
             coder_res = Coders.HERE.coder.from_gps(*res.location)
             res = GeoInfo(**{**res.model_dump(), **coder_res.model_dump()})
         return res.model_dump()
-    except AssertionError as e:
-        raise HTTPException(status_code=404, detail=e.__str__)
+    except IPError as e:
+        raise HTTPException(status_code=404, detail=e.message)
 
 
 

@@ -6,6 +6,8 @@ import validators
 import httpx
 import socket
 
+from geo.core import IPError
+
 
 def get_remote_ip(req_ip, forward_ip=None):
     try:
@@ -23,8 +25,10 @@ def resolve_hostname(hostname: str) -> str:
     try:
         assert validators.hostname(hostname, skip_ipv4_addr=True, skip_ipv6_addr=True)
         return socket.gethostbyname(hostname)
-    except (AssertionError, socket.gaierror) as e:
-        raise AssertionError(message=e.strerror)
+    except AssertionError as e:
+        raise IPError(message="Not valid input") 
+    except socket.gaierror as e:
+        raise IPError(message=e.strerror)
 
 def get_ip_from_input(input: str) -> str:
     try:
@@ -33,5 +37,5 @@ def get_ip_from_input(input: str) -> str:
     except AssertionError:
         try:
             return resolve_hostname(input) 
-        except AssertionError as e:
+        except IPError as e:
             raise e
