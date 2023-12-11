@@ -21,7 +21,7 @@
     <section right>
         <mat-button-toggle-group
             [(ngModel)]="storage.mode"
-            (change)="onModeSwitch($event)"
+            (click)="onModeSwitch($event)"
         >
             <mat-button-toggle
                 value="{{queryMode.IP}}"

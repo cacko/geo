@@ -15,6 +15,24 @@
     $map: $color-config,
     $key: background,
   );
+  .search-overlay { 
+    background-color: color.adjust(
+      mat.get-color-from-palette($background-palette, app-bar),
+      $alpha: -0.4
+    );
+  }
+  .search-backdrop {
+    background-color: color.adjust(
+      mat.get-color-from-palette($background-palette, app-bar),
+      $alpha: -0.4
+    );
+  }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    background-color: color.adjust(
+      mat.get-color-from-palette($background-palette, app-bar),
+      $alpha: -0.5
+    ) !important;
+  }
   app-geo-input {
     width: 100%;
     mat-form-field {
@@ -24,15 +42,22 @@
       }
     }
 
-    // .mat-mdc-text-field-wrapper.mdc-text-field {
-    //   background-color: color.adjust(
-    //     mat.get-color-from-palette($background-palette, app-bar),
-    //     $alpha: 0
-    //   );
-    // }
+    label {
+      width: 100%;
+      text-align: center !important;
+    }
+
+    .mat-mdc-text-field-wrapper.mdc-text-field {
+      background-color: color.adjust(
+        mat.get-color-from-palette($background-palette, app-bar),
+        $alpha: -0.5 
+      );
+    }
 
     .mat-mdc-input-element {
-      font-size: 2rem !important;
+      font-size: 1.6rem !important;
+      line-height: 1.8rem;
+      text-align: center;
     }
   }
 }

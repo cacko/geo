@@ -3,9 +3,11 @@
     (ngSubmit)="submitForm()"
 >
     <mat-form-field>
-        <mat-label>type command</mat-label>
+        <mat-label ali>IP,Hostname,Address or Goordinates</mat-label>
         <input
             matInput
+            spellcheck="false"
+            autocomplete="off" 
             [formControl]="geoInput"
         >
     </mat-form-field>

@@ -78,6 +78,8 @@ export class AppComponent implements OnInit {
           if (this.router.routerState.snapshot.url == "/") {
             storage.mode = this.queryMode.IP;
             this.router.navigateByUrl(`ip/${this.storage.myip}`);
+          } else {
+            storage.mode = this.queryMode.MANUAL;
           }
       }
     });
@@ -95,7 +97,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.loader.show();
+    this.loader.show();
   }
 
 
@@ -148,8 +150,8 @@ export class AppComponent implements OnInit {
   }
 
 
-  async onModeSwitch($event: MatButtonToggleChange) {
-    switch ($event.value) {
+  async onModeSwitch($event: MouseEvent) {
+    switch (this.storage.mode) {
       case this.queryMode.GPS:
         this.loader.show();
         return this.tryGeoLocation();
@@ -163,18 +165,23 @@ export class AppComponent implements OnInit {
 
   openSearchDialog() {
     // this.searching = true;
+    this.fullview = true;
     const dialogRef = this.dialog.open(GeoInputComponent, {
       panelClass: [
-        'search-overlay-desktop',
+        'search-overlay',
         'is-active',
       ],
       // position: this.isMobile ? { top: '0' } : {},
       backdropClass: 'search-backdrop',
       delayFocusTrap: true,
-      maxWidth: '800px',
-      width: '80vw',
+      maxWidth: '100%',
+      width: '100%',
     });
     dialogRef.afterClosed().subscribe((input) => {
+      this.fullview = false;
+      if (!input) {
+        return;
+      }
       if (LookupModel.isValidHostname(input)) {
         return this.router.navigate(["ip", input]);
       }
