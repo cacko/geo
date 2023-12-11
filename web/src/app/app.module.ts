@@ -38,6 +38,8 @@ import {
 } from '@angular/material/form-field';
 import { GeoInputComponent } from './components/geo-input/geo-input.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle'; 
+import { LoaderService } from './service/loader.service';
+import { StorageService } from './service/storage.service';
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -96,7 +98,9 @@ const MaterialModules = [
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { subscriptSizing: 'dynamic' },
     },
-    WebsocketService
+    WebsocketService,
+    LoaderService,
+    StorageService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

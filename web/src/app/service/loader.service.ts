@@ -7,9 +7,10 @@ import { Subject } from 'rxjs';
 export class LoaderService {
 
   private visibleSubject = new Subject<boolean>();
-  visible = this.visibleSubject.asObservable();
+  $visible = this.visibleSubject.asObservable();
 
-  constructor() { }
+  constructor() { 
+  }
 
   show() {
     this.visibleSubject.next(true);

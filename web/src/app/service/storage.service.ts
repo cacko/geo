@@ -6,26 +6,38 @@ import { QueryMode } from '../entity/api.entity';
 })
 export class StorageService {
 
-  private _myIp = "";
-  private _mode: QueryMode = QueryMode.IP;
+  readonly KEY_MYIP = "myip";
+  readonly KEY_MODE = "mode";
+
+
   constructor(
 
   ) { }
 
-  set myip(value: string) {
-    this._myIp = value;
+  private store(value: any, key: string) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  get myip() {
-    return this._myIp
+  private fetch(key: string, def: any = null): any {
+    const data = localStorage.getItem(key);
+    console.log(data);
+    return data !== null ? JSON.parse(data) : def;
+  }
+
+  set myip(value: string) {
+    this.store(value, this.KEY_MYIP);
+  }
+
+  get myip(): string {
+    return this.fetch(this.KEY_MYIP, "");
   }
 
   set mode(value: QueryMode) {
-    this._mode = value;
+    this.store(value, this.KEY_MODE);
   }
 
-  get mode() {
-    return this._mode;
+  get mode(): QueryMode {
+    return this.fetch(this.KEY_MODE, QueryMode.IP);
   }
 
 }

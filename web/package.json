@@ -23,6 +23,7 @@
     "@angular/service-worker": "^17.0.6",
     "angular-favicon": "^1.0.9",
     "create-hash": "^1.2.0",
+    "ip-regex": "^5.0.0",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
     "moment": "^2.29.4",

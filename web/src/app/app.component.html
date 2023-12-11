@@ -1,4 +1,4 @@
-<app-loader *ngIf="loader.visible | async"></app-loader>
+<app-loader *ngIf="$loading | async"></app-loader>
 <mat-toolbar>
     <section left>
         <button
@@ -20,8 +20,7 @@
     <span class="spacer"></span>
     <section right>
         <mat-button-toggle-group
-        appearance="legacy"
-            [ngModel]="storage.mode"
+            [(ngModel)]="storage.mode"
             (change)="onModeSwitch($event)"
         >
             <mat-button-toggle

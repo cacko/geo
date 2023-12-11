@@ -59,9 +59,17 @@
         }
       }
     }
-    .mat-button-toggle-checked {
+    .mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
+    .mat-button-toggle-group-appearance-standard {
+      border: none;
+    }
+    .mat-button-toggle-group-appearance-standard
+      .mat-button-toggle-appearance-standard
+      + .mat-button-toggle-appearance-standard {
+      border: none;
+    }
+    .mat-button-toggle-appearance-standard {
       background-color: unset;
-      color: mat.get-color-from-palette($accent);
     }
   }
 }

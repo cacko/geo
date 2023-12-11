@@ -1,9 +1,9 @@
-import { Component, OnInit, HostListener, isDevMode } from "@angular/core";
+import { Component, OnInit, HostListener, isDevMode, NgZone } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { interval } from "rxjs";
+import { Observable, interval } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
   $background = this.api.$background;
   $lookup = this.api.$lookup;
   $location = this.api.$location;
+  $loading = this.loader.$visible;
   page = this.activatedRoute.title;
 
   private currentLookup?: LookupModel;
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public storage: StorageService
+    public storage: StorageService,
   ) {
     if (!isDevMode()) {
       this.swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
@@ -74,14 +75,14 @@ export class AppComponent implements OnInit {
       switch (msg.command) {
         case WSCommand.IP:
           this.storage.myip = msg.content;
-          this.storage.myip = msg.content;
-          this.router.routerState.snapshot.url == "/" &&
-            this.router.navigate(['ip', this.storage.myip]);
+          if (this.router.routerState.snapshot.url == "/") {
+            storage.mode = this.queryMode.IP;
+            this.router.navigateByUrl(`ip/${this.storage.myip}`);
+          }
       }
     });
     this.$location.subscribe(res => (this.currentLocation = res));
     this.$lookup.subscribe(res => (this.currentLookup = res));
-
   }
 
   sendMsg(source: string, content: string) {
@@ -94,14 +95,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loader.show();
-    this.router.events.subscribe(res => {
-      switch (res.type) {
-        case EventType.ActivationEnd:
-          this.storage.mode = res.snapshot.component?.name == "LocationinfoComponent" ? QueryMode.GPS : QueryMode.IP;
-          this.messages = [this.storage.mode];
-      }
-    })
+    // this.loader.show();
   }
 
 
@@ -120,7 +114,8 @@ export class AppComponent implements OnInit {
 
   onRenew() {
     this.loader.show();
-    switch (this.storage.mode) {
+    const mode = /\/ip\//.test(window.location.href) ? this.queryMode.IP : this.queryMode.GPS;
+    switch (mode) {
       case this.queryMode.GPS:
         this.currentLocation &&
           this.currentLocation?.renewBackground() &&
@@ -180,12 +175,10 @@ export class AppComponent implements OnInit {
       width: '80vw',
     });
     dialogRef.afterClosed().subscribe((input) => {
-      // switch (this.storage.mode) {
-      //   case this.queryMode.IP:
-      //     return this.router.navigate(["ip", input]);
-      //   case this.queryMode.GPS:
-      //     return this.router.navigate(["location", input]);
-      // }
+      if (LookupModel.isValidHostname(input)) {
+        return this.router.navigate(["ip", input]);
+      }
+      return this.router.navigate(["location", input]);
     });
   }
 
