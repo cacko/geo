@@ -14,7 +14,7 @@ from pathlib import Path
 from random import choice
 
 
-class LookupImageMEta(type):
+class LookupImageMeta(type):
     
     def __call__(cls, *args, **kwds):
         return type.__call__(cls, *args, **kwds)
@@ -29,7 +29,12 @@ class LookupImageMEta(type):
         masha_config = app_config.masha
         return f"http://{masha_config.host}:{masha_config.port}/{path}"
 
-class LookupImage(CachableFileImage, metaclass=LookupImageMEta):
+
+class BaseLookupImage(CachableFileImage):
+    pass
+
+
+class LookupImage(BaseLookupImage, metaclass=LookupImageMeta):
     def __init__(
         self,
         geo: Optional[GeoInfo | GeoLocation] = None,

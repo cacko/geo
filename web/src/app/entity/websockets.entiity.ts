@@ -7,10 +7,11 @@ export enum WSCommand {
   IP = "ip",
   PING = "ping",
   LOOKUP = "lookup",
-  BACKGROUND = "background"
+  BACKGROUND = "background",
+  STYLES = "styles"
 }
 
 export interface WSMessage {
   command: string;
-  content: string;
+  content: string[];
 }

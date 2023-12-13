@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
         case WSCommand.IP:
-          storage.myip = msg.content;
+          storage.myip = msg.content.shift() || "";
           console.log("my ip is", storage.myip);
           if (this.router.routerState.snapshot.url == "/") {
             storage.mode = this.queryMode.IP;
@@ -84,6 +84,10 @@ export class AppComponent implements OnInit {
           } else {
             storage.mode = this.queryMode.MANUAL;
           }
+          break;
+        case WSCommand.STYLES:
+          console.log(msg.content);
+          break;
       }
     });
     this.$location.subscribe(res => (this.currentLocation = res));
@@ -140,7 +144,7 @@ export class AppComponent implements OnInit {
 
   downloadImage(src: string) {
     this.download = "";
-    
+
     saveAs(src, `${this.titleService.getTitle()}.webp`);
     this.download = src;
   }
