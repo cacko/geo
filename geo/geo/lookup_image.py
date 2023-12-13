@@ -12,7 +12,7 @@ from geo.geo.models import GeoInfo, GeoLocation, ImageOptions
 from geo.config import app_config
 from pathlib import Path
 from random import choice
-from geo.image.api import ImageApi
+from geo.geo.image.api import ImageApi
 
 
 class LookupImage(CachableFileImage):
