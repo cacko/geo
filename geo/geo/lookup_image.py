@@ -77,9 +77,16 @@ class LookupImage(CachableFileImage):
             if len(found):
                 fp = choice(found)
                 logging.debug(f"found {fp}")
-                ts = fp.stem.split(".")[-1].replace(hash, "")
+                ts = fp.stem.split(".")[-1]
                 logging.debug(f"ts={ts}")
         return f"{hash}.{self.style}.{ts}.webp"
+    
+    @property
+    def isCached(self) -> bool:
+        trd = super().isCached
+        logging.warning(f"{self._path} -> {self._path.exists()}")
+        return trd
+
 
     @property
     def tags(self) -> str:
