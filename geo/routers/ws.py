@@ -1,6 +1,7 @@
 from fastapi import (
     APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 )
+from geo.geo.image.api import ImageApi
 from geo.geo.lookup_image import LookupImage
 from geo.config import app_config
 from pydantic import BaseModel
@@ -42,7 +43,7 @@ class ConnectionManager:
         await websocket.send_json(
             Message(
                 command=WSCommand.STYLES,
-                content=LookupImage.styles
+                content=ImageApi.styles
             ).model_dump()
         )
 

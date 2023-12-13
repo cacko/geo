@@ -12,29 +12,10 @@ from geo.geo.models import GeoInfo, GeoLocation, ImageOptions
 from geo.config import app_config
 from pathlib import Path
 from random import choice
+from geo.image.api import ImageApi
 
 
-class LookupImageMeta(type):
-    
-    def __call__(cls, *args, **kwds):
-        return type.__call__(cls, *args, **kwds)
-
-    @property
-    def styles(cls) -> list[str]:
-        res = Request(cls.endpoint(app_config.masha.api_options))
-        options = ImageOptions(**res.json)
-        return options.styles
-    
-    def endpoint(cls, path: str) -> str:
-        masha_config = app_config.masha
-        return f"http://{masha_config.host}:{masha_config.port}/{path}"
-
-
-class BaseLookupImage(CachableFileImage):
-    pass
-
-
-class LookupImage(BaseLookupImage, metaclass=LookupImageMeta):
+class LookupImage(CachableFileImage):
     def __init__(
         self,
         geo: Optional[GeoInfo | GeoLocation] = None,
@@ -48,7 +29,7 @@ class LookupImage(BaseLookupImage, metaclass=LookupImageMeta):
     @property
     def style(self) -> str:
         if not self._style:
-            self._style = choice(self.styles)
+            self._style = choice(ImageApi.styles)
         return self._style
 
     def tocache(self, image_data: bytes):
@@ -130,7 +111,7 @@ class LookupImage(BaseLookupImage, metaclass=LookupImageMeta):
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
         parts = [
-            self.__class__.endpoint(app_config.masha.api_gps2img),
+            ImageApi.endpoint(app_config.masha.api_gps2img),
             self.style,
             gps
         ]
