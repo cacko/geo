@@ -77,8 +77,11 @@ class LookupImage(CachableFileImage):
             if len(found):
                 fp = choice(found)
                 logging.debug(f"found {fp}")
-                ts = fp.stem.split(".")[-1]
-                logging.debug(f"ts={ts}")
+                stem_parts = fp.stem.split(".")
+                ts = stem_parts.pop()
+                style = stem_parts.pop()
+                if not self._style:
+                    self._style = style
         return f"{hash}.{self.style}.{ts}.webp"
     
     @property
