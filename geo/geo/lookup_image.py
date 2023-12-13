@@ -14,7 +14,22 @@ from pathlib import Path
 from random import choice
 
 
-class LookupImage(CachableFileImage):
+class LookupImageMEta(type):
+    
+    def __call__(cls, *args, **kwds):
+        return type.__call__(cls, *args, **kwds)
+
+    @property
+    def styles(cls) -> list[str]:
+        res = Request(cls.endpoint(app_config.masha.api_options))
+        options = ImageOptions(**res.json)
+        return options.styles
+    
+    def endpoint(cls, path: str) -> str:
+        masha_config = app_config.masha
+        return f"http://{masha_config.host}:{masha_config.port}/{path}"
+
+class LookupImage(CachableFileImage, metaclass=LookupImageMEta):
     def __init__(
         self,
         geo: Optional[GeoInfo | GeoLocation] = None,
@@ -103,22 +118,14 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
-    @property
-    def styles(self) -> list[str]:
-        res = Request(self.__endpoint(app_config.masha.api_options))
-        options = ImageOptions(**res.json)
-        return options.styles
 
-    def __endpoint(self, path: str) -> str:
-        masha_config = app_config.masha
-        return f"http://{masha_config.host}:{masha_config.port}/{path}"
 
     def __fetch(self):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
         parts = [
-            self.__endpoint(app_config.masha.api_gps2img),
+            self.__class__.endpoint(app_config.masha.api_gps2img),
             self.style,
             gps
         ]

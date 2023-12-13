@@ -15,11 +15,12 @@ class WSCommand(StrEnum):
     PING = "ping"
     LOOKUP = "lookup"
     BACKGROUND = "background"
+    STYLES = "styles"
 
 
 class Message(BaseModel):
     command: WSCommand
-    content: str
+    content: list[str]
 
 
 router = APIRouter()
@@ -35,7 +36,13 @@ class ConnectionManager:
         await websocket.send_json(
             Message(
                 command=WSCommand.IP,
-                content=get_remote_ip(websocket.headers.get("x-forwarded-for"))
+                content=[get_remote_ip(websocket.headers.get("x-forwarded-for"))]
+            ).model_dump()
+        )
+        await websocket.send_json(
+            Message(
+                command=WSCommand.STYLES,
+                content=LookupImage.styles
             ).model_dump()
         )
 
