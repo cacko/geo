@@ -67,6 +67,8 @@ export class IPInfoComponent implements OnInit {
       .open("GPS copied to clipboard", "Ok", { duration: 2000 })
   }
 
+
+
   onOpenMap($event: MouseEvent) {
     $event.preventDefault();
     const lookup = this.lookup as LookupModel;

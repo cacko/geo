@@ -10,6 +10,16 @@
             </mat-icon>
         </button>
         <button
+        mat-icon-button
+        (click)="downloadImage(download)"
+        [attr.download]="download"
+        [disabled]="download == ''"
+    >
+        <mat-icon>
+            download
+        </mat-icon>
+    </button>
+        <button
             mat-icon-button
             (click)="onRenew()"
         >
@@ -50,6 +60,7 @@
     class="container main"
     [class.fullview]="fullview"
     [locationbg]="$background | async"
+    (backgroundSrc)="onBackgroundSrc($event)"
 >
     <router-outlet></router-outlet>
 </div>

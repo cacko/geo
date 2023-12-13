@@ -15,9 +15,21 @@ from random import choice
 
 
 class LookupImage(CachableFileImage):
-    def __init__(self, geo: Optional[GeoInfo|GeoLocation] = None, ts: Optional[int] = None):
+    def __init__(
+        self,
+        geo: Optional[GeoInfo | GeoLocation] = None,
+        ts: Optional[int] = None,
+        style: Optional[str] = None,
+    ):
         self._ts = ts
         self._geo = geo
+        self._style = style
+
+    @property
+    def style(self) -> str:
+        if not self._style:
+            self._style = choice(self.styles)
+        return self._style
 
     def tocache(self, image_data: bytes):
         assert self._path
@@ -67,7 +79,7 @@ class LookupImage(CachableFileImage):
                 logging.debug(f"found {fp}")
                 ts = fp.stem.split(".")[-1].replace(hash, "")
                 logging.debug(f"ts={ts}")
-        return f"{hash}{ts}.webp"
+        return f"{hash}.{self.style}.{ts}.webp"
 
     @property
     def tags(self) -> str:
@@ -95,8 +107,12 @@ class LookupImage(CachableFileImage):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
-        style = choice(self.styles)
-        path = f"{self.__endpoint(app_config.masha.api_gps2img)}/{style}/{gps}"
+        parts = [
+            self.__endpoint(app_config.masha.api_gps2img),
+            self.style,
+            gps
+        ]
+        path = "/".join(parts)
         req = Request(path)
         is_multipart = req.is_multipart
         if is_multipart:

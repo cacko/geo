@@ -9,6 +9,8 @@ export class StorageService {
   readonly KEY_MYIP = "myip";
   readonly KEY_MODE = "mode";
 
+  private backgroundSrc ?: string
+
 
   constructor(
 

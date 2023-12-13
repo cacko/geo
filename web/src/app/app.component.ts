@@ -3,20 +3,20 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { Observable, interval } from "rxjs";
+import { interval } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
 import { LoaderService } from "./service/loader.service";
 import { GeoLocationService } from "./service/geo-location.service";
 import { LocationModel } from "./models/location.model";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
 import { ActivatedRoute, EventType, Router } from "@angular/router";
-import { MatButtonToggleChange } from "@angular/material/button-toggle";
 import { StorageService } from "./service/storage.service";
 
+import { saveAs } from 'file-saver';
+import { Title } from "@angular/platform-browser";
 
 
 @Component({
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
+  download: string = "";
   $background = this.api.$background;
   $lookup = this.api.$lookup;
   $location = this.api.$location;
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public storage: StorageService,
+    private titleService: Title
   ) {
     if (!isDevMode()) {
       this.swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
@@ -136,6 +138,16 @@ export class AppComponent implements OnInit {
     this.fullview = !this.fullview;
   }
 
+  downloadImage(src: string) {
+    this.download = "";
+    
+    saveAs(src, `${this.titleService.getTitle()}.webp`);
+    this.download = src;
+  }
+
+  onBackgroundSrc($event: string) {
+    this.download = $event;
+  }
 
   tryGeoLocation() {
 

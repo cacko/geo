@@ -56,11 +56,12 @@ def read_gps(
         raise HTTPException(status_code=404)
 
 
-@router.get("/api/background/{ip_gps}/{ts}", tags=["api"])
-@router.get("/api/background/{ip_gps}", tags=["api"])
-def route_background(
+@router.get("/api/streetview/{ip_gps}/{ts}", tags=["api"])
+@router.get("/api/streetview/{ip_gps}", tags=["api"])
+def route_streetview(
     ip_gps: str,
-    ts: Optional[int] = None
+    ts: Optional[int] = None,
+    
 ):
     try:
         logging.info(ip_gps)
