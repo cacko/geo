@@ -17,4 +17,5 @@ export interface LookupEntity {
 export interface BackgroundEntity {
   name: string;
   url: string;
+  style: string;
 }

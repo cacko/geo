@@ -78,6 +78,7 @@ def route_streetview(
         return {
             "name": image_path.name,
             "url": f"{app_config.web.backgrounds_path}/{image_path.name}",
+            "style": image.style
         }
     except AssertionError:
         raise HTTPException(status_code=502)

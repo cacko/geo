@@ -2,7 +2,7 @@ export enum ApiType {
     LOOKUP = 'ip',
     GPS = 'gps',
     ADDRESS = "address",
-    BACKGROUND = 'background'
+    BACKGROUND = 'streetview'
 }
 
 export enum QueryMode {
