@@ -78,7 +78,6 @@ export class AppComponent implements OnInit {
       switch (msg.command) {
         case WSCommand.IP:
           storage.myip = msg.content.shift() || "";
-          console.log("my ip is", storage.myip);
           if (this.router.routerState.snapshot.url == "/") {
             storage.mode = this.queryMode.IP;
             this.router.navigateByUrl(`ip/${this.storage.myip}`);
@@ -87,7 +86,6 @@ export class AppComponent implements OnInit {
           }
           break;
         case WSCommand.STYLES:
-          console.log(msg.content);
           break;
       }
     });

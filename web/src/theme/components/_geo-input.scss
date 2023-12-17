@@ -15,7 +15,7 @@
     $map: $color-config,
     $key: background,
   );
-  .search-overlay { 
+  .search-overlay {
     background-color: color.adjust(
       mat.get-color-from-palette($background-palette, app-bar),
       $alpha: -0.4
@@ -50,14 +50,23 @@
     .mat-mdc-text-field-wrapper.mdc-text-field {
       background-color: color.adjust(
         mat.get-color-from-palette($background-palette, app-bar),
-        $alpha: -0.5 
+        $alpha: -0.5
       );
     }
 
     .mat-mdc-input-element {
-      font-size: 1.6rem !important;
-      line-height: 1.8rem;
+      font-size: 1.8rem !important;
+      line-height: 2rem;
       text-align: center;
+    }
+
+    mat-form-field.mat-focused {
+      label {
+        width: 100%;
+        font-variant: small-caps;
+        text-transform: uppercase;
+        color: mat.get-color-from-palette($foreground-palette, text) !important;
+      }
     }
   }
 }
