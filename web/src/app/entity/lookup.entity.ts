@@ -3,6 +3,10 @@ export interface ISPEntity {
   id: number;
 }
 
+export enum LOOKUP_IMAGES {
+  LOADING="https://cdn.cacko.net/geo/loading.webp"
+}
+
 export interface LookupEntity {
   country?: string
   country_iso?: string

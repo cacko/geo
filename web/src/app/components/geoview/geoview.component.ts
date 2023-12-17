@@ -1,9 +1,10 @@
-import { Component, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { ElementRef, Input, Output, HostListener, HostBinding, EventEmitter } from '@angular/core';
 import { ApiType } from 'src/app/entity/api.entity';
-import { BackgroundEntity, BGMODE } from 'src/app/entity/lookup.entity';
+import { BackgroundEntity, BGMODE, LOOKUP_IMAGES } from 'src/app/entity/lookup.entity';
 import { ApiService } from 'src/app/service/api.service';
 import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
+import View360 from '@egjs/view360';
 
 @Component({
   selector: 'app-geoview',
@@ -11,32 +12,33 @@ import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
   styleUrl: './geoview.component.scss'
 })
 export class GeoviewComponent implements OnChanges {
-
+  @ViewChild("viewer") public view360!: View360;
 
   private diffusionSrc = "";
   private rawSrc = ""
 
   options: Partial<View360Options> = {
     projection: new EquirectProjection({
-      src: "/bg/loading.webp",
+      src: LOOKUP_IMAGES.LOADING
     })
   }
 
   @Output() backgroundSrc: EventEmitter<string> = new EventEmitter<string>();
-
   @Input() mode?: BGMODE | null;
-
   @Input() locationbg?: string | null;
 
   onModeChange() {
-    console.log(`mnde ${this.mode}`);
     this.setModeBackground();
   }
 
   onLocationBGChange() {
     this.backgroundSrc.emit("");
     if (!this.locationbg) {
-      return this.setBackground("/bg/loading.webp");
+      return this.setBackground(LOOKUP_IMAGES.LOADING);
+    }
+    console.log(this.diffusionSrc);
+    if (!this.diffusionSrc) {
+      this.setBackground(LOOKUP_IMAGES.LOADING);
     }
     this.isLoading = true;
     const fetchParams = {
@@ -49,7 +51,6 @@ export class GeoviewComponent implements OnChanges {
       this.rawSrc = data.raw_url;
       this.setModeBackground();
       this.isLoading = false;
-
     }).catch((err) => {
       this.isLoading = false;
     });
@@ -57,8 +58,6 @@ export class GeoviewComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(`locationbg ${this.locationbg}`);
-    console.log(changes);
     Object.keys(changes).forEach(changed => {
       switch (changed) {
         case "mode":
@@ -78,10 +77,10 @@ export class GeoviewComponent implements OnChanges {
   }
 
   ngOnInit(): void {
-    this.setBackground("/bg/loading.webp");
+    this.setBackground(LOOKUP_IMAGES.LOADING);
   }
 
-  protected setModeBackground() {
+  setModeBackground() {
     switch (this.mode) {
       case BGMODE.DIFFUSION:
         return this.setBackground(this.diffusionSrc);
@@ -90,13 +89,8 @@ export class GeoviewComponent implements OnChanges {
     }
   }
 
-  protected setBackground(src: string) {
-    this.options = {
-      ...this.options,
-      projection: new EquirectProjection({
-        src: src
-      })
-    };
+  setBackground(src: string) {
+    this.view360.load(new EquirectProjection({src}))
     this.backgroundSrc.emit(src);
   }
 
