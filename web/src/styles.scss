@@ -4,6 +4,7 @@
 @use "theme/components/query-button" as myquerybutton;
 @use "theme/components/toolbar" as mytoolbar;
 @use "theme/components/geo-input" as mygeoinput;
+@use "theme/components/geoview" as mygeoview;
 @use "sass:map";
 @include mat.core();
 
@@ -29,14 +30,16 @@ $mytheme: mat.define-dark-theme(
 @include mat.all-component-bases($mytheme);
 @include mat.all-component-colors($mytheme);
 @include mat.all-component-typographies($mytheme);
-
+@import "@egjs/view360/css/view360.min.css";
 @import "theme/components/app-truncate";
 @import "theme/components/spacer";
+
 @include myipinfo.apply-theme($mytheme);
 @include myquerybutton.apply-theme($mytheme);
 @include mylocationinfo.apply-theme($mytheme);
 @include mytoolbar.apply-theme($mytheme);
 @include mygeoinput.apply-theme($mytheme);
+@include mygeoview.apply-theme($mytheme);
 html {
   box-sizing: border-box;
   padding: 0;

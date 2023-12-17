@@ -1,13 +1,23 @@
-import { Directive, ElementRef, Input, Output, OnInit, HostListener, HostBinding, EventEmitter } from '@angular/core';
-import { ApiType } from '../entity/api.entity';
-import { BackgroundEntity, LookupEntity } from '../entity/lookup.entity';
-import { ApiService } from '../service/api.service';
-import { now } from 'lodash-es';
+import { Component } from '@angular/core';
+import { ElementRef, Input, Output,HostListener, HostBinding, EventEmitter } from '@angular/core';
+import { ApiType } from 'src/app/entity/api.entity';
+import { BackgroundEntity } from 'src/app/entity/lookup.entity';
+import { ApiService } from 'src/app/service/api.service';
+import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
 
-@Directive({
-  selector: '[locationbg]'
+@Component({
+  selector: 'app-geoview',
+  templateUrl: './geoview.component.html',
+  styleUrl: './geoview.component.scss'
 })
-export class LocationBgDirective implements OnInit {
+export class GeoviewComponent {
+
+  options: Partial<View360Options> = {
+    fov: 120,
+    projection: new EquirectProjection({
+      src: "/bg/loading.webp",
+    })
+  }
 
   @Output() backgroundSrc: EventEmitter<string> = new EventEmitter<string>();
   @Input() locationbg?: string | null;
@@ -43,8 +53,14 @@ export class LocationBgDirective implements OnInit {
   }
 
   protected setBackground(img: string) {
-    const src = `https://geo.cacko.net${img}`
-    this.el.nativeElement.style.backgroundImage = `url('${src}')`;
+    const src = `https://geo.cacko.net${img}`;
+
+    this.options = {
+      ...this.options,
+      projection: new EquirectProjection({
+        src: src
+      })
+    };
     this.backgroundSrc.emit(src);
   }
 

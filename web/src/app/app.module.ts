@@ -16,13 +16,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlagComponent } from './components/flag/flag.component';
 import { ErrorComponent } from './components/error/error.component';
-import { LocationBgDirective } from './directives/location-bg.directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapComponent } from './components/map/map.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ConnectionComponent } from './components/connection/connection.component';
 import { WebsocketService } from './service/websocket.service';
-import { NgxLongPress2Module } from 'ngx-long-press2';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { QueryInputComponent } from './components/query-input/query-input.component';
 import { QueryButtonComponent } from './components/query-button/query-button.component';
@@ -37,9 +35,11 @@ import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
 } from '@angular/material/form-field';
 import { GeoInputComponent } from './components/geo-input/geo-input.component';
-import {MatButtonToggleModule} from '@angular/material/button-toggle'; 
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoaderService } from './service/loader.service';
 import { StorageService } from './service/storage.service';
+import { NgxView360Module } from '@egjs/ngx-view360';
+import { GeoviewComponent } from './components/geoview/geoview.component';
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -65,18 +65,18 @@ const MaterialModules = [
     LoaderComponent,
     FlagComponent,
     ErrorComponent,
-    LocationBgDirective,
     MapComponent,
     ConnectionComponent,
     QueryInputComponent,
     QueryButtonComponent,
-    GeoInputComponent
+    GeoInputComponent, 
+    GeoviewComponent
   ],
   imports: [
     BrowserModule,
+    NgxView360Module,
     AppRoutingModule,
     HttpClientModule,
-    NgxLongPress2Module,
     FormsModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

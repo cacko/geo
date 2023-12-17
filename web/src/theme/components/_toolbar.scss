@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 @use "sass:color";
+@use "../mixins.scss" as mix;
 
 @mixin apply-theme($theme) {
   $color-config: mat.get-color-config($theme);
@@ -17,11 +18,19 @@
       position: fixed;
       top: 0;
       left: 0;
+      z-index: 1;
       padding: 0 !important;
       background: color.adjust(
         mat.get-color-from-palette($background-palette, app-bar),
         $alpha: -1
       );
+      &.fullview {
+        section[right],
+        section[left] button:not([fullview]) {
+          @include mix.fullview();
+        }
+        background: transparent;
+      }
 
       section {
         height: 49px;
@@ -47,6 +56,16 @@
             $alpha: -0.2
           );
           cursor: pointer;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        background: color.adjust(
+          mat.get-color-from-palette($background-palette, app-bar),
+          $alpha: -0.4
+        );
+        section {
+          background: transparent;
         }
       }
 

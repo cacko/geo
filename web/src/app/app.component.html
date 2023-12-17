@@ -1,8 +1,9 @@
 <app-loader *ngIf="$loading | async"></app-loader>
-<mat-toolbar>
+<mat-toolbar [class.fullview]="fullview">
     <section left>
         <button
             mat-icon-button
+            fullview
             (click)="onFullView()"
         >
             <mat-icon>
@@ -10,15 +11,12 @@
             </mat-icon>
         </button>
         <button
-        mat-icon-button
-        (click)="downloadImage(download)"
-        [attr.download]="download"
-        [disabled]="download == ''"
-    >
-        <mat-icon>
-            download
-        </mat-icon>
-    </button>
+            *ngIf="($download | async) as download"
+            mat-icon-button
+            (click)="downloadImage(download)"
+        >
+            <mat-icon>download</mat-icon>
+        </button>
         <button
             mat-icon-button
             (click)="onRenew()"
@@ -59,8 +57,10 @@
 <div
     class="container main"
     [class.fullview]="fullview"
-    [locationbg]="$background | async"
-    (backgroundSrc)="onBackgroundSrc($event)"
 >
+    <app-geoview
+        [locationbg]="$background | async"
+        (backgroundSrc)="downloadSubject.next($event)"
+    ></app-geoview>
     <router-outlet></router-outlet>
 </div>

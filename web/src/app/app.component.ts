@@ -1,9 +1,9 @@
-import { Component, OnInit, HostListener, isDevMode, NgZone } from "@angular/core";
+import { Component, OnInit, HostListener, isDevMode, NgZone, EventEmitter } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { interval } from "rxjs";
+import { Observable, Subject, Subscription, interval } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
@@ -18,7 +18,6 @@ import { StorageService } from "./service/storage.service";
 import { saveAs } from 'file-saver';
 import { Title } from "@angular/platform-browser";
 
-
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -32,7 +31,6 @@ export class AppComponent implements OnInit {
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
-  download: string = "";
   $background = this.api.$background;
   $lookup = this.api.$lookup;
   $location = this.api.$location;
@@ -41,6 +39,9 @@ export class AppComponent implements OnInit {
 
   private currentLookup?: LookupModel;
   private currentLocation?: LocationModel;
+
+  downloadSubject = new Subject<string>();
+  $download = this.downloadSubject.asObservable();
 
   constructor(
     public api: ApiService,
@@ -143,15 +144,15 @@ export class AppComponent implements OnInit {
   }
 
   downloadImage(src: string) {
-    this.download = "";
+    // this.download = "";
 
     saveAs(src, `${this.titleService.getTitle()}.webp`);
-    this.download = src;
+    // this.download = src;
   }
 
-  onBackgroundSrc($event: string) {
-    this.download = $event;
-  }
+  // onBackgroundSrc($event: string) {
+  //   this.download = $event;
+  // }
 
   tryGeoLocation() {
 

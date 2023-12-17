@@ -17,8 +17,7 @@
   );
   .container.main.fullview {
     #{$node} {
-      transition: background-color 0.2s ease-in-out;
-      opacity: 0;
+      @include misc.fullview();
     }
   }
   #{$node} {
