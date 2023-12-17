@@ -8,6 +8,7 @@ from corestring import string_hash
 from corefile import filepath
 from typing import Optional
 from PIL import Image
+from PIL.ExifTags import Base as TagNames
 from io import BytesIO
 from geo.geo.models import GeoInfo, GeoLocation, ImageOptions
 from geo.config import app_config
@@ -55,7 +56,7 @@ class LookupImage(CachableFileImage):
         if "raw_url" not in self._metadata:
             with Image.open(self.path) as img:
                 ex = img.getexif()
-                self._metadata["raw_url"] = ex.get("DocumentName")
+                self._metadata["raw_url"] = ex[TagNames.DocumentName]
         return self._metadata
 
     @property
