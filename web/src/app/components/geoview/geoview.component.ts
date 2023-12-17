@@ -24,6 +24,7 @@ export class GeoviewComponent implements OnChanges {
   }
 
   @Output() backgroundSrc: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onRenewFinished: EventEmitter<void> = new EventEmitter<void>();
   @Input() mode?: BGMODE | null;
   @Input() locationbg?: string | null;
 
@@ -36,10 +37,10 @@ export class GeoviewComponent implements OnChanges {
     if (!this.locationbg) {
       return this.setBackground(LOOKUP_IMAGES.LOADING);
     }
-    console.log(this.diffusionSrc);
+console.log(this.diffusionSrc);
     if (!this.diffusionSrc) {
-      this.setBackground(LOOKUP_IMAGES.LOADING);
-    }
+    this.setBackground(LOOKUP_IMAGES.LOADING);
+}
     this.isLoading = true;
     const fetchParams = {
       path: `${this.locationbg}`,

@@ -119,13 +119,19 @@ export class AppComponent implements OnInit {
       event.preventDefault();
       this.openSearchDialog();
     }
-    if (event.shiftKey && event.metaKey && event.key === "r") {
-      event.preventDefault();
-      this.onRenew();
-    }
-    if (event.shiftKey && event.metaKey && event.key === "f") {
-      event.preventDefault();
-      this.onFullView();
+    if (event.shiftKey && event.metaKey) {
+
+      switch (event.key) {
+        case "r":
+          event.preventDefault();
+          return this.onRenew();
+        case "f":
+          event.preventDefault();
+          return this.onFullView();
+        case "v":
+          event.preventDefault();
+          return this.onBgMode();
+      }
     }
   }
 
@@ -133,6 +139,8 @@ export class AppComponent implements OnInit {
   onRenew() {
     this.loader.show();
     const mode = /\/ip\//.test(window.location.href) ? this.queryMode.IP : this.queryMode.GPS;
+    this.bgModeSubject.next(BGMODE.DIFFUSION);
+    this.bgModes = [BGMODE.RAW, BGMODE.DIFFUSION];
     switch (mode) {
       case this.queryMode.GPS:
         this.currentLocation &&
@@ -159,10 +167,7 @@ export class AppComponent implements OnInit {
   }
 
   downloadImage(src: string) {
-    // this.download = "";
-
     saveAs(src, `${this.titleService.getTitle()}.webp`);
-    // this.download = src;
   }
 
   // onBackgroundSrc($event: string) {
