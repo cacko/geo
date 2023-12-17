@@ -20,3 +20,13 @@ export interface BackgroundEntity {
   raw_url: string;
   style: string;
 }
+
+export enum BGMODE {
+  DIFFUSION = "diffusion",
+  RAW = "raw"
+}
+
+export enum BGMODEICONS {
+  diffusion = "cruelty_free",
+  raw = "vrpano"
+}

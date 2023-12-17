@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { ElementRef, Input, Output,HostListener, HostBinding, EventEmitter } from '@angular/core';
+import { Component, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { ElementRef, Input, Output, HostListener, HostBinding, EventEmitter } from '@angular/core';
 import { ApiType } from 'src/app/entity/api.entity';
-import { BackgroundEntity } from 'src/app/entity/lookup.entity';
+import { BackgroundEntity, BGMODE } from 'src/app/entity/lookup.entity';
 import { ApiService } from 'src/app/service/api.service';
 import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
 
@@ -10,7 +10,11 @@ import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
   templateUrl: './geoview.component.html',
   styleUrl: './geoview.component.scss'
 })
-export class GeoviewComponent {
+export class GeoviewComponent implements OnChanges {
+
+
+  private diffusionSrc = "";
+  private rawSrc = ""
 
   options: Partial<View360Options> = {
     projection: new EquirectProjection({
@@ -19,15 +23,17 @@ export class GeoviewComponent {
   }
 
   @Output() backgroundSrc: EventEmitter<string> = new EventEmitter<string>();
+
+  @Input() mode?: BGMODE | null;
+
   @Input() locationbg?: string | null;
-  @HostBinding('class.loading') isLoading = false;
-  constructor(
-    private api: ApiService,
-    private el: ElementRef,
-  ) {
+
+  onModeChange() {
+    console.log(`mnde ${this.mode}`);
+    this.setModeBackground();
   }
 
-  @HostListener('change') ngOnChanges() {
+  onLocationBGChange() {
     this.backgroundSrc.emit("");
     if (!this.locationbg) {
       return this.setBackground("/bg/loading.webp");
@@ -39,7 +45,9 @@ export class GeoviewComponent {
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
       let imgeUrl = data.url;
-      this.setBackground(imgeUrl);
+      this.diffusionSrc = `https://geo.cacko.net${imgeUrl}`;
+      this.rawSrc = data.raw_url;
+      this.setModeBackground();
       this.isLoading = false;
 
     }).catch((err) => {
@@ -47,13 +55,42 @@ export class GeoviewComponent {
     });
   }
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(`locationbg ${this.locationbg}`);
+    console.log(changes);
+    Object.keys(changes).forEach(changed => {
+      switch (changed) {
+        case "mode":
+          return this.onModeChange();
+        case "locationbg":
+          return this.onLocationBGChange();
+      }
+    })
+  }
+
+
+  @HostBinding('class.loading') isLoading = false;
+  constructor(
+    private api: ApiService,
+    private el: ElementRef,
+  ) {
+  }
+
   ngOnInit(): void {
     this.setBackground("/bg/loading.webp");
   }
 
-  protected setBackground(img: string) {
-    const src = `https://geo.cacko.net${img}`;
+  protected setModeBackground() {
+    switch (this.mode) {
+      case BGMODE.DIFFUSION:
+        return this.setBackground(this.diffusionSrc);
+      case BGMODE.RAW:
+        return this.setBackground(this.rawSrc);
+    }
+  }
 
+  protected setBackground(src: string) {
     this.options = {
       ...this.options,
       projection: new EquirectProjection({

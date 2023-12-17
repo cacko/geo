@@ -52,6 +52,10 @@ class LookupImage(CachableFileImage):
     
     @property
     def metadata(self):
+        if "raw_url" not in self._metadata:
+            with Image.open(self.path) as img:
+                ex = img.getexif()
+                self._metadata["raw_url"] = ex.get("DocumentName")
         return self._metadata
 
     @property

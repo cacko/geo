@@ -11,6 +11,8 @@ export enum WSCommand {
   STYLES = "styles"
 }
 
+
+
 export interface WSMessage {
   command: string;
   content: string[];

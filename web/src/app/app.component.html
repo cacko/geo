@@ -11,6 +11,15 @@
             </mat-icon>
         </button>
         <button
+            mat-icon-button
+            bgmode
+            (click)="onBgMode()"
+        >
+            <mat-icon *ngIf="($bgMode | async) as mode">
+                {{BG_MODE_ICONS[mode]}}
+            </mat-icon>
+        </button>
+        <button
             *ngIf="($download | async) as download"
             mat-icon-button
             (click)="downloadImage(download)"
@@ -60,6 +69,7 @@
 >
     <app-geoview
         [locationbg]="$background | async"
+        [mode]="$bgMode | async"
         (backgroundSrc)="downloadSubject.next($event)"
     ></app-geoview>
     <router-outlet></router-outlet>

@@ -3,7 +3,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { Observable, Subject, Subscription, interval } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription, interval } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
@@ -17,6 +17,7 @@ import { StorageService } from "./service/storage.service";
 
 import { saveAs } from 'file-saver';
 import { Title } from "@angular/platform-browser";
+import { BGMODE, BGMODEICONS } from "./entity/lookup.entity";
 
 @Component({
   selector: "app-root",
@@ -28,6 +29,8 @@ export class AppComponent implements OnInit {
   error = false;
   fullview = false;
   queryMode = QueryMode;
+  BG_MODE_ICONS = BGMODEICONS;
+  bgModes = [BGMODE.RAW, BGMODE.DIFFUSION];
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
   icons: string[] = ['location_disabled', 'my_location'];
@@ -42,6 +45,9 @@ export class AppComponent implements OnInit {
 
   downloadSubject = new Subject<string>();
   $download = this.downloadSubject.asObservable();
+
+  bgModeSubject = new BehaviorSubject<BGMODE>(BGMODE.DIFFUSION);
+  $bgMode = this.bgModeSubject.asObservable();
 
   constructor(
     public api: ApiService,
@@ -143,6 +149,13 @@ export class AppComponent implements OnInit {
   }
   onFullView() {
     this.fullview = !this.fullview;
+  }
+
+  onBgMode() {
+    const next = this.bgModes.shift() || BGMODE.DIFFUSION;
+    console.log(next);
+    this.bgModes.push(next);
+    this.bgModeSubject.next(next);
   }
 
   downloadImage(src: string) {
