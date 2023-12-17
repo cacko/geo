@@ -117,6 +117,10 @@ export class AppComponent implements OnInit {
       event.preventDefault();
       this.onRenew();
     }
+    if (event.shiftKey && event.metaKey && event.key === "f") {
+      event.preventDefault();
+      this.onFullView();
+    }
   }
 
 

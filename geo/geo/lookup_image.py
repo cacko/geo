@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 from cachable.storage.filestorage.image import CachableFileImage
@@ -25,6 +26,7 @@ class LookupImage(CachableFileImage):
         self._ts = ts
         self._geo = geo
         self._style = style
+        self._metadata = {}
 
     @property
     def style(self) -> str:
@@ -47,6 +49,10 @@ class LookupImage(CachableFileImage):
     @property
     def storage(self):
         return FileStorage
+    
+    @property
+    def metadata(self):
+        return self._metadata
 
     @property
     def name(self) -> str:
@@ -127,6 +133,8 @@ class LookupImage(CachableFileImage):
                 if content_type.startswith("image"):
                     assert self._path
                     self._path.write_bytes(part.content)
+                else:
+                    self._metadata = json.loads(part.content)
 
 
 class LoadingImage(LookupImage):

@@ -13,12 +13,6 @@ import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
 export class GeoviewComponent {
 
   options: Partial<View360Options> = {
-    initialYaw: 0,
-    initialPitch: 0,
-    initialZoom: 0,
-    zoom: {
-      scale: 1
-    },
     projection: new EquirectProjection({
       src: "/bg/loading.webp",
     })
@@ -62,9 +56,6 @@ export class GeoviewComponent {
 
     this.options = {
       ...this.options,
-      initialYaw: 0,
-      initialPitch: 0,
-      initialZoom: 0,
       projection: new EquirectProjection({
         src: src
       })
