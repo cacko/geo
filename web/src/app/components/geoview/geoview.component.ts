@@ -20,6 +20,7 @@ export class GeoviewComponent implements OnChanges {
   private rawSrc = ""
 
   options: Partial<View360Options> = {
+    initialZoom: 0,
     projection: new EquirectProjection({
       src: LOOKUP_IMAGES.LOADING
     })

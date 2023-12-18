@@ -1,6 +1,69 @@
-footer {
+@use "sass:map";
+@use "sass:color";
+@use "@angular/material" as mat;
+@use "../mixins.scss" as mix;
+
+@mixin apply-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, primary);
+  $accent: map.get($color-config, accent);
+  $warn: map.get($color-config, warn);
+  $background-palette: map-get(
+    $map: $color-config,
+    $key: background,
+  );
+
+  footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 1rem;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    row-gap: 0.3rem;
+
+    [current-style] {
+        font-size: 1rem;
+        font-family: "Gloria Hallelujah", cursive;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    &.fullview {
+      section[right],
+      section[left] {
+        @include mix.fullview();
+      }
+      background: transparent;
+    }
+
+    section {
+      height: 49px;
+      display: flex;
+      align-items: center;
+      background: color.adjust(
+        mat.get-color-from-palette($background-palette, app-bar),
+        $alpha: -0.4
+      );
+      &[left] {
+        border-top-right-radius: 1em;
+        border-bottom-right-radius: 1em;
+        padding-right: 1rem;
+      }
+      &[right] {
+        border-top-left-radius: 1em;
+        border-bottom-left-radius: 1em;
+        padding: 0 1em;
+        column-gap: 0.4em;
+      }
+      &:hover {
+        background-color: color.adjust(
+          mat.get-color-from-palette($background-palette, app-bar),
+          $alpha: -0.2
+        );
+        cursor: pointer;
+      }
+    }
+  }
 }

@@ -77,24 +77,36 @@
     ></app-geoview>
     <router-outlet></router-outlet>
 </div>
-<footer mat-toolbar>
-    <button
-        mat-icon-button
-        [matMenuTriggerFor]="stymenu"
-    >
-        <mat-icon
-            [matBadge]="storage.style.length"
-            matBadgeColor="warn"
-            [matBadgeHidden]="storage.style.length == 0"
-            fontIcon="dresser"
-            aria-hidden="false"
-        ></mat-icon>
-    </button>
-    <mat-menu #stymenu="matMenu">
-        <app-styles
-            [selected]="storage.style"
-            (change)="onStyleChange($event)"
-            (click)="$event.stopPropagation();"
-        ></app-styles>
-    </mat-menu>
+<footer
+    mat-toolbar
+    [class.fullview]="fullview"
+>
+    <section left>
+        <button
+            mat-icon-button
+            [matMenuTriggerFor]="stymenu"
+        >
+            <mat-icon
+                [matBadge]="storage.style.length"
+                matBadgeColor="warn"
+                [matBadgeHidden]="storage.style.length == 0"
+                fontIcon="dresser"
+                aria-hidden="false"
+            ></mat-icon>
+        </button>
+        <mat-menu #stymenu="matMenu">
+            <app-styles
+                [selected]="storage.style"
+                (change)="onStyleChange($event)"
+                (click)="$event.stopPropagation();"
+            ></app-styles>
+        </mat-menu>
+        <div
+            current-style
+            *ngIf="diffusionStyle"
+        >
+            {{diffusionStyle}}
+        </div>
+    </section>
+
 </footer>
