@@ -60,7 +60,7 @@ class LookupImage(CachableFileImage):
     def metadata(self):
         if "raw_url" not in self._metadata:
             jsn = self.path.read_text()
-            self._metadata = LookupMetadata(**jsn)
+            self._metadata = LookupMetadata(**json.loads(jsn))
         return self._metadata
 
     @property
