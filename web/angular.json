@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "moment",
-              "md5"
+              "md5",
+              "file-saver"
            ],
             "outputPath": "dist/geo",
             "index": "src/index.html",

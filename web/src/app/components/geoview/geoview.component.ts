@@ -1,5 +1,5 @@
-import { Component, OnChanges, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
-import { ElementRef, Input, Output, HostListener, HostBinding, EventEmitter } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { ApiType } from 'src/app/entity/api.entity';
 import { BackgroundEntity, BGMODE, LOOKUP_IMAGES } from 'src/app/entity/lookup.entity';
 import { ApiService } from 'src/app/service/api.service';
@@ -78,7 +78,6 @@ export class GeoviewComponent implements OnChanges {
   @HostBinding('class.loading') isLoading = false;
   constructor(
     private api: ApiService,
-    private el: ElementRef,
     private storage: StorageService
   ) {
   }
@@ -97,7 +96,7 @@ export class GeoviewComponent implements OnChanges {
   }
 
   setBackground(src: string) {
-    this.view360.load(new EquirectProjection({src}))
+    this.view360.load(new EquirectProjection({ src }))
     this.backgroundSrc.emit(src);
   }
 
