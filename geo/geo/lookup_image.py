@@ -130,7 +130,7 @@ class LookupImage(CachableFileImage):
         path = "/".join(parts)
         req = Request(path)
         is_multipart = req.is_multipart
-        print(req.body)
+        logging.info(f"is multipark {is_multipart}")
         if is_multipart:
             multipart = req.multipart
             for part in multipart.parts:
@@ -141,11 +141,10 @@ class LookupImage(CachableFileImage):
                     assert self._path
                     self._path.write_bytes(part.content)
                 else:
-                    self._metadata = json.loads(part.content)
+                    self._metadata = LookupMetadata(**json.loads(part.content))
         else:
-            metadata = LookupMetadata(**json.loads(part.content))
-            self._path.write_text(metadata.url)
-            self._metadata = metadata
+            self._metadata  = LookupMetadata(**json.loads(part.content))
+        self._path.write_text(self._metadata.url)
 
 
 class LoadingImage(LookupImage):
