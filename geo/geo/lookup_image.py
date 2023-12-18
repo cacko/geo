@@ -45,8 +45,6 @@ class LookupImage(CachableFileImage):
 
     def tocache(self, image_data: bytes):
         assert self._path
-        im = Image.open(BytesIO(image_data))
-        im.save(self._path.as_posix())
 
     def post_init(self):
         self._path = self.cache_path / f"{self.store_key}"
@@ -130,7 +128,6 @@ class LookupImage(CachableFileImage):
         path = "/".join(parts)
         req = Request(path)
         is_multipart = req.is_multipart
-        logging.info(f"is multipark {is_multipart}")
         if is_multipart:
             multipart = req.multipart
             for part in multipart.parts:
@@ -143,10 +140,13 @@ class LookupImage(CachableFileImage):
                 else:
                     self._metadata = LookupMetadata(**json.loads(part.content))
         else:
+            logging.info(req.body)
             try:
                 self._metadata  = LookupMetadata(**json.loads(req.body))
             except json.JSONDecodeError as e:
                 logging.exception(e)
+        logging.info(self._path)
+        logging.info(self._metadata)
         self._path.write_text(self._metadata.url)
 
 
