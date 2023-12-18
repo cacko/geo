@@ -50,7 +50,9 @@ def read_gps(lat: float, lon: float, coder: Coders = Coders.HERE):
 @router.get("/api/streetview/{ip_gps}/{ts}", tags=["api"])
 @router.get("/api/streetview/{ip_gps}", tags=["api"])
 def route_streetview(
-    ip_gps: str, ts: Optional[int] = None, style: Optional[str] = None
+    ip_gps: str, 
+    ts: Optional[int] = None, 
+    style: str = None
 ):
     try:
         logging.info(ip_gps)
@@ -66,7 +68,7 @@ def route_streetview(
         assert image_path.exists()
         return {
             "name": image_path.name,
-            "url": f"{app_config.web.backgrounds_path}/{image_path.name}",
+            "url": image_path.read_text(),
             "style": image.style,
             "raw_url": image.metadata.get("raw_url", ""),
         }

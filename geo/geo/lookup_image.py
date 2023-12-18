@@ -10,11 +10,19 @@ from typing import Optional
 from PIL import Image
 from PIL.ExifTags import Base as TagNames
 from io import BytesIO
+
+from pydantic import BaseModel
 from geo.geo.models import GeoInfo, GeoLocation, ImageOptions
 from geo.config import app_config
 from pathlib import Path
 from random import choice
 from geo.geo.image.api import ImageApi
+
+
+class LookupMetadata(BaseModel):
+    url: str
+    raw_url: str
+    name: str
 
 
 class LookupImage(CachableFileImage):
@@ -50,7 +58,7 @@ class LookupImage(CachableFileImage):
     @property
     def storage(self):
         return FileStorage
-    
+
     @property
     def metadata(self):
         if "raw_url" not in self._metadata:
@@ -95,13 +103,12 @@ class LookupImage(CachableFileImage):
                 if not self._style:
                     self._style = style
         return f"{hash}.{self.style}.{ts}.webp"
-    
+
     @property
     def isCached(self) -> bool:
         trd = super().isCached
         logging.warning(f"{self._path} -> {self._path.exists()}")
         return trd
-
 
     @property
     def tags(self) -> str:
@@ -115,17 +122,11 @@ class LookupImage(CachableFileImage):
         except Exception:
             self._path = self.DEFAULT
 
-
-
     def __fetch(self):
         assert self._geo
         assert self._geo.location
         gps = ",".join(map(str, self._geo.location))
-        parts = [
-            ImageApi.endpoint(app_config.masha.api_gps2img),
-            self.style,
-            gps
-        ]
+        parts = [ImageApi.endpoint(app_config.masha.api_gps2img), self.style, gps]
         path = "/".join(parts)
         req = Request(path)
         is_multipart = req.is_multipart
@@ -140,6 +141,10 @@ class LookupImage(CachableFileImage):
                     self._path.write_bytes(part.content)
                 else:
                     self._metadata = json.loads(part.content)
+        else:
+            metadata = LookupMetadata(**json.loads(part.content))
+            self._path.write_text(metadata.url)
+            self._metadata = metadata
 
 
 class LoadingImage(LookupImage):

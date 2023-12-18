@@ -5,6 +5,8 @@ import { BackgroundEntity, BGMODE, LOOKUP_IMAGES } from 'src/app/entity/lookup.e
 import { ApiService } from 'src/app/service/api.service';
 import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
 import View360 from '@egjs/view360';
+import { StorageService } from 'src/app/service/storage.service';
+import { sample } from 'lodash-es';
 
 @Component({
   selector: 'app-geoview',
@@ -38,13 +40,13 @@ export class GeoviewComponent implements OnChanges {
     if (!this.locationbg) {
       return this.setBackground(LOOKUP_IMAGES.LOADING);
     }
-console.log(this.diffusionSrc);
     if (!this.diffusionSrc) {
-    this.setBackground(LOOKUP_IMAGES.LOADING);
-}
+      this.setBackground(LOOKUP_IMAGES.LOADING);
+    }
     this.isLoading = true;
     const fetchParams = {
       path: `${this.locationbg}`,
+      style: sample(this.storage.style) || sample(this.storage.styles)
     }
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
@@ -76,6 +78,7 @@ console.log(this.diffusionSrc);
   constructor(
     private api: ApiService,
     private el: ElementRef,
+    private storage: StorageService
   ) {
   }
 
