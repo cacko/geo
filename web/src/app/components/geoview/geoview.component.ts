@@ -51,7 +51,7 @@ export class GeoviewComponent implements OnChanges {
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
       let imgeUrl = data.url;
-      this.diffusionSrc = `https://geo.cacko.net${imgeUrl}`;
+      this.diffusionSrc = imgeUrl;
       this.rawSrc = data.raw_url;
       this.backgroundStyle.emit(data.style);
       this.setModeBackground();

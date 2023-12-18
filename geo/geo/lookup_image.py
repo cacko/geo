@@ -130,6 +130,7 @@ class LookupImage(CachableFileImage):
         path = "/".join(parts)
         req = Request(path)
         is_multipart = req.is_multipart
+        print(req.body)
         if is_multipart:
             multipart = req.multipart
             for part in multipart.parts:
