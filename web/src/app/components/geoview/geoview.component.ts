@@ -41,14 +41,18 @@ export class GeoviewComponent implements OnChanges {
     if (!this.locationbg) {
       return this.setBackground(LOOKUP_IMAGES.LOADING);
     }
-    if (!this.diffusionSrc) {
-      this.setBackground(LOOKUP_IMAGES.LOADING);
-    }
-    this.isLoading = true;
     const fetchParams = {
       path: `${this.locationbg}`,
-      style: sample(this.storage.style) || sample(this.storage.styles)
+      style: ""
     }
+    if (!this.diffusionSrc) {
+      this.setBackground(LOOKUP_IMAGES.LOADING);
+    } else if (this.storage.style) {
+      fetchParams.style = sample(this.storage.style) as string;
+
+    }
+    this.isLoading = true;
+
     this.api.fetch(ApiType.BACKGROUND, fetchParams, false).then((res) => {
       const data = res as BackgroundEntity;
       let imgeUrl = data.url;

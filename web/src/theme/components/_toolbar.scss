@@ -50,13 +50,16 @@
           padding: 0 1em;
           column-gap: 0.4em;
         }
-        &:hover {
-          background-color: color.adjust(
-            mat.get-color-from-palette($background-palette, app-bar),
-            $alpha: -0.2
-          );
-          cursor: pointer;
+        @media (hover: hover) {
+          &:hover {
+            background-color: color.adjust(
+              mat.get-color-from-palette($background-palette, app-bar),
+              $alpha: -0.2
+            );
+            cursor: pointer;
+          }
         }
+
       }
 
       @media (max-width: 575.98px) {

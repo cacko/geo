@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ErrorComponent } from './components/error/error.component';
 import { IPInfoComponent } from './components/ipinfo/ipinfo.component';
 import { LocationinfoComponent } from './components/locationinfo/locationinfo.component';
 
@@ -18,22 +17,16 @@ const routes: Routes = [
     pathMatch: 'full',
     title: "location"
   },
-//   {
-//     path: 'login',
-//     component: LoginComponent,
-//     pathMatch: 'full',
-//   },
-//   {
-//     path: 'privacy',
-//     component: PrivacyComponent,
-//     pathMatch: 'full',
-//   },
 ];
-
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {
+      enableTracing: false,
+      anchorScrolling: "enabled",
+      scrollPositionRestoration: "enabled",
+      useHash: true
+    })
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

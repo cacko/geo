@@ -1,3 +1,4 @@
+from h11 import Data
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 
@@ -14,6 +15,10 @@ class MaxmindConfig(BaseModel):
 class RedisConfig(BaseModel):
     cli: str
     url: str
+
+
+class DatabaseConfig(BaseModel):
+    uri: str
 
 
 class MashaConfig(BaseModel):
@@ -58,6 +63,7 @@ class Settings(BaseSettings):
     storage: StorageConfig
     geopy: GeoPyConfig
     masha: MashaConfig
+    database: DatabaseConfig
 
     class Config:
         env_nested_delimiter = "__"

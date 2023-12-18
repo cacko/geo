@@ -3,7 +3,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { BehaviorSubject, Observable, Subject, Subscription, interval } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription, interval, filter, pipe } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
@@ -12,7 +12,7 @@ import { GeoLocationService } from "./service/geo-location.service";
 import { LocationModel } from "./models/location.model";
 import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
-import { ActivatedRoute, EventType, Router } from "@angular/router";
+import { ActivatedRoute, EventType, NavigationStart, Router, RouterEvent } from "@angular/router";
 import { StorageService } from "./service/storage.service";
 
 import { saveAs } from 'file-saver';
@@ -86,6 +86,36 @@ export class AppComponent implements OnInit {
         this.swUpdate.checkForUpdate();
       });
     }
+
+    router.events
+      .pipe(
+        filter(
+          (event: any) =>
+            (event instanceof NavigationStart)
+
+        )
+      )
+      .subscribe({
+        next: (event: NavigationStart) => {
+          console.group("NavigationStart Event");
+          console.log("navigation id:", event.id);
+          console.log("route:", event.url);
+          console.log("trigger:", event.navigationTrigger);
+          if (event.restoredState) {
+            console.warn(
+              "restoring navigation id:",
+              event.restoredState.navigationId
+            );
+
+          }
+          console.groupEnd();
+        }, error: () => {
+
+        }
+
+      }
+      )
+      ;
 
     this.ws.messages.subscribe((msg) => {
       switch (msg.command) {
@@ -174,7 +204,6 @@ export class AppComponent implements OnInit {
 
   onBgMode() {
     const next = this.bgModes.shift() || BGMODE.DIFFUSION;
-    console.log(next);
     this.bgModes.push(next);
     this.bgModeSubject.next(next);
   }
