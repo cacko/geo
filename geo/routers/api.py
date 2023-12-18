@@ -1,3 +1,4 @@
+from os import name
 from typing import Optional
 from fastapi import APIRouter, HTTPException
 from geo.core import IPError
@@ -67,10 +68,10 @@ def route_streetview(
         assert image_path
         assert image_path.exists()
         return {
-            "name": image_path.name,
-            "url": image_path.read_text(),
+            "name": image.metadata.name,
+            "url": image.metadata.url,
             "style": image.style,
-            "raw_url": image.metadata.get("raw_url", ""),
+            "raw_url": image.metadata.raw_url
         }
     except AssertionError:
         raise HTTPException(status_code=502)
