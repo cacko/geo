@@ -24,7 +24,6 @@ class LookupMetadata(BaseModel):
     raw_url: str
     name: str
 
-
 class LookupImage(CachableFileImage):
     def __init__(
         self,
@@ -142,7 +141,7 @@ class LookupImage(CachableFileImage):
         else:
             logging.info(req.body)
             try:
-                self._metadata  = LookupMetadata(**json.loads(req.body))
+                self._metadata = LookupMetadata(**req.json)
             except json.JSONDecodeError as e:
                 logging.exception(e)
         logging.info(self._path)
