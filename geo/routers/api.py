@@ -31,12 +31,8 @@ def read_ip(
         raise HTTPException(status_code=404, detail=e.message)
 
 
-
 @router.get("/api/address/{address:path}", tags=["api"])
-def read_address(
-    address: str,
-    coder: Coders = Coders.HERE
-):
+def read_address(address: str, coder: Coders = Coders.HERE):
     try:
         return coder.coder.from_name(address).model_dump()
     except AssertionError:
@@ -44,12 +40,7 @@ def read_address(
 
 
 @router.get("/api/gps/{lat}/{lon}", tags=["api"])
-def read_gps(
-    lat: float,
-    lon: float,
-    coder: Coders = Coders.HERE
-
-):
+def read_gps(lat: float, lon: float, coder: Coders = Coders.HERE):
     try:
         return coder.coder.from_gps(lat, lon).model_dump()
     except AssertionError:
@@ -59,9 +50,7 @@ def read_gps(
 @router.get("/api/streetview/{ip_gps}/{ts}", tags=["api"])
 @router.get("/api/streetview/{ip_gps}", tags=["api"])
 def route_streetview(
-    ip_gps: str,
-    ts: Optional[int] = None,
-    
+    ip_gps: str, ts: Optional[int] = None, style: Optional[str] = None
 ):
     try:
         logging.info(ip_gps)
@@ -71,7 +60,7 @@ def route_streetview(
             geo_info = Coders.HERE.coder.from_gps(lat, lng)
         else:
             geo_info = MaxMind.lookup(ip=ip_gps)
-        image = LookupImage(geo=geo_info, ts=ts)
+        image = LookupImage(geo=geo_info, ts=ts, style=style)
         image_path = image.path
         assert image_path
         assert image_path.exists()
@@ -79,7 +68,7 @@ def route_streetview(
             "name": image_path.name,
             "url": f"{app_config.web.backgrounds_path}/{image_path.name}",
             "style": image.style,
-            "raw_url": image.metadata.get("raw_url", "")
+            "raw_url": image.metadata.get("raw_url", ""),
         }
     except AssertionError:
         raise HTTPException(status_code=502)

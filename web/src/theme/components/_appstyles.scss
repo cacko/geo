@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+@use "sass:color";
+
+@mixin apply-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  app-styles {
+    mat-chip-listbox {
+      padding: 1rem;
+      mat-chip-option.mat-mdc-standard-chip {
+        font-variant: small-caps;
+        text-transform: uppercase;
+        font-size: 110%
+      }
+    }
+  }
+}

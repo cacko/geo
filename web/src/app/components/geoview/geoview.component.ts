@@ -24,6 +24,7 @@ export class GeoviewComponent implements OnChanges {
   }
 
   @Output() backgroundSrc: EventEmitter<string> = new EventEmitter<string>();
+  @Output() backgroundStyle: EventEmitter<string> = new EventEmitter<string>();
   @Output() onRenewFinished: EventEmitter<void> = new EventEmitter<void>();
   @Input() mode?: BGMODE | null;
   @Input() locationbg?: string | null;
@@ -50,6 +51,7 @@ console.log(this.diffusionSrc);
       let imgeUrl = data.url;
       this.diffusionSrc = `https://geo.cacko.net${imgeUrl}`;
       this.rawSrc = data.raw_url;
+      this.backgroundStyle.emit(data.style);
       this.setModeBackground();
       this.isLoading = false;
     }).catch((err) => {

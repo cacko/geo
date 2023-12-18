@@ -18,6 +18,8 @@ import { StorageService } from "./service/storage.service";
 import { saveAs } from 'file-saver';
 import { Title } from "@angular/platform-browser";
 import { BGMODE, BGMODEICONS } from "./entity/lookup.entity";
+import { Platform } from "@angular/cdk/platform";
+import { MatChipListboxChange } from "@angular/material/chips";
 
 @Component({
   selector: "app-root",
@@ -30,6 +32,7 @@ export class AppComponent implements OnInit {
   fullview = false;
   queryMode = QueryMode;
   BG_MODE_ICONS = BGMODEICONS;
+  BG_MODES = BGMODE;
   bgModes = [BGMODE.RAW, BGMODE.DIFFUSION];
   modes: QueryMode[] = [QueryMode.GPS, QueryMode.IP];
   messages: string[] = [];
@@ -39,11 +42,14 @@ export class AppComponent implements OnInit {
   $location = this.api.$location;
   $loading = this.loader.$visible;
   page = this.activatedRoute.title;
+  diffusionStyle: string = "";
+
+  metaKeyName = this.platform.IOS
 
   private currentLookup?: LookupModel;
   private currentLocation?: LocationModel;
 
-  downloadSubject = new Subject<string>();
+  downloadSubject = new BehaviorSubject<string>("");
   $download = this.downloadSubject.asObservable();
 
   bgModeSubject = new BehaviorSubject<BGMODE>(BGMODE.DIFFUSION);
@@ -60,7 +66,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public storage: StorageService,
-    private titleService: Title
+    private titleService: Title,
+    private platform: Platform
   ) {
     if (!isDevMode()) {
       this.swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
@@ -92,6 +99,7 @@ export class AppComponent implements OnInit {
           }
           break;
         case WSCommand.STYLES:
+          this.storage.styles = msg.content;
           break;
       }
     });
@@ -112,6 +120,11 @@ export class AppComponent implements OnInit {
     this.loader.show();
   }
 
+
+
+  onBackgroundStyle($event: string) {
+    this.diffusionStyle = $event;
+  }
 
   @HostListener("window:keydown", ["$event"])
   hardRefresh(event: KeyboardEvent) {
@@ -224,6 +237,11 @@ export class AppComponent implements OnInit {
       }
       return this.router.navigate(["location", input]);
     });
+  }
+
+
+  onStyleChange($event: any) {
+    this.storage.style = $event as string[];
   }
 
   title = "geo";

@@ -34,12 +34,16 @@ import {
   MatFormFieldModule,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
 } from '@angular/material/form-field';
+import {MatChipsModule} from '@angular/material/chips'; 
 import { GeoInputComponent } from './components/geo-input/geo-input.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LoaderService } from './service/loader.service';
 import { StorageService } from './service/storage.service';
 import { NgxView360Module } from '@egjs/ngx-view360';
 import { GeoviewComponent } from './components/geoview/geoview.component';
+import { StylesComponent } from './components/styles/styles.component';
+import {MatMenuModule} from '@angular/material/menu'; 
+import {MatBadgeModule} from '@angular/material/badge'; 
 const MaterialModules = [
   MatSnackBarModule,
   MatProgressBarModule,
@@ -54,7 +58,10 @@ const MaterialModules = [
   MatSlideToggleModule,
   MatInputModule,
   MatFormFieldModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatChipsModule,
+  MatMenuModule,
+  MatBadgeModule
 ];
 @NgModule({
   declarations: [
@@ -70,7 +77,8 @@ const MaterialModules = [
     QueryInputComponent,
     QueryButtonComponent,
     GeoInputComponent, 
-    GeoviewComponent
+    GeoviewComponent,
+    StylesComponent
   ],
   imports: [
     BrowserModule,

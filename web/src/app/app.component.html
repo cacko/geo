@@ -4,6 +4,7 @@
         <button
             mat-icon-button
             fullview
+            [matTooltip]="fullview ? 'Show controls and info (Win+Shift+F)' : 'Hide controls and info (Win+Shift+F)'"
             (click)="onFullView()"
         >
             <mat-icon>
@@ -13,15 +14,15 @@
         <button
             mat-icon-button
             bgmode
+            [matTooltip]="($bgMode | async) == BG_MODES.RAW  ? 'Switch to diffused background (Win+Shift+V)' : 'Switch to raw panorama (Win+Shift+V)'"
             (click)="onBgMode()"
         >
-            <mat-icon *ngIf="($bgMode | async) as mode">
-                {{BG_MODE_ICONS[mode]}}
-            </mat-icon>
+            <mat-icon *ngIf="($bgMode | async) as mode">{{BG_MODE_ICONS[mode]}}</mat-icon>
         </button>
         <button
             *ngIf="($download | async) as download"
             mat-icon-button
+            matTooltip="Download background"
             (click)="downloadImage(download)"
         >
             <mat-icon>download</mat-icon>
@@ -29,6 +30,7 @@
         <button
             mat-icon-button
             (click)="onRenew()"
+            matTooltip="Refresh background (Win+Shift+R)"
         >
             <mat-icon>cached</mat-icon>
         </button>
@@ -71,6 +73,28 @@
         [locationbg]="$background | async"
         [mode]="$bgMode | async"
         (backgroundSrc)="downloadSubject.next($event)"
+        (backgroundStyle)="onBackgroundStyle($event)"
     ></app-geoview>
     <router-outlet></router-outlet>
 </div>
+<footer mat-toolbar>
+    <button
+        mat-icon-button
+        [matMenuTriggerFor]="stymenu"
+    >
+        <mat-icon
+            [matBadge]="storage.style.length"
+            matBadgeColor="warn"
+            [matBadgeHidden]="storage.style.length == 0"
+            fontIcon="dresser"
+            aria-hidden="false"
+        ></mat-icon>
+    </button>
+    <mat-menu #stymenu="matMenu">
+        <app-styles
+            [selected]="storage.style"
+            (change)="onStyleChange($event)"
+            (click)="$event.stopPropagation();"
+        ></app-styles>
+    </mat-menu>
+</footer>

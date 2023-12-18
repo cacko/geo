@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QueryMode } from '../entity/api.entity';
+import { kebabCase } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ export class StorageService {
 
   readonly KEY_MYIP = "myip";
   readonly KEY_MODE = "mode";
+  readonly KEY_STYLES = "styles";
+  readonly KEY_STYLE = "style";
 
   private backgroundSrc ?: string
 
@@ -40,5 +43,22 @@ export class StorageService {
   get mode(): QueryMode {
     return this.fetch(this.KEY_MODE, QueryMode.IP);
   }
+
+  set styles(value: string[]) {
+    localStorage.setItem(this.KEY_STYLES, JSON.stringify(value));
+  }
+
+  get styles(): string[] {
+    return this.fetch(this.KEY_STYLES, []);
+  }
+
+  set style(value: string[]) {
+    this.store(value, this.KEY_STYLE);
+  }
+
+  get style(): string[] {
+    return this.fetch(this.KEY_STYLE, []);
+  }
+
 
 }
