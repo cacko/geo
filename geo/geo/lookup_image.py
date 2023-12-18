@@ -59,9 +59,8 @@ class LookupImage(CachableFileImage):
     @property
     def metadata(self):
         if "raw_url" not in self._metadata:
-            with Image.open(self.path) as img:
-                ex = img.getexif()
-                self._metadata["raw_url"] = ex[TagNames.DocumentName]
+            jsn = self.path.read_text()
+            self._metadata = LookupMetadata((jsn))
         return self._metadata
 
     @property
@@ -145,7 +144,7 @@ class LookupImage(CachableFileImage):
                 logging.exception(e)
         logging.info(self._path)
         logging.info(self._metadata)
-        self._path.write_text(self._metadata.url)
+        self._path.write_text(self._metadata.model_dump_json())
 
 
 class LoadingImage(LookupImage):
