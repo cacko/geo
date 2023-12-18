@@ -83,6 +83,18 @@ tasks:
     cmds:
       - redis-cli $REDIS_CLI
 
+  web-serve:
+    desc: ng serve
+    dir: web
+    cmds:
+      - ng serve -c
+
+  web-yarn:
+    desc: yarn
+    dir: web
+    cmds:
+      - yarn {{.CLO_ARGS}}
+
   web-deploy:
     desc: deploy
     dir: web
