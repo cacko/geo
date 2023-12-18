@@ -143,7 +143,10 @@ class LookupImage(CachableFileImage):
                 else:
                     self._metadata = LookupMetadata(**json.loads(part.content))
         else:
-            self._metadata  = LookupMetadata(**json.loads(part.content))
+            try:
+                self._metadata  = LookupMetadata(**json.loads(req.body))
+            except json.JSONDecodeError as e:
+                logging.exception(e)
         self._path.write_text(self._metadata.url)
 
 
