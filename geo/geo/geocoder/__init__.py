@@ -14,7 +14,7 @@ class Coders(StrEnum):
 
     @classmethod
     def _missing_(cls, value):
-        return Coders.HERE
+        return Coders.TOMTOM
 
     @property
     def coder(self) -> GeoCoderMeta:
