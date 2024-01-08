@@ -1,9 +1,9 @@
-import { Component, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { ApiType } from 'src/app/entity/api.entity';
 import { BackgroundEntity, BGMODE, LOOKUP_IMAGES } from 'src/app/entity/lookup.entity';
 import { ApiService } from 'src/app/service/api.service';
-import { View360Options, EquirectProjection } from "@egjs/ngx-view360";
+import { View360Options, EquirectProjection, NgxView360Component } from "@egjs/ngx-view360";
 import View360 from '@egjs/view360';
 import { StorageService } from 'src/app/service/storage.service';
 import { sample } from 'lodash-es';
@@ -13,8 +13,8 @@ import { sample } from 'lodash-es';
   templateUrl: './geoview.component.html',
   styleUrl: './geoview.component.scss'
 })
-export class GeoviewComponent implements OnChanges {
-  @ViewChild("viewer") public view360!: View360;
+export class GeoviewComponent implements OnChanges, OnInit {
+  @ViewChild("viewer") public view360: any;
 
   private diffusionSrc = "";
   private rawSrc = ""
@@ -100,7 +100,13 @@ export class GeoviewComponent implements OnChanges {
   }
 
   setBackground(src: string) {
-    this.view360.load(new EquirectProjection({ src }))
+    this.options = {
+      ...this.options,
+      projection: new EquirectProjection({
+        src: src
+      })
+    };
+    // this.view360.load(new EquirectProjection({ src }))
     this.backgroundSrc.emit(src);
   }
 
