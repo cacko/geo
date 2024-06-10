@@ -63,11 +63,11 @@ export class WebsocketService {
   private create(url: string | URL): void {
     let ws = new WebSocket(url);
     ws.onmessage = (msg) => {
-      console.info(msg.data)
+      console.debug(msg.data)
       try {
         this.messagesSubject.next(JSON.parse(msg.data));
       } catch (err) {
-        
+
       }
 
     };

@@ -96,9 +96,6 @@ export class AppComponent implements OnInit {
       .subscribe({
         next: (event: NavigationStart) => {
           console.group("NavigationStart Event");
-          console.log("navigation id:", event.id);
-          console.log("route:", event.url);
-          console.log("trigger:", event.navigationTrigger);
           if (event.restoredState) {
             console.warn(
               "restoring navigation id:",
