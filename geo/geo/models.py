@@ -67,5 +67,6 @@ class ImageOptions(BaseModel):
     resolution: list[str]
     category: list[str]
     template: list[str]
-    qrcode: list[str]
+    qrcode_templates: list[str]
+    qrcode_models: list[str]
     styles: list[str]
