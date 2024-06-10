@@ -1,4 +1,4 @@
-<app-loader *ngIf="$loading | async"></app-loader>
+<app-loader></app-loader>
 <mat-toolbar [class.fullview]="fullview">
     <section left>
         <button
@@ -87,18 +87,14 @@
             [matMenuTriggerFor]="stymenu"
         >
             <mat-icon
-                [matBadge]="storage.style.length"
-                matBadgeColor="warn"
-                [matBadgeHidden]="storage.style.length == 0"
                 fontIcon="dresser"
                 aria-hidden="false"
             ></mat-icon>
         </button>
         <mat-menu #stymenu="matMenu">
-            <app-styles
-                [selected]="storage.style"
+            <app-styles *ngIf="(storage.$style | async) as style"
+                [selected]="style"
                 (change)="onStyleChange($event)"
-                (click)="$event.stopPropagation();"
             ></app-styles>
         </mat-menu>
         <div

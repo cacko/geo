@@ -1,9 +1,9 @@
-import { Component, OnInit, HostListener, isDevMode, NgZone, EventEmitter } from "@angular/core";
+import { Component, OnInit, HostListener, isDevMode } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SwUpdate, VersionEvent } from "@angular/service-worker";
 import { QueryMode } from "./entity/api.entity";
 import { ApiService } from "./service/api.service";
-import { BehaviorSubject, Observable, Subject, Subscription, interval, filter, pipe } from "rxjs";
+import { BehaviorSubject, interval, filter } from "rxjs";
 import { WebsocketService } from "./service/websocket.service";
 import { WSCommand } from "./entity/websockets.entiity";
 import { LookupModel } from "./models/lookup.model";
@@ -12,14 +12,13 @@ import { GeoLocationService } from "./service/geo-location.service";
 import { LocationModel } from "./models/location.model";
 import { MatDialog } from '@angular/material/dialog';
 import { GeoInputComponent } from "./components/geo-input/geo-input.component";
-import { ActivatedRoute, EventType, NavigationStart, Router, RouterEvent } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { StorageService } from "./service/storage.service";
 
 import { saveAs } from 'file-saver';
 import { Title } from "@angular/platform-browser";
 import { BGMODE, BGMODEICONS } from "./entity/lookup.entity";
 import { Platform } from "@angular/cdk/platform";
-import { MatChipListboxChange } from "@angular/material/chips";
 
 @Component({
   selector: "app-root",
@@ -40,7 +39,6 @@ export class AppComponent implements OnInit {
   $background = this.api.$background;
   $lookup = this.api.$lookup;
   $location = this.api.$location;
-  $loading = this.loader.$visible;
   page = this.activatedRoute.title;
   diffusionStyle: string = "";
 
@@ -270,7 +268,8 @@ export class AppComponent implements OnInit {
 
 
   onStyleChange($event: any) {
-    this.storage.style = $event as string[];
+    this.storage.style = $event as string;
+    this.onRenew();
   }
 
   title = "geo";

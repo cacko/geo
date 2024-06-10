@@ -35,6 +35,7 @@ $mytheme: mat.define-dark-theme(
 @import "@egjs/view360/css/view360.min.css";
 @import "theme/components/app-truncate";
 @import "theme/components/spacer";
+@import "theme/components/loader";
 @include myipinfo.apply-theme($mytheme);
 @include myquerybutton.apply-theme($mytheme);
 @include mylocationinfo.apply-theme($mytheme);

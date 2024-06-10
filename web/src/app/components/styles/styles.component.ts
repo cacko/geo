@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { isString } from 'lodash-es';
 import { StorageService } from 'src/app/service/storage.service';
@@ -21,9 +21,10 @@ export class StylesComponent {
   ngOnInit(): void {
   }
   readonly categories: string[] = Object.values(this.storage.styles).filter(isString);
-  @Input() selected: string[] = [];
+  @Input() selected : string = "";
 
   @Output() change = new EventEmitter<string[]>();
+
 
   onChange(ev: MatChipListboxChange) {
     this.change.emit(ev.value);

@@ -64,7 +64,12 @@ export class WebsocketService {
     let ws = new WebSocket(url);
     ws.onmessage = (msg) => {
       console.info(msg.data)
-      this.messagesSubject.next(JSON.parse(msg.data));
+      try {
+        this.messagesSubject.next(JSON.parse(msg.data));
+      } catch (err) {
+        
+      }
+
     };
     ws.onerror = (err) => {
       console.error(err);

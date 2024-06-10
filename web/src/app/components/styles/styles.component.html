@@ -1,5 +1,5 @@
-<mat-chip-listbox multiple aria-label="Styles" aria-orientation="horizontal"
+<mat-chip-listbox hideSingleSelectionIndicator aria-label="Styles" aria-orientation="horizontal"
   (change)="onChange($event)">
   <mat-chip-option color="primary" *ngFor="let st of storage.styles"
-    [selected]="storage.style.includes(st)">{{st}}</mat-chip-option>
+    [selected]="selected == st">{{st}}</mat-chip-option>
 </mat-chip-listbox>

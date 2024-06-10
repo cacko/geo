@@ -48,7 +48,7 @@ export class GeoviewComponent implements OnChanges, OnInit {
     if (!this.diffusionSrc) {
       this.setBackground(LOOKUP_IMAGES.LOADING);
     } else if (this.storage.style) {
-      fetchParams.style = sample(this.storage.style) as string;
+      fetchParams.style = this.storage.style as string;
 
     }
     this.isLoading = true;
