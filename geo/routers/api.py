@@ -1,6 +1,6 @@
 from os import name
 from typing import Optional
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from geo.core import IPError
 from geo.geo.maxmind import MaxMind
 from geo.geo.geocoder import Coders
@@ -9,7 +9,7 @@ import logging
 from geo.geo.lookup_image import LookupImage
 from geo.config import app_config
 from geo.geo.models import GeoInfo
-from geo.core.ip import get_ip_from_input
+from geo.core.ip import get_ip_from_input, get_remote_ip
 import re
 
 PATTERN_GPS = re.compile(r"(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)")
@@ -31,6 +31,20 @@ def read_ip(
     except IPError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
+
+@router.get("/api/ip", tags=["api"])
+def read_ip(
+    request: Request,
+):
+    try:
+        ip = get_remote_ip(request.client.host, request.headers.get("x-forwarded-for"))
+        res = MaxMind.lookup(ip)
+        if res.location:
+            coder_res = Coders.HERE.coder.from_gps(*res.location)
+            res = GeoInfo(**{**res.model_dump(), **coder_res.model_dump()})
+        return res.model_dump()
+    except IPError as e:
+        raise HTTPException(status_code=404, detail=e.message)
 
 @router.get("/api/address/{address:path}", tags=["api"])
 def read_address(address: str, coder: Coders = Coders.HERE):
