@@ -37,8 +37,9 @@ def read_ip(
     request: Request,
 ):
     try:
-        logging.info(request.headers)
-        ip = get_remote_ip(request.client.host, request.headers.get("x-forwarded-for"))
+        ip = get_remote_ip(
+            request.headers.get("cf-connecting-ip")
+        )
         res = MaxMind.lookup(ip)
         if res.location:
             coder_res = Coders.HERE.coder.from_gps(*res.location)
@@ -46,6 +47,7 @@ def read_ip(
         return res.model_dump()
     except IPError as e:
         raise HTTPException(status_code=404, detail=e.message)
+
 
 @router.get("/api/address/{address:path}", tags=["api"])
 def read_address(address: str, coder: Coders = Coders.HERE):
@@ -65,11 +67,7 @@ def read_gps(lat: float, lon: float, coder: Coders = Coders.HERE):
 
 @router.get("/api/streetview/{ip_gps}/{ts}", tags=["api"])
 @router.get("/api/streetview/{ip_gps}", tags=["api"])
-def route_streetview(
-    ip_gps: str, 
-    ts: Optional[int] = None, 
-    style: str = None
-):
+def route_streetview(ip_gps: str, ts: Optional[int] = None, style: str = None):
     try:
         logging.info(ip_gps)
         geo_info = None
@@ -86,7 +84,7 @@ def route_streetview(
             "name": image.metadata.name,
             "url": image.metadata.url,
             "style": image.style,
-            "raw_url": image.metadata.raw_url
+            "raw_url": image.metadata.raw_url,
         }
     except AssertionError:
         raise HTTPException(status_code=502)
