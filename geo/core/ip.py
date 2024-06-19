@@ -11,6 +11,7 @@ from geo.core import IPError
 
 def get_remote_ip(req_ip, forward_ip=None):
     try:
+        logging.info(req_ip)
         ipv4 = ipaddress.IPv4Address(req_ip)
         if ipv4.is_private:
             return httpx.get("https://checkip.amazonaws.com").text.strip()
