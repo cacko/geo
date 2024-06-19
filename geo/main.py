@@ -12,7 +12,8 @@ app = FastAPI(
 
 origins = [
     "http://localhost:4200",
-    "https://geo.cacko.net"
+    "https://geo.cacko.net",
+    "https://alex.cacko.net"
 ]
 
 app.add_middleware(
