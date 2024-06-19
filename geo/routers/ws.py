@@ -37,7 +37,7 @@ class ConnectionManager:
         await websocket.send_json(
             Message(
                 command=WSCommand.IP,
-                content=[get_remote_ip(websocket.headers.get("x-forwarded-for"))]
+                content=[get_remote_ip(websocket.headers.get("cf-connecting-ip"))]
             ).model_dump()
         )
         await websocket.send_json(
