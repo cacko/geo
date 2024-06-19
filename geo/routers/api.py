@@ -37,7 +37,7 @@ def read_ip(
     request: Request,
 ):
     try:
-        logging.info([request.client.host, request.headers.get("x-forwarded-for")])
+        logging.info(request.headers)
         ip = get_remote_ip(request.client.host, request.headers.get("x-forwarded-for"))
         res = MaxMind.lookup(ip)
         if res.location:
