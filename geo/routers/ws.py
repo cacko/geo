@@ -1,6 +1,4 @@
-from fastapi import (
-    APIRouter, WebSocket, WebSocketDisconnect, HTTPException
-)
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 from geo.geo.image.api import ImageApi
 from geo.geo.lookup_image import LookupImage
 from geo.config import app_config
@@ -37,14 +35,15 @@ class ConnectionManager:
         await websocket.send_json(
             Message(
                 command=WSCommand.IP,
-                content=[get_remote_ip(websocket.headers.get("cf-connecting-ip"))]
+                content=[
+                    get_remote_ip(
+                        websocket.headers.get("cf-connecting-ip", websocket.client.host)
+                    )
+                ],
             ).model_dump()
         )
         await websocket.send_json(
-            Message(
-                command=WSCommand.STYLES,
-                content=ImageApi.styles
-            ).model_dump()
+            Message(command=WSCommand.STYLES, content=ImageApi.styles).model_dump()
         )
 
     def disconnect(self, websocket: WebSocket):

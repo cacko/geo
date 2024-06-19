@@ -38,7 +38,7 @@ def read_ip(
 ):
     try:
         ip = get_remote_ip(
-            request.headers.get("cf-connecting-ip")
+            request.headers.get("cf-connecting-ip", request.client.host)
         )
         res = MaxMind.lookup(ip)
         if res.location:
